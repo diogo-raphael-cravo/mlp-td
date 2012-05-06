@@ -1,5 +1,6 @@
 package mlptd;
 
+import java.awt.Point;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
@@ -22,10 +23,8 @@ public class td {
   public static final int DISPLAY_WIDTH = 640;
   public static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
-  private int squareSize;
-  private int squareX;
-  private int squareY;
-  private int squareZ;
+  Tile tileExemplo;
+  Tile outraTile;
 
   static {
     try {
@@ -44,10 +43,7 @@ public class td {
       System.out.println("left  - Rotate left");
       System.out.println("right - Rotate right");
       System.out.println("esc   - Exit");
-      squareSize = 100;
-      squareX = 0;
-      squareY = 0;
-      squareZ = 0;
+      tileExemplo = new Tile(new Point(0,0), 1, 1);
       create();
       run();
     } catch(Exception ex) {
@@ -93,24 +89,13 @@ public class td {
   public void processKeyboard() {
     //Square's Size
     if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-      --squareSize;
-    }
-    if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-      ++squareSize;
-    }
-
-    //Square's Z
-    if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-      ++squareZ;
-    }
-    if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-      --squareZ;
+     
     }
   }
 
   public void processMouse() {
-    squareX = Mouse.getX();
-    squareY = Mouse.getY();
+    Point destinoTile = new Point(Mouse.getX(), Mouse.getY());
+    tileExemplo.mover(destinoTile);
   }
 
   public void render() {
@@ -118,16 +103,7 @@ public class td {
     glLoadIdentity();
 
     //Draw a basic square
-    glTranslatef(squareX,squareY,0.0f);
-    glRotatef(squareZ,0.0f,0.0f,1.0f);
-    glTranslatef(-(squareSize >> 1),-(squareSize >> 1),0.0f);
-    glColor3f(0.0f,0.5f,0.5f);
-    glBegin(GL_QUADS);
-      glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
-      glTexCoord2f(1.0f,0.0f); glVertex2f(squareSize,0.0f);
-      glTexCoord2f(1.0f,1.0f); glVertex2f(squareSize,squareSize);
-      glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f,squareSize);
-    glEnd();
+    tileExemplo.desenhar();
   }
 
   public void resizeGL() {
@@ -168,11 +144,11 @@ public class td {
   }
 
   public void update() {
-    if(squareSize < 5) {
+    /*if(squareSize < 5) {
       squareSize = 5;
     }
     else if(squareSize >= DISPLAY_HEIGHT) {
       squareSize = DISPLAY_HEIGHT;
-    }
+    }*/
   }
 }
