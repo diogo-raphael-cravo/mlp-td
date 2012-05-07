@@ -17,11 +17,11 @@ import static org.lwjgl.opengl.GL11.*;
  * @author diogo
  */
 public class Tile {
-    private int tamanhoEmPorcentagem;
-    private float posX;
-    private float posY;
-    private float comprimento;
-    private float largura;
+    protected int tamanhoEmPorcentagem;
+    protected float posX;
+    protected float posY;
+    protected float comprimento;
+    protected float largura;
     private Color cor;
 
     /**
@@ -45,6 +45,25 @@ public class Tile {
         comprimento = _comprimento;
         largura = _largura;tamanhoEmPorcentagem = _tamanhoEmPorcentagem;
         redimensionar(1);
+    }
+
+    public float getPosX(){
+        return posX;
+    }
+    public float getPosY(){
+        return posY;
+    }
+    public float getComprimento(){
+        return comprimento;
+    }
+    public float getLargura(){
+        return largura;
+    }
+    public int getTamanhoEmPorcentagem(){
+        return tamanhoEmPorcentagem;
+    }
+    public Color getCor(){
+        return cor;
     }
 
     /**

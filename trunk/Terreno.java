@@ -21,6 +21,12 @@ public class Terreno {
     Tile[][] tiles;
 
     /**
+     * Caminho composto por índices de tiles em tiles.
+     * O caminho mostra um lugar por onde os inimigos podem movimentar-se.
+     */
+    Caminho caminho;
+
+    /**
      * Posição do terreno na tela.
      */
     float posX;
@@ -57,13 +63,73 @@ public class Terreno {
 
         tiles = new Tile[tilesPorLinha][tilesPorColuna];
 
+        //Pequeno teste. Notar que a tile (0,0) é sinalizada com verde, e não laranja.
+        transformarEmTabuleiro(new Color(Color.ORANGE));
+        //transformarEmTabuleiro(new Color(Color.GREEN));
+
+        caminho = Caminho.criarCaminhoDiagonalDecrescente(tilesPorColuna, tilesPorLinha, tilesPorColuna);
+        transformarTerrenoSegundoCaminho(caminho);
+
+        posicao = 0;
+     }
+
+     /**
+      * Move os inimigos que estão neste terreno.
+      * Os inimigos seguem a rota indicada pelo caminho.
+      */
+     int posicao;
+     public void moverInimigos() throws InterruptedException{
+        Inimigo inimigoExemplo = new Inimigo();
+        TilePassadouro tile;
+        int linha;
+        int coluna;
+        Thread thisThread = Thread.currentThread();
+        if(posicao < caminho.getComprimento()){
+            if(0 < posicao){
+                coluna = caminho.getColunaTile(posicao-1);
+                linha = caminho.getLinhaTile(posicao-1);
+                tile = (TilePassadouro) tiles[coluna][linha];
+                tile.retirarTodosInimigos();
+            }
+            coluna = caminho.getColunaTile(posicao);
+            linha = caminho.getLinhaTile(posicao);
+            tile = (TilePassadouro) tiles[coluna][linha];
+            tile.adicionarInimigo(inimigoExemplo);
+            thisThread.sleep(1000);
+            posicao++;
+         }
+     }
+
+
+     /**
+      * Aplica o caminho a este terreno, isto é, transforma as tiles que estão no caminho em TilePassadouro.
+      * @param _caminho O caminho a ser aplicado.
+      */
+     private void transformarTerrenoSegundoCaminho(Caminho _caminho){
+        int posicao;
+        int linha;
+        int coluna;
+        Tile tileSubstituida;
+        for(posicao = 0; posicao<_caminho.getComprimento(); posicao++){
+            coluna = _caminho.getColunaTile(posicao);
+            linha = _caminho.getLinhaTile(posicao);
+            tileSubstituida = tiles[coluna][linha];
+            tiles[coluna][linha] = new TilePassadouro(tileSubstituida);
+        }
+     }
+
+     /**
+      * Transforma este terreno em um tabuleiro.
+      * A casa de índice (0,0) é sinalizada com a cor de parâmetro.
+      */
+     private void transformarEmTabuleiro(Color _cor){
         int linha;
         int coluna;
         Color cor;
         for(coluna=0; coluna<tilesPorLinha; coluna++){
             for(linha=0; linha<tilesPorColuna; linha++){
                 if(linha==0 && coluna == 0){
-                    cor = new Color(Color.ORANGE);
+                    cor = new Color(_cor);
                 } else if((coluna%2==0 && linha%2==1)
                    || (coluna%2==1 && linha%2==0)){
                     cor = new Color(Color.BLUE);
@@ -74,7 +140,7 @@ public class Terreno {
             }
         }
      }
-
+     
      /**
       * Adiciona uma tile ao terreno. Notar que as tiles têm seu tamanho limitado dentro do terreno,
       * isto é, todas possuem o mesmo tamanho que é definido na construção do terreno.
