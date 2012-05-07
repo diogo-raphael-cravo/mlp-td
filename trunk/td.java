@@ -1,5 +1,6 @@
 package mlptd;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
@@ -23,8 +24,7 @@ public class td {
   public static final int DISPLAY_WIDTH = 640;
   public static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
-  Tile tileExemplo;
-  Tile outraTile;
+  Terreno terrenoExemplo;
 
   static {
     try {
@@ -37,20 +37,12 @@ public class td {
 
   public td() {
     try {
-      System.out.println("Keys:");
-      System.out.println("down  - Shrink");
-      System.out.println("up    - Grow");
-      System.out.println("left  - Rotate left");
-      System.out.println("right - Rotate right");
-      System.out.println("esc   - Exit");
-      tileExemplo = new Tile(new Point(0,0), 1, 1);
+      terrenoExemplo = new Terreno(150, 50, 400, 400, 10, 10);
       create();
       run();
     } catch(Exception ex) {
       LOGGER.log(Level.SEVERE,ex.toString(),ex);
     }
-
-    
   }
 
   public void create() throws LWJGLException {
@@ -94,16 +86,14 @@ public class td {
   }
 
   public void processMouse() {
-    Point destinoTile = new Point(Mouse.getX(), Mouse.getY());
-    tileExemplo.mover(destinoTile);
+    //terrenoExemplo.mover(Mouse.getX(), Mouse.getY());
   }
 
   public void render() {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
-    //Draw a basic square
-    tileExemplo.desenhar();
+    terrenoExemplo.desenhar();
   }
 
   public void resizeGL() {
