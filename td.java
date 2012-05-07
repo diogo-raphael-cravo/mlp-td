@@ -92,7 +92,7 @@ public class td {
   public void render() {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-
+        
     terrenoExemplo.desenhar();
   }
 
@@ -134,6 +134,11 @@ public class td {
   }
 
   public void update() {
+      try {
+            terrenoExemplo.moverInimigos();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);
+        }
     /*if(squareSize < 5) {
       squareSize = 5;
     }
