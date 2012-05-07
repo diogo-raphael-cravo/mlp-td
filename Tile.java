@@ -5,20 +5,8 @@
 
 package mlptd;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import org.lwjgl.util.Color;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
-
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 
 /**
  * Representação genérica de uma tile.
@@ -30,32 +18,49 @@ import org.lwjgl.opengl.DisplayMode;
  */
 public class Tile {
     private int tamanhoEmPorcentagem;
-    private Rectangle forma;
+    private float posX;
+    private float posY;
+    private float comprimento;
+    private float largura;
+    private Color cor;
 
     /**
-     * @param _posicao A posição do ponto superior esquerdo na tela.
-     * @param _comprimento Comprimento da tile.
-     * @param _largura Largura da tile.
+     * @param _posX, _posY A posição do ponto superior esquerdo na tela.
+     * @param _comprimento, _largura Comprimento e largura.
      * @param _tamanhoEmPorcentagem Usado para resize.
      */
-    public Tile(Point _posicao, int _comprimento, int _largura){
-        forma = new Rectangle();
-        forma.setLocation(_posicao);
-        forma.setSize(_comprimento, _largura);
+    public Tile(float _posX, float _posY, float _comprimento, float _largura){
+        cor = new Color(Color.GREEN);
+        posX = _posX;
+        posY = _posY;
+        comprimento = _comprimento;
+        largura = _largura;
         tamanhoEmPorcentagem = 100;
+        redimensionar(1);
     }
-    public Tile(Point _posicao, int _tamanhoEmPorcentagem, int _comprimento, int _largura){
-        forma = new Rectangle();
-        forma.setLocation(_posicao);
-        forma.setSize(_comprimento, _largura);
-        tamanhoEmPorcentagem = _tamanhoEmPorcentagem;
+    public Tile(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
+        cor = new Color(Color.GREEN);
+        posX = _posX;
+        posY = _posY;
+        comprimento = _comprimento;
+        largura = _largura;tamanhoEmPorcentagem = _tamanhoEmPorcentagem;
+        redimensionar(1);
+    }
+
+    /**
+     * Modifica a cor desta tile.
+     * @param _cor Cor da tile.
+     */
+    public void mudarCor(Color _cor){
+        cor = new Color(_cor);
     }
 
     /**
      * @param _destino Ponto para onde a tile deve ir.
      */
-    public void mover(Point _destino){
-        forma.setLocation(_destino);
+    public void mover(float _posX, float _posY){
+        posX = _posX;
+        posY = _posY;
     }
 
     /**
@@ -69,19 +74,20 @@ public class Tile {
      * Desenha a tile na tela com base em seu tamanho e posição.
      */
     public void desenhar(){
-        glTranslatef((float) forma.getX(), (float) forma.getY(),0.0f);
+        glPushMatrix();
+        glTranslatef(posX,posY,0.0f);
         glRotatef(0,0.0f,0.0f,1.0f);
-        glTranslatef(-(tamanhoEmPorcentagem >> 1),-(tamanhoEmPorcentagem >> 1),0.0f);
-        glColor3f(0.0f,0.5f,0.5f);
+        glTranslatef(-(100 >> 1),-(100 >> 1),0.0f);
+        glColor3f((float) (cor.getRed()/255.0),
+                  (float) (cor.getGreen()/255.0),
+                  (float) (cor.getBlue()/255.0));
         glBegin(GL_QUADS);
             glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
-            glTexCoord2f(1.0f,0.0f); glVertex2f((float) (tamanhoEmPorcentagem*forma.getWidth()),
-                                                0.0f);
-            glTexCoord2f(1.0f,1.0f); glVertex2f((float) (tamanhoEmPorcentagem*forma.getWidth()),
-                                                (float) (tamanhoEmPorcentagem*forma.getHeight()));
-            glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f,
-                                                (float) (tamanhoEmPorcentagem*forma.getHeight()));
+            glTexCoord2f(1.0f,0.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, 0.0f);
+            glTexCoord2f(1.0f,1.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, tamanhoEmPorcentagem*largura);
+            glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f, tamanhoEmPorcentagem*largura);
         glEnd();
+        glPopMatrix();
     }
 
 }
