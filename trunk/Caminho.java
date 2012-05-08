@@ -102,7 +102,7 @@ public class Caminho {
      * 3 X - - -
      * 4 X X X X
      * 5 - - - X
-     * 6 15X X X
+     * 6 18X X X
      * 7 X - - -
      * 8 X X X X
      * 9 - - - X
@@ -119,9 +119,9 @@ public class Caminho {
                     caminhoLinhasAlternadas.adicionarTile(posicao, coluna, linha);
                     posicao++;
                 } else if((linha%2 == 0 && linha%4==2)){
-                    posicao = ((linha/2)*(_colunaMaxima+1))-coluna;
+                    posicao = ((linha/2)*(_colunaMaxima+1) + 3 - coluna);
                     caminhoLinhasAlternadas.adicionarTile(posicao, coluna, linha);
-                    posicao = ((linha/2)*(_colunaMaxima+1));
+                    posicao = ((linha/2)*(_colunaMaxima+1) + 4);
                 } else if(linha%2 == 1 && linha%4==1 && coluna == _colunaMaxima-1){
                     caminhoLinhasAlternadas.adicionarTile(posicao, coluna, linha);
                     posicao++;
