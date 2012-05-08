@@ -12,7 +12,7 @@ import org.lwjgl.util.Color;
  * Um terreno contém um conjunto de tiles, um caminho e um conjunto de inimigos.
  * @author diogo
  */
-public class Terreno {
+public class Terreno extends Desenho {
     /**
      * Array de tiles do terreno.
      * A posição da tile no array deve refletir sua posição no terreno.
@@ -25,12 +25,6 @@ public class Terreno {
      * O caminho mostra um lugar por onde os inimigos podem movimentar-se.
      */
     Caminho caminho;
-
-    /**
-     * Posição do terreno na tela.
-     */
-    float posX;
-    float posY;
 
     /**
      * O tamanho que cada tile deve ter.
@@ -58,9 +52,8 @@ public class Terreno {
         tilesPorLinha = _comprimentoEmTiles;
         tilesPorColuna = _larguraEmTiles;
 
-        posX = _posX;
-        posY = _posY+_larguraTela;
-
+		super(_posX, _posY+_larguraTela, _comprimentoTela, _larguraTela, 100);
+		
         tiles = new Tile[tilesPorLinha][tilesPorColuna];
 
         //Pequeno teste. Notar que a tile (0,0) é sinalizada com verde, e não laranja.
