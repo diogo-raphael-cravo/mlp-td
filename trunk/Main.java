@@ -1,4 +1,4 @@
-package mlptd;
+package mlp.td;
 
 
 /**

@@ -3,9 +3,8 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
-import org.lwjgl.util.Color;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -32,6 +31,7 @@ public class Tile extends Desenho {
     /**
      * Desenha a tile na tela com base em seu tamanho e posição.
      */
+    @Override
     public void desenhar(){
         glPushMatrix();
         glTranslatef(posX,posY,0.0f);
