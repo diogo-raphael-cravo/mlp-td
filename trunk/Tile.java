@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlp.td;
+package mlptd;
 
 import static org.lwjgl.opengl.GL11.*;
 

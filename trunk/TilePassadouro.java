@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 
-package mlp.td;
+package mlptd;
 
 import java.util.Vector;
-import static org.lwjgl.opengl.GL11.*;
+import org.lwjgl.util.Color;
 
 /**
  *
@@ -14,30 +14,46 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class TilePassadouro extends Tile{
     /**
+     * Tipos de tiles passadouros.
+     */
+    public static enum TIPO_PASSADOURO{TERRA, AGUA};
+
+    /**
      * Indica se a tile está ocupada por algum inimigo.
      */
     boolean ocupada;
 
     /**
-     * Array com inimigos que ocupam esta tile.
+     * Inimigos que ocupa esta tile.
      */
-    Vector inimigosQueEstaoAqui;
+    Inimigo inimigosQueEstahAqui;
+
+    /**
+     * O tipo do passadouro, que define que tipos de inimigos podem passar por ele.
+     */
+    private TIPO_PASSADOURO tipo;
 
     public TilePassadouro(float _posX, float _posY, float _comprimento, float _largura){
         super(_posX, _posY, _comprimento, _largura);
         ocupada = false;
-        inimigosQueEstaoAqui = new Vector();
+        setTipo(TIPO_PASSADOURO.TERRA);
     }
     public TilePassadouro(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
         super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
         ocupada = false;
-        inimigosQueEstaoAqui = new Vector();
+        setTipo(TIPO_PASSADOURO.TERRA);
     }
     public TilePassadouro(Tile _tile){
         super(_tile.getPosX(), _tile.getPosY(), _tile.getComprimento(), _tile.getLargura(), _tile.getTamanhoEmPorcentagem());
         mudarCor(_tile.getCor());
+        setTipo(TIPO_PASSADOURO.TERRA);
         ocupada = false;
-        inimigosQueEstaoAqui = new Vector();
+    }
+    public TilePassadouro(TilePassadouro _tile){
+        super(_tile.getPosX(), _tile.getPosY(), _tile.getComprimento(), _tile.getLargura(), _tile.getTamanhoEmPorcentagem());
+        mudarCor(_tile.getCor());
+        setTipo(_tile.getTipo());
+        ocupada = false;
     }
 
     /**
@@ -45,14 +61,27 @@ public class TilePassadouro extends Tile{
      * @param _inimigo Inimigo que será adicionado.
      */
      public void adicionarInimigo(Inimigo _inimigo){
-        inimigosQueEstaoAqui.add(_inimigo);
+        inimigosQueEstahAqui = new Inimigo(_inimigo);
     }
 
     /**
      * Retira todos inimigos desta tile.
      */
      public void retirarTodosInimigos(){
-         inimigosQueEstaoAqui = new Vector();
+         inimigosQueEstahAqui = null;
+     }
+
+     public TIPO_PASSADOURO getTipo(){
+         TIPO_PASSADOURO tipoReturn = tipo;
+         return tipoReturn;
+     }
+     public void setTipo(TIPO_PASSADOURO _tipo){
+         tipo = _tipo;
+         if(tipo == TIPO_PASSADOURO.TERRA){
+             cor = new Color(Color.GREEN);
+         } else if(tipo == TIPO_PASSADOURO.AGUA){
+             cor = new Color(Color.BLUE);
+         }
      }
 
     /**
@@ -61,9 +90,8 @@ public class TilePassadouro extends Tile{
     public void desenhar(){
         super.desenhar();
         Inimigo inimigoSendoDesenhado;
-        for(Object inimigo : inimigosQueEstaoAqui){
-            inimigoSendoDesenhado = (Inimigo) inimigo;
-            inimigoSendoDesenhado.desenhar(posX, posY);
+        if(inimigosQueEstahAqui != null){
+            inimigosQueEstahAqui.desenhar(posX, posY);
         }
     }
 

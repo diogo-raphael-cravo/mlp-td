@@ -1,4 +1,4 @@
-package mlp.td;
+package mlptd;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
@@ -133,15 +133,18 @@ public class td {
 
   public void update() {
       try {
-            terrenoExemplo.moverInimigos();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    /*if(squareSize < 5) {
-      squareSize = 5;
-    }
-    else if(squareSize >= DISPLAY_HEIGHT) {
-      squareSize = DISPLAY_HEIGHT;
-    }*/
+          terrenoExemplo.moverInimigos();
+      } catch (InterruptedException ex) {
+          Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      try {
+          Thread.sleep(500);
+      } catch (InterruptedException ex) {
+          Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);
+      }
   }
+
+
+
+  
 }
