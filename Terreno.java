@@ -3,9 +3,8 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
-import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.Color;
 
 /**
@@ -21,8 +20,11 @@ public class Terreno extends Desenho {
     Tile[][] tiles;
 
     /**
-     * Caminho composto por índices de tiles em tiles.
+     * Caminho composto por índices de tiles em tiles[][].
      * O caminho mostra um lugar por onde os inimigos podem movimentar-se.
+     * Apesar de caminhos isolados possuirem somente um início e um fim, sem bifurcações,
+     * o terreno pode ter vários caminhos, o que cria bifurcações no terreno, mas não
+     * nos caminhos isoladamente.
      */
     Caminho caminho;
 
@@ -46,18 +48,18 @@ public class Terreno extends Desenho {
      */
      public Terreno(float _posX, float _posY, float _comprimentoTela, float _larguraTela,
                     int _comprimentoEmTiles, int _larguraEmTiles){
+        super(_posX, _posY+_larguraTela, _comprimentoTela, _larguraTela, 100);
+         
         comprimentoCadaTile = _comprimentoTela/_comprimentoEmTiles;
         larguraCadaTile = _larguraTela/_larguraEmTiles;
         
         tilesPorLinha = _comprimentoEmTiles;
         tilesPorColuna = _larguraEmTiles;
-
-		super(_posX, _posY+_larguraTela, _comprimentoTela, _larguraTela, 100);
 		
         tiles = new Tile[tilesPorLinha][tilesPorColuna];
 
         //Pequeno teste. Notar que a tile (0,0) é sinalizada com verde, e não laranja.
-        transformarEmTabuleiro(new Color(Color.ORANGE));
+        //transformarEmTabuleiro(new Color(Color.ORANGE));
         //transformarEmTabuleiro(new Color(Color.GREEN));
 
         caminho = Caminho.criarCaminhoDiagonalDecrescente(tilesPorColuna, tilesPorLinha, tilesPorColuna);
@@ -76,7 +78,6 @@ public class Terreno extends Desenho {
         TilePassadouro tile;
         int linha;
         int coluna;
-        Thread thisThread = Thread.currentThread();
         if(posicao < caminho.getComprimento()){
             if(0 < posicao){
                 coluna = caminho.getColunaTile(posicao-1);
@@ -88,7 +89,7 @@ public class Terreno extends Desenho {
             linha = caminho.getLinhaTile(posicao);
             tile = (TilePassadouro) tiles[coluna][linha];
             tile.adicionarInimigo(inimigoExemplo);
-            thisThread.sleep(1000);
+            Thread.sleep(1000);
             posicao++;
          }
      }
@@ -99,13 +100,13 @@ public class Terreno extends Desenho {
       * @param _caminho O caminho a ser aplicado.
       */
      private void transformarTerrenoSegundoCaminho(Caminho _caminho){
-        int posicao;
+        int posicaoAtual;
         int linha;
         int coluna;
         Tile tileSubstituida;
-        for(posicao = 0; posicao<_caminho.getComprimento(); posicao++){
-            coluna = _caminho.getColunaTile(posicao);
-            linha = _caminho.getLinhaTile(posicao);
+        for(posicaoAtual = 0; posicaoAtual<_caminho.getComprimento(); posicaoAtual++){
+            coluna = _caminho.getColunaTile(posicaoAtual);
+            linha = _caminho.getLinhaTile(posicaoAtual);
             tileSubstituida = tiles[coluna][linha];
             tiles[coluna][linha] = new TilePassadouro(tileSubstituida);
         }
@@ -118,18 +119,18 @@ public class Terreno extends Desenho {
      private void transformarEmTabuleiro(Color _cor){
         int linha;
         int coluna;
-        Color cor;
+        Color corCasaAtual;
         for(coluna=0; coluna<tilesPorLinha; coluna++){
             for(linha=0; linha<tilesPorColuna; linha++){
                 if(linha==0 && coluna == 0){
-                    cor = new Color(_cor);
+                    corCasaAtual = new Color(_cor);
                 } else if((coluna%2==0 && linha%2==1)
                    || (coluna%2==1 && linha%2==0)){
-                    cor = new Color(Color.BLUE);
+                    corCasaAtual = new Color(Color.BLUE);
                 } else {
-                    cor = new Color(Color.RED);
+                    corCasaAtual = new Color(Color.RED);
                 }
-                adicionarTile(coluna, linha, cor);
+                adicionarTile(coluna, linha, corCasaAtual);
             }
         }
      }
@@ -159,6 +160,7 @@ public class Terreno extends Desenho {
      /**
       * Desenha todas as tiles do terreno.
       */
+    @Override
      public void desenhar(){
          for(int linha=0; linha<tilesPorColuna; linha++){
             for(int coluna=0; coluna<tilesPorLinha; coluna++){
@@ -171,6 +173,7 @@ public class Terreno extends Desenho {
       * Move o terreno.
       * @param _destino Posição para onde o terreno deve ir.
       */
+    @Override
      public void mover(float _posX, float _posY){
         posX = _posX;
         posY = _posY;

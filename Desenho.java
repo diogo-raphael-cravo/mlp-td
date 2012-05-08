@@ -1,4 +1,6 @@
-package mlp-td;
+package mlp.td;
+
+import org.lwjgl.util.Color;
 
 /**
  * Um desenho qualquer.
@@ -11,24 +13,35 @@ public class Desenho {
     protected float posY;
     protected float comprimento;
     protected float largura;
-    private Color cor;
+    protected float altura;
+    protected Color cor;
 
-	/**
-     * @param _posX, _posY A posição do ponto superior esquerdo na tela.
-     * @param _comprimento, _largura Comprimento e largura.
+    /**
+     * @param _posX, _posY A posiï¿½ï¿½o do ponto superior esquerdo na tela.
+     * @param _comprimento, _largura, _altura Comprimento, largura e altura.
      * @param _tamanhoEmPorcentagem Usado para resize.
      */
-	public Desenho(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
+    public Desenho(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
         cor = new Color(Color.GREEN);
         posX = _posX;
         posY = _posY;
         comprimento = _comprimento;
         largura = _largura;tamanhoEmPorcentagem = _tamanhoEmPorcentagem;
+        altura = 1;
         redimensionar(1);
-	}
+    }
+    public Desenho(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem, float _altura){
+        cor = new Color(Color.GREEN);
+        posX = _posX;
+        posY = _posY;
+        comprimento = _comprimento;
+        largura = _largura;tamanhoEmPorcentagem = _tamanhoEmPorcentagem;
+        altura = _altura;
+        redimensionar(1);
+    }
 
 
-	public float getPosX(){
+    public float getPosX(){
         return posX;
     }
     public float getPosY(){
@@ -47,7 +60,7 @@ public class Desenho {
         return cor;
     }
 	
-	/**
+    /**
      * Modifica a cor deste desenho.
      * @param _cor Cor do desenho.
      */
@@ -64,15 +77,15 @@ public class Desenho {
     }
 
     /**
-     * @param _tamanhoEmPorcentagem O tamanho em relação ao tamanho inicial (de criação) do desenho.
+     * @param _tamanhoEmPorcentagem O tamanho em relaï¿½ï¿½o ao tamanho inicial (de criaï¿½ï¿½o) do desenho.
      */
     public void redimensionar(int _tamanhoEmPorcentagem){
         tamanhoEmPorcentagem = _tamanhoEmPorcentagem;
     }
 	
-	/**
-     * Desenha na tela com base em seu tamanho e posição.
-	 * Deve ser implementada em casa classe descendente.
+    /**
+     * Desenha na tela com base em seu tamanho e posiï¿½ï¿½o.
+     * Deve ser implementada em casa classe descendente.
      */
     public void desenhar(){}
 }

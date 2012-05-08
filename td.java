@@ -1,7 +1,5 @@
-package mlptd;
+package mlp.td;
 
-import java.awt.Dimension;
-import java.awt.Point;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 

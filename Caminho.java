@@ -3,11 +3,12 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
 /**
  * Um caminho por onde os inimigos podem movimentar-se.
  * É constituído por índices de tiles no array tiles de Terreno.
+ * Um caminho só possui um início e um fim, sem bifurcações.
  * @author diogo
  */
 public class Caminho {
