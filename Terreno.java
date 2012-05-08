@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlp.td;
+package mlptd;
 
 import org.lwjgl.util.Color;
 
@@ -59,11 +59,12 @@ public class Terreno extends Desenho {
         tiles = new Tile[tilesPorLinha][tilesPorColuna];
 
         //Pequeno teste. Notar que a tile (0,0) é sinalizada com verde, e não laranja.
-        //transformarEmTabuleiro(new Color(Color.ORANGE));
+        transformarEmTabuleiro(new Color(Color.ORANGE));
         //transformarEmTabuleiro(new Color(Color.GREEN));
 
-        caminho = Caminho.criarCaminhoDiagonalDecrescente(tilesPorColuna, tilesPorLinha, tilesPorColuna);
-        transformarTerrenoSegundoCaminho(caminho);
+        //caminho = Caminho.criarCaminhoDiagonalDecrescente(tilesPorColuna, tilesPorLinha, tilesPorColuna);
+        caminho = Caminho.criarCaminhoLinhasAlternadas(tilesPorLinha, tilesPorColuna);
+        aplicar(caminho);
 
         posicao = 0;
      }
@@ -89,7 +90,6 @@ public class Terreno extends Desenho {
             linha = caminho.getLinhaTile(posicao);
             tile = (TilePassadouro) tiles[coluna][linha];
             tile.adicionarInimigo(inimigoExemplo);
-            Thread.sleep(1000);
             posicao++;
          }
      }
@@ -99,7 +99,7 @@ public class Terreno extends Desenho {
       * Aplica o caminho a este terreno, isto é, transforma as tiles que estão no caminho em TilePassadouro.
       * @param _caminho O caminho a ser aplicado.
       */
-     private void transformarTerrenoSegundoCaminho(Caminho _caminho){
+     private void aplicar(Caminho _caminho){
         int posicaoAtual;
         int linha;
         int coluna;
