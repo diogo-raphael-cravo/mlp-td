@@ -44,6 +44,8 @@ public class td {
   }
 
   public void create() throws LWJGLException {
+    Camera.inicializacao();
+
     //Display
     Display.setDisplayMode(new DisplayMode(DISPLAY_WIDTH,DISPLAY_HEIGHT));
     Display.setFullscreen(false);
@@ -85,27 +87,27 @@ public class td {
 
   public void processMouse() {
     //terrenoExemplo.mover(Mouse.getX(), Mouse.getY());
+    if(Mouse.getX() < 5){
+        Camera.deslocar(Camera.CAMERA.ORTOGRAFICA, -10.0f, 0.0f);
+    } else if(Mouse.getY() < 5){
+        Camera.deslocar(Camera.CAMERA.ORTOGRAFICA, 0.0f, -10.0f);
+    } else if(DISPLAY_WIDTH - 5 < Mouse.getX()){
+        Camera.deslocar(Camera.CAMERA.ORTOGRAFICA, 10.0f, 0.0f);
+    } else if(DISPLAY_HEIGHT - 5 < Mouse.getY()){
+        Camera.deslocar(Camera.CAMERA.ORTOGRAFICA, 0.0f, 10.0f);
+    }
   }
 
   public void render() {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-        
+    Camera.setCamera(Camera.CAMERA.ORTOGRAFICA);
     terrenoExemplo.desenhar();
   }
 
   public void resizeGL() {
     //2D Scene
-    glViewport(0,0,DISPLAY_WIDTH,DISPLAY_HEIGHT);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0.0f,DISPLAY_WIDTH,0.0f,DISPLAY_HEIGHT);
-    glPushMatrix();
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glPushMatrix();
+    Camera.setCamera(Camera.CAMERA.ORTOGRAFICA);
   }
 
   public void run() {
