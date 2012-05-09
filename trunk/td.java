@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
 import java.io.IOException;
+import java.util.Vector;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,7 +45,8 @@ public class td {
   }
 
   public void create() throws LWJGLException {
-    Camera.inicializacao();
+    Tela.inicializar();
+    Camera.inicializar();
 
     //Display
     Display.setDisplayMode(new DisplayMode(DISPLAY_WIDTH,DISPLAY_HEIGHT));
@@ -86,7 +88,17 @@ public class td {
   }
 
   public void processMouse() {
-    //terrenoExemplo.mover(Mouse.getX(), Mouse.getY());
+      int BOTAO_ESQUERDO_MOUSE = 0;
+      float mouseX = Tela.xTelaParaGlobal(Mouse.getX());
+      float mouseY = Tela.yTelaParaGlobal(Mouse.getY());
+      if(Mouse.isButtonDown(BOTAO_ESQUERDO_MOUSE)){
+        Vector<Desenho> todosDesenhosCriados = Desenho.getTodosDesenhosCriados();
+        for(Desenho desenho : todosDesenhosCriados){
+            if(desenho.contem(mouseX, mouseY)){
+                desenho.houveMouseDown();
+            }
+        }
+      }
   }
 
   public void render() {
@@ -103,6 +115,7 @@ public class td {
         Camera.ortografica.deslocar(0.0f, 1.0f);
     }
     terrenoExemplo.desenhar();
+    Tela.getTela().desenhar();
   }
 
   public void resizeGL() {
@@ -139,11 +152,11 @@ public class td {
       } catch (InterruptedException ex) {
           Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);
       }
-     try {
+     /*try {
           Thread.sleep(500);
       } catch (InterruptedException ex) {
           Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);
-      }
+      }*/
   }
 
 

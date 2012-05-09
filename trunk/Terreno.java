@@ -11,7 +11,7 @@ import org.lwjgl.util.Color;
  * Um terreno contém um conjunto de tiles, um caminho e um conjunto de inimigos.
  * @author diogo
  */
-public class Terreno extends Desenho {
+public class Terreno extends Desenho{
     /**
      * Array de tiles do terreno.
      * A posição da tile no array deve refletir sua posição no terreno.
@@ -155,6 +155,7 @@ public class Terreno extends Desenho {
             tileQueDeveSerAdicionada.mudarCor(_cor);
             tiles[_colunaTile][_linhaTile] = tileQueDeveSerAdicionada;
          }
+         tiles[_colunaTile][_linhaTile].inicializarEventos();
      }
      
      /**
@@ -188,4 +189,5 @@ public class Terreno extends Desenho {
             }
         }
      }
+
 }
