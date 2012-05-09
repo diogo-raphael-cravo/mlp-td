@@ -15,14 +15,19 @@ import static org.lwjgl.util.glu.GLU.*;
  */
 public class Camera {
     /**
+     * A camera que está sendo utilizada.
+     */
+    private static CAMERA cameraAtual;
+
+    /**
      * Camera em perspectiva.
      */
-    private static Camera perspectiva;
+    public static Camera perspectiva;
 
     /**
      * Camera ortograhfica.
      */
-    private static Camera ortografica;
+    public static Camera ortografica;
 
     /**
      * Tipos de cameras.
@@ -41,6 +46,7 @@ public class Camera {
     public static void inicializacao(){
         perspectiva = new Camera();
         ortografica = new Camera();
+        cameraAtual = CAMERA.ORTOGRAFICA;
     }
 
     private Camera(){
@@ -50,16 +56,12 @@ public class Camera {
 
     /**
      * Permite deslocar a camera.
-     * @param _camera A camera que serah deslocada.
      * @param _deslocamentoX, _deslocamentoY O deslocamento nestes eixos.
      */
-    public static void deslocar(CAMERA _camera, float _deslocamentoX, float _deslocamentoY){
-        if(_camera == CAMERA.PERSPECTIVA){
-            
-        } else if(_camera == CAMERA.ORTOGRAFICA){
-            ortografica._posX += _deslocamentoX;
-            ortografica._posY += _deslocamentoY;
-        }
+    public void deslocar(float _deslocamentoX, float _deslocamentoY){
+        _posX += _deslocamentoX;
+        _posY += _deslocamentoY;
+        Camera.atualizar();
     }
 
     /**
@@ -83,6 +85,11 @@ public class Camera {
         }
     }
 
-    
+    /**
+     * Atualiza a camera utilizada para que esteja de acordo com seus atributos.
+     */
+    public static void atualizar(){
+        setCamera(cameraAtual);
+    }
     
 }

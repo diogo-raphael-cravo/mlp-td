@@ -87,21 +87,21 @@ public class td {
 
   public void processMouse() {
     //terrenoExemplo.mover(Mouse.getX(), Mouse.getY());
-    if(Mouse.getX() < 5){
-        Camera.deslocar(Camera.CAMERA.ORTOGRAFICA, -10.0f, 0.0f);
-    } else if(Mouse.getY() < 5){
-        Camera.deslocar(Camera.CAMERA.ORTOGRAFICA, 0.0f, -10.0f);
-    } else if(DISPLAY_WIDTH - 5 < Mouse.getX()){
-        Camera.deslocar(Camera.CAMERA.ORTOGRAFICA, 10.0f, 0.0f);
-    } else if(DISPLAY_HEIGHT - 5 < Mouse.getY()){
-        Camera.deslocar(Camera.CAMERA.ORTOGRAFICA, 0.0f, 10.0f);
-    }
   }
 
   public void render() {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-    Camera.setCamera(Camera.CAMERA.ORTOGRAFICA);
+
+    if(Mouse.getX() < 5){
+        Camera.ortografica.deslocar(-1.0f, 0.0f);
+    } else if(Mouse.getY() < 5){
+        Camera.ortografica.deslocar(0.0f, -1.0f);
+    } else if(DISPLAY_WIDTH - 5 < Mouse.getX()){
+        Camera.ortografica.deslocar(1.0f, 0.0f);
+    } else if(DISPLAY_HEIGHT - 5 < Mouse.getY()){
+        Camera.ortografica.deslocar(0.0f, 1.0f);
+    }
     terrenoExemplo.desenhar();
   }
 
@@ -139,7 +139,7 @@ public class td {
       } catch (InterruptedException ex) {
           Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);
       }
-      try {
+     try {
           Thread.sleep(500);
       } catch (InterruptedException ex) {
           Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);

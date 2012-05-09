@@ -113,15 +113,16 @@ public class Caminho {
         int posicao=0;
         int linha;
         int coluna;
+        int posicaoAuxiliar;
         for(linha=0; linha<_linhaMaxima; linha++){
             for(coluna=0; coluna<_colunaMaxima; coluna++){
                 if((linha%2 == 0 && linha%4==0)){
                     caminhoLinhasAlternadas.adicionarTile(posicao, coluna, linha);
                     posicao++;
                 } else if((linha%2 == 0 && linha%4==2)){
-                    posicao = ((linha/2)*(_colunaMaxima+1) + 3 - coluna);
-                    caminhoLinhasAlternadas.adicionarTile(posicao, coluna, linha);
-                    posicao = ((linha/2)*(_colunaMaxima+1) + 4);
+                    posicaoAuxiliar = posicao + (_colunaMaxima - (2*coluna+1));
+                    caminhoLinhasAlternadas.adicionarTile(posicaoAuxiliar, coluna, linha);
+                    posicao++;
                 } else if(linha%2 == 1 && linha%4==1 && coluna == _colunaMaxima-1){
                     caminhoLinhasAlternadas.adicionarTile(posicao, coluna, linha);
                     posicao++;
@@ -131,6 +132,7 @@ public class Caminho {
                 }
             }
         }
+        
         return caminhoLinhasAlternadas;
     }
 }

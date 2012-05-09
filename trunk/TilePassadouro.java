@@ -24,9 +24,9 @@ public class TilePassadouro extends Tile{
     boolean ocupada;
 
     /**
-     * Inimigos que ocupa esta tile.
+     * Inimigo que ocupa esta tile.
      */
-    Inimigo inimigosQueEstahAqui;
+    Inimigo inimigoQueEstahAqui;
 
     /**
      * O tipo do passadouro, que define que tipos de inimigos podem passar por ele.
@@ -39,9 +39,7 @@ public class TilePassadouro extends Tile{
         setTipo(TIPO_PASSADOURO.TERRA);
     }
     public TilePassadouro(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
-        super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
-        ocupada = false;
-        setTipo(TIPO_PASSADOURO.TERRA);
+        this(_posX, _posY, _comprimento, _largura);
     }
     public TilePassadouro(Tile _tile){
         super(_tile.getPosX(), _tile.getPosY(), _tile.getComprimento(), _tile.getLargura(), _tile.getTamanhoEmPorcentagem());
@@ -61,14 +59,17 @@ public class TilePassadouro extends Tile{
      * @param _inimigo Inimigo que será adicionado.
      */
      public void adicionarInimigo(Inimigo _inimigo){
-        inimigosQueEstahAqui = new Inimigo(_inimigo);
-    }
+        float xCentro = getPosX() + getComprimento()/2 - _inimigo.getComprimento()/2;
+        float yCentro = getPosY() + getLargura()/2 - _inimigo.getLargura()/2;
+        inimigoQueEstahAqui = new Inimigo(_inimigo);
+        inimigoQueEstahAqui.mover(xCentro, yCentro);
+     }
 
     /**
      * Retira todos inimigos desta tile.
      */
      public void retirarTodosInimigos(){
-         inimigosQueEstahAqui = null;
+         inimigoQueEstahAqui = null;
      }
 
      public TIPO_PASSADOURO getTipo(){
@@ -87,11 +88,11 @@ public class TilePassadouro extends Tile{
     /**
      * Desenha a tile na tela com base em seu tamanho e posição.
      */
+    @Override
     public void desenhar(){
         super.desenhar();
-        Inimigo inimigoSendoDesenhado;
-        if(inimigosQueEstahAqui != null){
-            inimigosQueEstahAqui.desenhar(posX, posY);
+        if(inimigoQueEstahAqui != null){
+            inimigoQueEstahAqui.desenhar();
         }
     }
 

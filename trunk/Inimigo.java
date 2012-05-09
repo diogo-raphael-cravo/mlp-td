@@ -5,34 +5,28 @@
 
 package mlptd;
 
-import static org.lwjgl.opengl.GL11.*;
+import org.lwjgl.util.Color;
 
 /**
  *
  * @author diogo
  */
-public class Inimigo {
-
+public class Inimigo extends Desenho {
+    /**
+     * @param _posX, _posY A posição do ponto superior esquerdo na tela.
+     * @param _comprimento, _largura Comprimento e largura.
+     */
     public Inimigo(){
-        
+        super(0, 0, 10, 10, 100);
+        cor = new Color(Color.BLACK);
+    }
+    public Inimigo(float _posX, float _posY, float _comprimento, float _largura){
+         super(_posX, _posY, _comprimento, _largura, 100);
     }
     public Inimigo(Inimigo _inimigo){
-
-    }
-
-    public void desenhar(float _x, float _y){
-        glPushMatrix();
-        glTranslatef(_x,_y,0.0f);
-        glRotatef(0,0.0f,0.0f,1.0f);
-        glTranslatef(-(100 >> 1),-(100 >> 1),0.0f);
-        glColor3f(0.5f, 0.5f, 0.5f);
-        glBegin(GL_QUADS);
-            glTexCoord3f(0.0f,0.0f, 0.0f); glVertex3f(0.0f,0.0f, 0.0f);
-            glTexCoord3f(1.0f,0.0f, 0.0f); glVertex3f(10, 0.0f, 0.0f);
-            glTexCoord3f(1.0f,1.0f, 0.0f); glVertex3f(10, 10, 0.0f);
-            glTexCoord3f(0.0f,1.0f, 0.0f); glVertex3f(0.0f, 10, 0.0f);
-        glEnd();
-        glPopMatrix();
+         super(_inimigo.getPosX(), _inimigo.getPosY(),
+               _inimigo.getComprimento(), _inimigo.getLargura(),
+               _inimigo.getTamanhoEmPorcentagem());
     }
 
 
