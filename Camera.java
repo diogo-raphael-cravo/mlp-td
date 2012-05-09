@@ -43,7 +43,7 @@ public class Camera {
     /**
      * Inicializa todas as cameras, deixando-as prontas para uso.
      */
-    public static void inicializacao(){
+    public static void inicializar(){
         perspectiva = new Camera();
         ortografica = new Camera();
         cameraAtual = CAMERA.ORTOGRAFICA;
@@ -61,6 +61,7 @@ public class Camera {
     public void deslocar(float _deslocamentoX, float _deslocamentoY){
         _posX += _deslocamentoX;
         _posY += _deslocamentoY;
+        Tela.getTela().deslocar(_deslocamentoX, _deslocamentoY);
         Camera.atualizar();
     }
 

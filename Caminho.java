@@ -94,18 +94,6 @@ public class Caminho {
      * 1 1 1 1
      * 1 0 0 0
      * 1 1 1 1
-     *
-     *   0 1 2 3
-     * 0 0 1 2 3
-     * 1 - - - 4
-     * 2 8 7 6 5
-     * 3 X - - -
-     * 4 X X X X
-     * 5 - - - X
-     * 6 18X X X
-     * 7 X - - -
-     * 8 X X X X
-     * 9 - - - X
      */
     public static Caminho criarCaminhoLinhasAlternadas(int _colunaMaxima, int _linhaMaxima){
         int comprimentoCaminho = (_colunaMaxima+1)*(_linhaMaxima/2);
