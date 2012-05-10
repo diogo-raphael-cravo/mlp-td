@@ -260,6 +260,9 @@ public class Terreno extends Desenho{
             linha = _caminho.getLinhaTile(posicaoAtual);
             tileSubstituida = tiles[coluna][linha];
             tiles[coluna][linha] = new TilePassadouro(tileSubstituida);
+            /*
+             * Vazando memória aqui?
+             */
         }
      }
 

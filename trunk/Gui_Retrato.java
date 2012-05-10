@@ -5,6 +5,7 @@
 
 package mlptd;
 
+import java.util.Vector;
 import org.lwjgl.util.Color;
 
 /**
@@ -37,7 +38,10 @@ public class Gui_Retrato extends Desenho {
      * @param _desenho Desenho a ser exibido.
      */
     public void exibir(Desenho _desenho){
-        desenhoExibido = _desenho;
+        float xCentro = xCentroParaDesenho(_desenho) - posX;
+        float yCentro = yCentroParaDesenho(_desenho) - posY;
+        desenhoExibido = new Desenho(_desenho);
+        adicionarFilho(desenhoExibido, xCentro, yCentro);
     }
 
     /**
@@ -45,6 +49,7 @@ public class Gui_Retrato extends Desenho {
      */
     public void retirarDesenhoExibido(){
         desenhoExibido = null;
+        filhos = new Vector<Desenho>();
     }
 
     /**
@@ -53,9 +58,6 @@ public class Gui_Retrato extends Desenho {
      */
     public void desenhar(){
         super.desenhar();
-        if(desenhoExibido != null){
-            desenhoExibido.desenhar();
-        }
     }
     
 }

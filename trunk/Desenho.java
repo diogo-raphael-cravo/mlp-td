@@ -19,15 +19,25 @@ public class Desenho {
     protected Color cor;
 
     /**
+     * Utilizada para encontrar este objeto em todosDesenhosCriados.
+     */
+    private long identificacaoUnica;
+
+    /**
      * Array que contém todos os desenhos criados.
      * Utilizado para aplicação de eventos.
      */
     private static Vector<Desenho> todosDesenhosCriados;
 
+   /**
+    * Usado para garantir que identificacaoUnica é única.
+    */
+    private static long identificacaoUnicaLivre;
+
     /**
      * Filhos, que são sempre desenhados.
      */
-     private Vector<Desenho> filhos;
+    protected Vector<Desenho> filhos;
 
     /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
@@ -45,9 +55,11 @@ public class Desenho {
         redimensionar(1);
         if(todosDesenhosCriados == null){
             todosDesenhosCriados = new Vector<Desenho>();
+            identificacaoUnicaLivre=0;
         }
-
         filhos = new Vector<Desenho>();
+        identificacaoUnica = identificacaoUnicaLivre;
+        identificacaoUnicaLivre++;
     }
     public Desenho(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem, float _altura){
         this(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
@@ -93,6 +105,9 @@ public class Desenho {
     }
     public Color getCor(){
         return cor;
+    }
+    public long getIdentificacaoUnica(){
+        return identificacaoUnica;
     }
     public Vector<Desenho> getFilhos(){
         Vector<Desenho> filhosRetorno = new Vector<Desenho>();
@@ -153,6 +168,9 @@ public class Desenho {
     public void mover(float _posX, float _posY){
         posX = _posX;
         posY = _posY;
+        for(Desenho desenhoFilho : filhos){
+            desenhoFilho.mover(_posX, _posY);
+        }
     }
 
     /**
@@ -162,6 +180,9 @@ public class Desenho {
     public void deslocar(float _deslocamentoX, float _deslocamentoY){
         posX += _deslocamentoX;
         posY += _deslocamentoY;
+        for(Desenho desenhoFilho : filhos){
+            desenhoFilho.deslocar(_deslocamentoX, _deslocamentoY);
+        }
     }
     
     /**
@@ -224,6 +245,9 @@ public class Desenho {
             glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f, tamanhoEmPorcentagem*largura);
         glEnd();
         glPopMatrix();
+        for(Desenho desenhoFilho : filhos){
+            desenhoFilho.desenhar();
+        }
     }
 
     /**
@@ -256,5 +280,20 @@ public class Desenho {
         string.append("\t filhos = "+filhos.toString()+"\n");
         string.append("}");
         return string.toString();
+    }
+
+    /*
+     *
+     *
+     */
+    protected void finalize() throws Throwable{
+        int index=0;
+        for(Desenho desenhoCriado : todosDesenhosCriados){
+            if(desenhoCriado.getIdentificacaoUnica() == identificacaoUnica){
+                todosDesenhosCriados.remove(index);
+            }
+            index++;
+        }
+        super.finalize();
     }
 }
