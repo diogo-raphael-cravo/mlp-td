@@ -1,7 +1,6 @@
 package mlptd;
 
 import java.util.Vector;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Color;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -26,6 +25,22 @@ public class Desenho implements MouseListener {
     private static Vector<Desenho> todosDesenhosCriados;
 
     /**
+     * Frames, que são desenhados de forma alternada.
+     */
+    private Vector<Desenho> frames;
+
+    /**
+     * Filhos, que são sempre desenhados.
+     */
+     private Vector<Desenho> filhos;
+
+    /**
+     * Indica o frame que foi exibido na última chamada a desenhar.
+     * Inicia em 0.
+     */
+     private int frameExbido;
+
+    /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
      * @param _comprimento, _largura, _altura Comprimento, largura e altura.
      * @param _tamanhoEmPorcentagem Usado para resize.
@@ -42,10 +57,25 @@ public class Desenho implements MouseListener {
         if(todosDesenhosCriados == null){
             todosDesenhosCriados = new Vector<Desenho>();
         }
+
+        frames = new Vector<Desenho>();
+        filhos = new Vector<Desenho>();
+
+        frames.add(this);
+        frameExbido = 0;
     }
     public Desenho(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem, float _altura){
         this(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
         altura = _altura;
+    }
+    public Desenho(Desenho _desenho){
+        this(_desenho.getPosX(), _desenho.getPosY(), _desenho.getComprimento(), _desenho.getLargura(), _desenho.getTamanhoEmPorcentagem());
+        for(Desenho desenho : _desenho.getFilhos()){
+            filhos.add(desenho);
+        }
+        for(Desenho desenho : _desenho.getFrames()){
+            frames.add(desenho);
+        }
     }
 
     /**
@@ -81,6 +111,45 @@ public class Desenho implements MouseListener {
     public Color getCor(){
         return cor;
     }
+    public Vector<Desenho> getFrames(){
+        Vector<Desenho> framesRetorno = new Vector<Desenho>();
+        for(Desenho desenho : frames){
+            framesRetorno.add(desenho);
+        }
+        return framesRetorno;
+    }
+    public Vector<Desenho> getFilhos(){
+        Vector<Desenho> filhosRetorno = new Vector<Desenho>();
+        for(Desenho desenho : filhos){
+            filhosRetorno.add(desenho);
+        }
+        return filhosRetorno;
+    }
+
+    /**
+     * Adiciona um frame a este desenho.
+     * Quando o desenho é desenhado, alterna-se entre seus frames.
+     * @param _desenho Desenho do frame a ser adicionado.
+     * Atenção: a diferença entre um frame e um filho é que o filho permanece sempre,
+     * enquanto o frame alterna-se com os outros.
+     */
+    public void adicionarFrame(Desenho _desenhoFrame){
+        frames.add(_desenhoFrame);
+    }
+
+    /**
+     * Adiciona um desenho filho a este desenho.
+     * Ele é sempre desenhado em sua posição.
+     * @param _desenho Desenho do filho a ser adicionado.
+     * @param _posX, _posY Posição em que o filho é adicionado em relação à posição deste desenho.
+     *                     Assim, se _posX=0 e _posY=0, o desenho é adicionado na posição deste desenho.
+     * Atenção: a diferença entre um frame e um filho é que o filho permanece sempre,
+     * enquanto o frame alterna-se com os outros.
+     */
+     public void adicionarFilho(Desenho _desenhoFilho, float _posX, float _posY){
+         filhos.add(_desenhoFilho);
+         _desenhoFilho.mover(posX+_posX, posY+_posY);
+     }
 
     /**
      * Compara este desenho com o desenho de parâmetro e retorna a posição em que
@@ -175,20 +244,29 @@ public class Desenho implements MouseListener {
      * O objeto desenhado é um retângulo.
      */
     public void desenhar(){
-        glPushMatrix();
-        glTranslatef(posX,posY,0.0f);
-        glRotatef(0,0.0f,0.0f,1.0f);
-        glTranslatef(-(100 >> 1),-(100 >> 1),0.0f);
-        glColor3f((float) (cor.getRed()/255.0),
-                  (float) (cor.getGreen()/255.0),
-                  (float) (cor.getBlue()/255.0));
-        glBegin(GL_QUADS);
-            glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
-            glTexCoord2f(1.0f,0.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, 0.0f);
-            glTexCoord2f(1.0f,1.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, tamanhoEmPorcentagem*largura);
-            glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f, tamanhoEmPorcentagem*largura);
-        glEnd();
-        glPopMatrix();
+        System.out.println("frameExbido"+frameExbido+"\n");
+        if(frames.size() <= 1){
+            glPushMatrix();
+            glTranslatef(posX,posY,0.0f);
+            glRotatef(0,0.0f,0.0f,1.0f);
+            glTranslatef(-(100 >> 1),-(100 >> 1),0.0f);
+            glColor3f((float) (cor.getRed()/255.0),
+                      (float) (cor.getGreen()/255.0),
+                      (float) (cor.getBlue()/255.0));
+            glBegin(GL_QUADS);
+                glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
+                glTexCoord2f(1.0f,0.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, 0.0f);
+                glTexCoord2f(1.0f,1.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, tamanhoEmPorcentagem*largura);
+                glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f, tamanhoEmPorcentagem*largura);
+            glEnd();
+            glPopMatrix();
+        } else {
+            frameExbido++;
+            if(frameExbido == frames.size()){
+                frameExbido = 0;
+            }
+            frames.get(frameExbido).desenhar();
+        }
     }
     
     public void houveMouseDown() {

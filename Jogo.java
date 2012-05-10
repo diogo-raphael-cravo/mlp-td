@@ -37,21 +37,15 @@ public class Jogo {
     private int nivelAtual;
 
     /**
-     * Tempo que havia no início do nível atual.
+     * Marca os nascimentos.
      */
-    private long tempoInicioNivelAtual;
-
-    /**
-     * Tempo medido desde o início do último nível.
-     */
-    private long tempoNoNivel;
+    private Temporizador temporizadorNascimentos;
 
     public Jogo(Terreno _terreno, Nivel[] _niveis){
         terreno = _terreno;
         niveis = _niveis;
         nivelAtual = -1;
-        tempoNoNivel = 0;
-        tempoInicioNivelAtual = 0;
+        temporizadorNascimentos = new Temporizador();
         iniciarProximoNivel();
     }
 
@@ -62,9 +56,9 @@ public class Jogo {
         nivelAtual++;
         boolean alcancouFimNiveis = (nivelAtual == niveis.length);
         if(!alcancouFimNiveis){
-            tempoNoNivel = 0;
-            tempoInicioNivelAtual = System.currentTimeMillis()/1000;
+            temporizadorNascimentos = new Temporizador();
             niveis[nivelAtual].criarInimigo(terreno);
+            temporizadorNascimentos.marcarAgora();
         }
     }
 
@@ -72,17 +66,10 @@ public class Jogo {
      * Atualiza o jogo, adicionando inimigos quando necessário.
      */
     public void atualizar(){
-        tempoNoNivel += System.currentTimeMillis()/1000 - tempoInicioNivelAtual;
-        
-        float tempoDesdeUltimoNascimento =
-                (tempoNoNivel - (niveis[nivelAtual].getNumeroInimigosNascidos()-1)*INTERVALO_NASCIMENTO_INIMIGOS_MILISSEGUNDOS);
-
-        System.out.println(tempoDesdeUltimoNascimento+"\n");
-        boolean passouTempoIntervaloDesdeUltimoNascimento;
-        passouTempoIntervaloDesdeUltimoNascimento = 
-                (INTERVALO_NASCIMENTO_INIMIGOS_MILISSEGUNDOS <= tempoDesdeUltimoNascimento);
-        if(passouTempoIntervaloDesdeUltimoNascimento){
+        if(INTERVALO_NASCIMENTO_INIMIGOS_MILISSEGUNDOS
+                <= temporizadorNascimentos.tempoDesdeUltimaMarcacao()){
             niveis[nivelAtual].criarInimigo(terreno);
+            temporizadorNascimentos.marcarAgora();
         }
         terreno.moverInimigos();
     }

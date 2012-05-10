@@ -6,8 +6,6 @@
 package mlptd;
 
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.lwjgl.util.Color;
 
 /**
@@ -122,7 +120,7 @@ public class Terreno extends Desenho{
         Tile exemploTileTerreno = tiles[0][0];
         TilePassadouro tileInimigo = (TilePassadouro) getTileComPosicao(inimigoNaoMovido.getPosX(), inimigoNaoMovido.getPosY());
         TilePassadouro tileVizinhaTileInimigo = null;
-        float tempoPassadoDesdeUltimoMovimentoEmSegundos = Temporizador.diferencaUltimasDuasMarcacoes()/((float) 1000.0);
+        float tempoPassadoDesdeUltimoMovimentoEmSegundos = Temporizador.diferencaUltimasDuasMarcacoesPrincipal()/((float) 1000.0);
         float velocidadeInimigoEmPixelsPorSegundo = exemploTileTerreno.getComprimento()*
                                                     inimigoNaoMovido.getVelocidadeTilesPorSegundo();
         float xDestinoInimigo = 0;
@@ -321,6 +319,9 @@ public class Terreno extends Desenho{
             for(int coluna=0; coluna<tilesPorLinha; coluna++){
                 tiles[coluna][linha].desenhar();
             }
+         }
+         for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
+            inimigoNoTerreno.desenhar();
          }
      }
 

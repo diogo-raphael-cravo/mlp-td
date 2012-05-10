@@ -12,7 +12,7 @@ package mlptd;
 public class Temporizador {
 
     /**
-     * Único temporizador existente.
+     * Temporizador principal.
      * Este elemento não pode ser acessível de fora desta classe, não deve haver getter para ele.
      * O motivo é que todas as suas propriedades são públicas.
      */
@@ -27,7 +27,7 @@ public class Temporizador {
         temporizador = new Temporizador();
     }
 
-    private Temporizador(){
+    public Temporizador(){
         marcacoes = new long[5];
         marcacoes[0] = 1000/24;
         marcacoes[1] = 1000/24;
@@ -37,24 +37,46 @@ public class Temporizador {
     }
 
     /**
-     * Realiza uma marcação no temporizador, salvando a hora atual.
+     * Realiza uma marcação no temporizador principal, salvando a hora atual.
      */
-     public static void marcarAgora(){
-          temporizador.marcacoes[4] = temporizador.marcacoes[3];
-          temporizador.marcacoes[3] = temporizador.marcacoes[2];
-          temporizador.marcacoes[2] = temporizador.marcacoes[1];
-          temporizador.marcacoes[1] = temporizador.marcacoes[0];
-          temporizador.marcacoes[0] = System.nanoTime()/1000000;
+     public static void marcarAgoraPrincipal(){
+          temporizador.marcarAgora();
+     }
+
+     /**
+      * Realiza uma marcação no temporizador, salvando a hora atual.
+      */
+     public void marcarAgora(){
+         marcacoes[4] = marcacoes[3];
+         marcacoes[3] = marcacoes[2];
+         marcacoes[2] = marcacoes[1];
+         marcacoes[1] = marcacoes[0];
+         marcacoes[0] = System.nanoTime()/1000000;
      }
 
     /**
-     * @return O tempo em milissegundos que se passou entre as duas últimas marcações.
+     * @return O tempo em milissegundos que se passou entre as duas últimas marcações no temporizador principal.
      */
-     public static long diferencaUltimasDuasMarcacoes(){
-         long diferenca = temporizador.marcacoes[0] - temporizador.marcacoes[1];
+     public static long diferencaUltimasDuasMarcacoesPrincipal(){
+         return temporizador.diferencaUltimasDuasMarcacoes();
+     }
+
+     /**
+      * @return O tempo em milissegundos que se passou entre as duas últimas marcações no temporizador
+      */
+     public long diferencaUltimasDuasMarcacoes(){
+         long diferenca = marcacoes[0] - marcacoes[1];
          if(100 < diferenca){
              diferenca = 100;
          }
+         return diferenca;
+     }
+
+     /**
+      * @return O tempo em milissegundos que se passou desde a última marcação feita.
+      */
+     public long tempoDesdeUltimaMarcacao(){
+         long diferenca = System.nanoTime()/1000000 - marcacoes[0];
          return diferenca;
      }
 

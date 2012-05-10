@@ -1,7 +1,6 @@
 package mlptd;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
 
 import java.io.IOException;
 import java.util.Vector;
@@ -13,6 +12,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.util.Color;
 
 /**
  * @author jediTofu
@@ -36,8 +36,13 @@ public class td {
 
   public td() {
     try {
+      Inimigo inimigo = new Inimigo();
+      Desenho frame2Inimigo = new Inimigo(); frame2Inimigo.mudarCor(new Color(Color.BLUE));
+      Desenho frame3Inimigo = new Inimigo(); frame3Inimigo.mudarCor(new Color(Color.BLACK));
+      inimigo.adicionarFrame(frame2Inimigo);
+      inimigo.adicionarFrame(frame3Inimigo);
       Nivel niveis[] = new Nivel[1];
-      niveis[0] = new Nivel(new Inimigo(), 10);
+      niveis[0] = new Nivel(inimigo, 10);
       jogo = new Jogo(new Terreno(150, 50, 400, 400, 10, 10), niveis);
       create();
       run();
@@ -105,7 +110,7 @@ public class td {
   }
 
   public void render() {
-    Temporizador.marcarAgora();
+    Temporizador.marcarAgoraPrincipal();
 
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
