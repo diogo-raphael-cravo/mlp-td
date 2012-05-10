@@ -45,8 +45,6 @@ public class Temporizador {
           temporizador.marcacoes[2] = temporizador.marcacoes[1];
           temporizador.marcacoes[1] = temporizador.marcacoes[0];
           temporizador.marcacoes[0] = System.nanoTime()/1000000;
-          //System.out.println("nanotime = "+System.nanoTime()+"\n");
-          //System.out.println("segundos = "+temporizador.marcacoes[0]+"\n");
      }
 
     /**
@@ -57,7 +55,6 @@ public class Temporizador {
          if(100 < diferenca){
              diferenca = 100;
          }
-         //System.out.println("diferença="+diferenca+"\n");
          return diferenca;
      }
 

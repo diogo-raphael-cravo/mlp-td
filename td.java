@@ -23,7 +23,7 @@ public class td {
   public static final int DISPLAY_WIDTH = 640;
   public static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
-  Terreno terrenoExemplo;
+  Jogo jogo;
 
   static {
     try {
@@ -36,7 +36,9 @@ public class td {
 
   public td() {
     try {
-      terrenoExemplo = new Terreno(150, 50, 400, 400, 10, 10);
+      Nivel niveis[] = new Nivel[1];
+      niveis[0] = new Nivel(new Inimigo(), 10);
+      jogo = new Jogo(new Terreno(150, 50, 400, 400, 10, 10), niveis);
       create();
       run();
     } catch(Exception ex) {
@@ -117,7 +119,7 @@ public class td {
     } else if(DISPLAY_HEIGHT - 5 < Mouse.getY()){
         Camera.ortografica.deslocar(0.0f, 1.0f);
     }
-    terrenoExemplo.desenhar();
+    jogo.desenhar();
     Tela.getTela().desenhar();
   }
 
@@ -150,16 +152,7 @@ public class td {
   }
 
   public void update() {
-      try {
-          terrenoExemplo.moverInimigos();
-      } catch (InterruptedException ex) {
-          Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);
-      }
-     /*try {
-          Thread.sleep(500);
-      } catch (InterruptedException ex) {
-          Logger.getLogger(td.class.getName()).log(Level.SEVERE, null, ex);
-      }*/
+    jogo.atualizar();
   }
 
 
