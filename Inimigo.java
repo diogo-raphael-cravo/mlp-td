@@ -47,4 +47,9 @@ public class Inimigo extends Desenho {
          return velocidadeTilesSegundo;
      }
 
+     public void desenhar(){
+         System.out.println(toString());
+         super.desenhar();
+     }
+
 }
