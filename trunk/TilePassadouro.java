@@ -26,6 +26,7 @@ public class TilePassadouro extends Tile{
     /**
      * Inimigo que ocupa esta tile.
      * A variável é atualizada para null quando o inimigo excede os limites.
+     * O inimigo não é desenhado por esta classe.
      */
     Inimigo inimigoQueEstahAqui;
 
@@ -90,13 +91,6 @@ public class TilePassadouro extends Tile{
     @Override
     public void desenhar(){
         super.desenhar();
-        if(inimigoQueEstahAqui != null){
-            if(contem(inimigoQueEstahAqui)){
-                inimigoQueEstahAqui.desenhar();
-            } else {
-                retirarTodosInimigos();
-            }
-        }
     }
     
 }

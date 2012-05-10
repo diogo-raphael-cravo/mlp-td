@@ -36,10 +36,8 @@ public class Inimigo extends Desenho {
          super(_posX, _posY, _comprimento, _largura, 100);
     }
     public Inimigo(Inimigo _inimigo){
-         super(_inimigo.getPosX(), _inimigo.getPosY(),
-               _inimigo.getComprimento(), _inimigo.getLargura(),
-               _inimigo.getTamanhoEmPorcentagem());
-         velocidadeTilesSegundo = 3;
+         super(_inimigo);
+         velocidadeTilesSegundo = _inimigo.getVelocidadeTilesPorSegundo();
     }
 
     /**
