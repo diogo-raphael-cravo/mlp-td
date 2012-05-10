@@ -1,0 +1,13 @@
+#summary Instruções de Uso
+#labels Phase-Deploy
+
+="Como compilar e utilizar este projeto?"=
+
+==Requisitos==
+
+Você vai necessitar da biblioteca lwjgl, de preferência na última versão (2.8.3). Instruções de como utilizá-la no NetBeans podem ser encontradas em:
+http://www.lwjgl.org/wiki/index.php?title=Setting_Up_LWJGL_with_NetBeans
+
+==No Netbeans==
+
+Tendo a biblioteca instalada (segundo instruções da seção anterior), basta criar um novo projeto que contenha um pacote chamado "mlptd" e colar diretamente todos os arquivos deste projeto dentro do pacote. Lembre de adicionar a biblioteca e modificar as propriedades do projeto, como também é especificado no link da seção anterior.
