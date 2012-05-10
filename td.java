@@ -38,12 +38,22 @@ public class td {
   public td() {
     try {
       Inimigo inimigo = new Inimigo();
-      Desenho primeiroQuadroInimigo = new Desenho(0, 0, 10, 10, 100);
-      Desenho segundoQuadroInimigo = new Desenho(0, 0, 10, 10, 100);
-      primeiroQuadroInimigo.mudarCor(new Color(Color.WHITE));
-      segundoQuadroInimigo.mudarCor(new Color(Color.BLACK));
-      inimigo.adicionarQuadro(primeiroQuadroInimigo);
-      inimigo.adicionarQuadro(segundoQuadroInimigo);
+      Desenho quadroInimigo = new Desenho(0, 0, 10, 10, 100);
+      Color corInimigo = new Color(Color.BLACK);
+      for(int i=0; i<=255; i+=10){
+        corInimigo.setBlue(i);
+        corInimigo.setRed(i);
+        corInimigo.setGreen(i);
+        quadroInimigo.mudarCor(corInimigo);
+        inimigo.adicionarQuadro(quadroInimigo);
+      }
+      for(int i=255; 0<=i; i-=10){
+        corInimigo.setBlue(i);
+        corInimigo.setRed(i);
+        corInimigo.setGreen(i);
+        quadroInimigo.mudarCor(corInimigo);
+        inimigo.adicionarQuadro(quadroInimigo);
+      }
       Nivel niveis[] = new Nivel[1];
       niveis[0] = new Nivel(inimigo, 10);
       jogo = new Jogo(new Terreno(150, 50, 400, 400, 10, 10), niveis);
