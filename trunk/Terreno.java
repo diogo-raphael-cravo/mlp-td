@@ -75,7 +75,6 @@ public class Terreno extends Desenho{
         aplicar(caminho);
 
         inimigosNoTerreno = new Vector<Inimigo>();
-        adicionarInimigo(new Inimigo());
      }
 
      /**
@@ -86,17 +85,40 @@ public class Terreno extends Desenho{
      public void adicionarInimigo(Inimigo _inimigoModelo){
           TilePassadouro primeiraTileCaminho = (TilePassadouro) tiles[caminho.getColunaTile(0)][caminho.getLinhaTile(0)];
           Inimigo inimigoNovo = new Inimigo(_inimigoModelo);
-          inimigoNovo.mover(primeiraTileCaminho.getPosX(), primeiraTileCaminho.getPosY());
+          inimigoNovo.mover(getPosX(), getPosY());
           primeiraTileCaminho.adicionarInimigo(inimigoNovo);
           inimigosNoTerreno.add(inimigoNovo);
      }
 
      /**
-      * Move os inimigos que estão neste terreno.
-      * Os inimigos seguem a rota indicada pelo caminho.
+      * Move todos os inimigos que estão neste terreno.
+      * Decide qual o melhor caminho a utilizar para cada inimigo.
+      * Na prática, o melhor é o menor caminho que o inimigo pode usar.
       */
-     public void moverInimigos() throws InterruptedException{
-        Inimigo inimigoNaoMovido = inimigosNoTerreno.get(0);
+     public void moverInimigos(){
+         for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
+            moverInimigo(inimigoNoTerreno, caminho);
+         }
+     }
+
+     /**
+      * Move o inimigo sobre este terreno.
+      * Note que ele não precisa pertencer ao terreno, apesar de isto ser altamente recomendado.
+      * O algoritmo é o seguinte:
+      *   1) Identificar tile em que o inimigo está, baseado somente em sua posição
+      *   2) Identificar tile vizinha (no caminho) da encontrada.
+      *   3) Calcular distância em x e em y entre a posição do inimigo e a posição da tile vizinha encontrada.
+      *   4) Escalar a variação pelo tempo passado entre o último movimento e este, multiplicado
+      *      pela velocidade em pixels/segundo do inimigo. Se o movimento for em mais de uma direção, 
+      *      calcular de tal forma que a norma do vetor movimento seja a velocidade em pixels/segundo
+      *      do inimigo.
+      *   5) Movimentar o inimigo.
+      *   6) Se o inimigo já atingiu a próxima tile, adicioná-lo a ela.
+      * @param _inimigo Inimigo que será movido sobre o terreno.
+      * @param _caminho Caminho a ser utilizado para encontrar a vizinha.
+      */
+     private void moverInimigo(Inimigo _inimigo, Caminho _caminho){
+        Inimigo inimigoNaoMovido = _inimigo;
         Tile exemploTileTerreno = tiles[0][0];
         TilePassadouro tileInimigo = (TilePassadouro) getTileComPosicao(inimigoNaoMovido.getPosX(), inimigoNaoMovido.getPosY());
         TilePassadouro tileVizinhaTileInimigo = null;
@@ -112,7 +134,7 @@ public class Terreno extends Desenho{
         int direcaoY = 1;
         
         if(tileInimigo != null){
-            tileVizinhaTileInimigo = (TilePassadouro) getTileVizinha(tileInimigo, caminho);
+            tileVizinhaTileInimigo = (TilePassadouro) getTileVizinha(tileInimigo, _caminho);
         }
 
         if(tileVizinhaTileInimigo != null){
@@ -147,7 +169,6 @@ public class Terreno extends Desenho{
             yVariacaoInimigo *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
             xVariacaoInimigo *= direcaoX;
             yVariacaoInimigo *= direcaoY;
-            System.out.print("("+xVariacaoInimigo+","+yVariacaoInimigo+")\n");
             inimigoNaoMovido.deslocar(xVariacaoInimigo, yVariacaoInimigo);
             if(tileVizinhaTileInimigo.contem(inimigoNaoMovido)){
                 tileVizinhaTileInimigo.adicionarInimigo(inimigoNaoMovido);
