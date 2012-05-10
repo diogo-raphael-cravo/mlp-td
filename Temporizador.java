@@ -44,14 +44,21 @@ public class Temporizador {
           temporizador.marcacoes[3] = temporizador.marcacoes[2];
           temporizador.marcacoes[2] = temporizador.marcacoes[1];
           temporizador.marcacoes[1] = temporizador.marcacoes[0];
-          temporizador.marcacoes[0] = System.currentTimeMillis();
+          temporizador.marcacoes[0] = System.nanoTime()/1000000;
+          //System.out.println("nanotime = "+System.nanoTime()+"\n");
+          //System.out.println("segundos = "+temporizador.marcacoes[0]+"\n");
      }
 
     /**
-     * @return O tempo que se passou entre as duas últimas marcações.
+     * @return O tempo em milissegundos que se passou entre as duas últimas marcações.
      */
-     public static long deltaUltimasDuasMarcacoes(){
-         return temporizador.marcacoes[0] - temporizador.marcacoes[1];
+     public static long diferencaUltimasDuasMarcacoes(){
+         long diferenca = temporizador.marcacoes[0] - temporizador.marcacoes[1];
+         if(100 < diferenca){
+             diferenca = 100;
+         }
+         //System.out.println("diferença="+diferenca+"\n");
+         return diferenca;
      }
 
      /**

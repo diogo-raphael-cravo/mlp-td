@@ -47,6 +47,7 @@ public class td {
   public void create() throws LWJGLException {
     Tela.inicializar();
     Camera.inicializar();
+    Temporizador.inicializar();
 
     //Display
     Display.setDisplayMode(new DisplayMode(DISPLAY_WIDTH,DISPLAY_HEIGHT));
@@ -94,7 +95,7 @@ public class td {
       if(Mouse.isButtonDown(BOTAO_ESQUERDO_MOUSE)){
         Vector<Desenho> todosDesenhosCriados = Desenho.getTodosDesenhosCriados();
         for(Desenho desenho : todosDesenhosCriados){
-            if(desenho.contem(mouseX, mouseY)){
+            if(desenho.contem(mouseX+desenho.getComprimento(), mouseY+desenho.getLargura())){
                 desenho.houveMouseDown();
             }
         }
@@ -102,6 +103,8 @@ public class td {
   }
 
   public void render() {
+    Temporizador.marcarAgora();
+
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 

@@ -5,6 +5,9 @@
 
 package mlptd;
 
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.lwjgl.util.Color;
 
 /**
@@ -41,6 +44,11 @@ public class Terreno extends Desenho{
     int tilesPorColuna;
 
     /**
+     * Os inimigos que estão no terreno.
+     */
+    Vector<Inimigo> inimigosNoTerreno;
+
+    /**
      * O terreno é criado com um número especificado de tiles de forma que ocupe as dimensões que lhe são especificadas.
      * @param _posicao Posição do terreno.
      * @param _dimensoesTela Comprimento e largura do terreno em unidades de tela.
@@ -66,34 +74,158 @@ public class Terreno extends Desenho{
         caminho = Caminho.criarCaminhoLinhasAlternadas(tilesPorLinha, tilesPorColuna);
         aplicar(caminho);
 
-        posicao = 0;
+        inimigosNoTerreno = new Vector<Inimigo>();
+        adicionarInimigo(new Inimigo());
+     }
+
+     /**
+      * Adiciona um inimigo a este terreno, que correrá imediatamente
+      * à partir da primeira tile do caminho.
+      * @param _inimigo Modelo de inimigo a ser adicionado.
+      */
+     public void adicionarInimigo(Inimigo _inimigoModelo){
+          TilePassadouro primeiraTileCaminho = (TilePassadouro) tiles[caminho.getColunaTile(0)][caminho.getLinhaTile(0)];
+          Inimigo inimigoNovo = new Inimigo(_inimigoModelo);
+          inimigoNovo.mover(primeiraTileCaminho.getPosX(), primeiraTileCaminho.getPosY());
+          primeiraTileCaminho.adicionarInimigo(inimigoNovo);
+          inimigosNoTerreno.add(inimigoNovo);
      }
 
      /**
       * Move os inimigos que estão neste terreno.
       * Os inimigos seguem a rota indicada pelo caminho.
       */
-     int posicao;
      public void moverInimigos() throws InterruptedException{
-        Inimigo inimigoExemplo = new Inimigo();
-        TilePassadouro tile;
-        int linha;
-        int coluna;
-        if(posicao < caminho.getComprimento()){
-            if(0 < posicao){
-                coluna = caminho.getColunaTile(posicao-1);
-                linha = caminho.getLinhaTile(posicao-1);
-                tile = (TilePassadouro) tiles[coluna][linha];
-                tile.retirarTodosInimigos();
+        Inimigo inimigoNaoMovido = inimigosNoTerreno.get(0);
+        Tile exemploTileTerreno = tiles[0][0];
+        TilePassadouro tileInimigo = (TilePassadouro) getTileComPosicao(inimigoNaoMovido.getPosX(), inimigoNaoMovido.getPosY());
+        TilePassadouro tileVizinhaTileInimigo = null;
+        float tempoPassadoDesdeUltimoMovimentoEmSegundos = Temporizador.diferencaUltimasDuasMarcacoes()/((float) 1000.0);
+        float velocidadeInimigoEmPixelsPorSegundo = exemploTileTerreno.getComprimento()*
+                                                    inimigoNaoMovido.getVelocidadeTilesPorSegundo();
+        float xDestinoInimigo = 0;
+        float yDestinoInimigo = 0;
+        float xVariacaoInimigo = 0;
+        float yVariacaoInimigo = 0;
+
+        int direcaoX = 1;
+        int direcaoY = 1;
+        
+        if(tileInimigo != null){
+            tileVizinhaTileInimigo = (TilePassadouro) getTileVizinha(tileInimigo, caminho);
+        }
+
+        if(tileVizinhaTileInimigo != null){
+            xDestinoInimigo = tileVizinhaTileInimigo.xCentroParaDesenho(inimigoNaoMovido);
+            yDestinoInimigo = tileVizinhaTileInimigo.yCentroParaDesenho(inimigoNaoMovido);
+
+            if(xDestinoInimigo <= inimigoNaoMovido.getPosX()){
+                direcaoX = -1;
+            } else {
+                direcaoX = 1;
             }
-            coluna = caminho.getColunaTile(posicao);
-            linha = caminho.getLinhaTile(posicao);
-            tile = (TilePassadouro) tiles[coluna][linha];
-            tile.adicionarInimigo(inimigoExemplo);
-            posicao++;
+
+            if(yDestinoInimigo <= inimigoNaoMovido.getPosY()){
+                direcaoY = 1;
+            } else {
+                direcaoY = -1;
+            }
+
+            if(inimigoNaoMovido.getPosX() == xDestinoInimigo){
+                xVariacaoInimigo = 0;
+                if(inimigoNaoMovido.getPosY() != yDestinoInimigo){
+                    yVariacaoInimigo = - velocidadeInimigoEmPixelsPorSegundo;
+                }
+            } else if(inimigoNaoMovido.getPosY() == yDestinoInimigo){
+                xVariacaoInimigo = velocidadeInimigoEmPixelsPorSegundo;
+                yVariacaoInimigo = 0;
+            } else {
+                xVariacaoInimigo = (float) Math.sqrt(Math.pow((double) velocidadeInimigoEmPixelsPorSegundo, 2))/2;
+                yVariacaoInimigo = - (float) Math.sqrt(Math.pow((double) velocidadeInimigoEmPixelsPorSegundo, 2))/2;
+            }
+            xVariacaoInimigo *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
+            yVariacaoInimigo *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
+            xVariacaoInimigo *= direcaoX;
+            yVariacaoInimigo *= direcaoY;
+            System.out.print("("+xVariacaoInimigo+","+yVariacaoInimigo+")\n");
+            inimigoNaoMovido.deslocar(xVariacaoInimigo, yVariacaoInimigo);
+            if(tileVizinhaTileInimigo.contem(inimigoNaoMovido)){
+                tileVizinhaTileInimigo.adicionarInimigo(inimigoNaoMovido);
+            }
          }
      }
 
+     /**
+      * @param _posX, _posY A posição a ser testada.
+      * @return A tile deste terreno que contenha a posição de parâmetro.
+      *         Se não houver, retornará null.
+      */
+     private Tile getTileComPosicao(float _posX, float _posY){
+         Tile tileQueContemPosicao = null;
+         boolean encontrouTile = false;
+         int linha=0;
+         int coluna=0;
+         while(!encontrouTile && linha<tilesPorColuna){
+            coluna = 0;
+            while(!encontrouTile && coluna<tilesPorLinha){
+                if(tiles[coluna][linha].contem(_posX, _posY)){
+                    tileQueContemPosicao = tiles[coluna][linha];
+                    encontrouTile = true;
+                }
+                coluna++;
+            }
+            linha++;
+         }
+         return tileQueContemPosicao;
+     }
+
+     /**
+      * @param _tile Tile a ser procurada.
+      * @param _caminho Caminho que indica as tiles a serem testadas.
+      * @return A posição no caminho de parâmetro em que está a tile de parâmetro.
+      *         Se a tile não estiver no caminho, retorna -1.
+      */
+     private int getPosicaoTileCaminho(Tile _tile, Caminho _caminho){
+         Tile tileTestada;
+         boolean encontrada_posicaoTileParametroNoCaminho = false;
+         int posicaoTestada = 0;
+         int posicaoTileCaminho = -1;
+         int colunaTileCaminho;
+         int linhaTileCaminho;
+         while(!encontrada_posicaoTileParametroNoCaminho && posicaoTestada < caminho.getComprimento()){
+            colunaTileCaminho = caminho.getColunaTile(posicaoTestada);
+            linhaTileCaminho = caminho.getLinhaTile(posicaoTestada);
+            tileTestada = tiles[colunaTileCaminho][linhaTileCaminho];
+            encontrada_posicaoTileParametroNoCaminho = tileTestada.contem(_tile.getPosX()+1, _tile.getPosY()+1);
+            if(encontrada_posicaoTileParametroNoCaminho && posicaoTestada < caminho.getComprimento()-1){
+                encontrada_posicaoTileParametroNoCaminho = true;
+                posicaoTileCaminho = posicaoTestada;
+            }
+            posicaoTestada++;
+         }
+         return posicaoTileCaminho;
+     }
+
+     /**
+      * Dada uma tile e um caminho, retorna a tile que segue
+      * a tile dada no caminho dado.
+      * @param _tile A tile cuja vizinha será procurada.
+      * @param _caminho O caminho que definirá quem é a vizinha.
+      * @return A tile vizinha ou null, caso não haja tile vizinha.
+      */
+     private Tile getTileVizinha(Tile _tile, Caminho _caminho){
+         Tile tileVizinha = null;
+         Tile tileTestada;
+         int posicaoTileVizinha = getPosicaoTileCaminho(_tile, _caminho) + 1;
+         int coluna;
+         int linha;
+         if(posicaoTileVizinha < caminho.getComprimento() && posicaoTileVizinha != 0){
+             coluna = caminho.getColunaTile(posicaoTileVizinha);
+             linha = caminho.getLinhaTile(posicaoTileVizinha);
+             tileVizinha = tiles[coluna][linha];
+         }
+         return tileVizinha;
+     }
 
      /**
       * Aplica o caminho a este terreno, isto é, transforma as tiles que estão no caminho em TilePassadouro.
@@ -155,6 +287,7 @@ public class Terreno extends Desenho{
             tileQueDeveSerAdicionada.mudarCor(_cor);
             tiles[_colunaTile][_linhaTile] = tileQueDeveSerAdicionada;
          }
+         //Apenas as tiles que não são passadouro têm eventos de mouse.
          tiles[_colunaTile][_linhaTile].inicializarEventos();
      }
      
