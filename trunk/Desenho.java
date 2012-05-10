@@ -38,7 +38,7 @@ public class Desenho implements MouseListener {
      * Indica o frame que foi exibido na última chamada a desenhar.
      * Inicia em 0.
      */
-     private int frameExbido;
+     private int frameExibido;
 
     /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
@@ -61,8 +61,7 @@ public class Desenho implements MouseListener {
         frames = new Vector<Desenho>();
         filhos = new Vector<Desenho>();
 
-        frames.add(this);
-        frameExbido = 0;
+        frameExibido = 0;
     }
     public Desenho(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem, float _altura){
         this(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
@@ -71,10 +70,10 @@ public class Desenho implements MouseListener {
     public Desenho(Desenho _desenho){
         this(_desenho.getPosX(), _desenho.getPosY(), _desenho.getComprimento(), _desenho.getLargura(), _desenho.getTamanhoEmPorcentagem());
         for(Desenho desenho : _desenho.getFilhos()){
-            filhos.add(desenho);
+            adicionarFilho(desenho, desenho.getPosX()-posX, desenho.getPosY()-posY);
         }
         for(Desenho desenho : _desenho.getFrames()){
-            frames.add(desenho);
+            adicionarFrame(desenho);
         }
     }
 
@@ -244,8 +243,7 @@ public class Desenho implements MouseListener {
      * O objeto desenhado é um retângulo.
      */
     public void desenhar(){
-        System.out.println("frameExbido"+frameExbido+"\n");
-        if(frames.size() <= 1){
+        if(frames.size() <= 0){
             glPushMatrix();
             glTranslatef(posX,posY,0.0f);
             glRotatef(0,0.0f,0.0f,1.0f);
@@ -261,11 +259,11 @@ public class Desenho implements MouseListener {
             glEnd();
             glPopMatrix();
         } else {
-            frameExbido++;
-            if(frameExbido == frames.size()){
-                frameExbido = 0;
+            frameExibido++;
+            if(frameExibido == frames.size()){
+                frameExibido = 0;
             }
-            frames.get(frameExbido).desenhar();
+            frames.get(frameExibido).desenhar();
         }
     }
     
@@ -286,6 +284,9 @@ public class Desenho implements MouseListener {
         string.append("\t largura = "+largura+"\n");
         string.append("\t altura = "+altura+"\n");
         string.append("\t cor = "+cor.toString()+"\n");
+        string.append("\t frames = "+frames.toString()+"\n");
+        string.append("\t filhos = "+filhos.toString()+"\n");
+        string.append("\t frameExibido = "+frameExibido+"\n");
         string.append("}");
         return string.toString();
     }
