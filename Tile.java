@@ -37,9 +37,10 @@ public class Tile extends Desenho {
         glTranslatef(posX,posY,0.0f);
         glRotatef(0,0.0f,0.0f,1.0f);
         glTranslatef(-(100 >> 1),-(100 >> 1),0.0f);
-        glColor3f((float) (cor.getRed()/255.0),
+        glColor4f((float) (cor.getRed()/255.0),
                   (float) (cor.getGreen()/255.0),
-                  (float) (cor.getBlue()/255.0));
+                  (float) (cor.getBlue()/255.0),
+                  (float) (cor.getAlpha()/255.0));
         glBegin(GL_QUADS);
             glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
             glTexCoord2f(1.0f,0.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, 0.0f);
