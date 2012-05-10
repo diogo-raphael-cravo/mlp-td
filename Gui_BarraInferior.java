@@ -9,9 +9,14 @@ import org.lwjgl.util.Color;
 
 /**
  * Elemento da gui que fica na parte inferior da tela.
- * @author NUTED
+ * @author diogo
  */
 public class Gui_BarraInferior extends Desenho{
+    /**
+     * Retrato que mostra o elemento selecionado.
+     */
+    private Gui_Retrato gui_retrato;
+
 
     public Gui_BarraInferior(){
         /*
@@ -22,7 +27,23 @@ public class Gui_BarraInferior extends Desenho{
          */
         super(Tela.xTelaParaGlobal(0) +50, Tela.yTelaParaGlobal(0), Tela.WIDTH, 200, 100);
         mudarCor(new Color(Color.WHITE));
+        gui_retrato = new Gui_Retrato(posX, posY, 50, 50, 100);
     }
-    
+
+    /**
+     * @return Retrato que mostra o elemento selecionado.
+     */
+    public Gui_Retrato getGuiRetrato(){
+        return gui_retrato;
+    }
+
+    /**
+     * Desenha na tela com base em seu tamanho e posicao.
+     * O objeto desenhado é um retângulo.
+     */
+    public void desenhar(){
+        super.desenhar();
+        gui_retrato.desenhar();
+    }
 
 }
