@@ -12,6 +12,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
 /**
@@ -37,10 +38,12 @@ public class td {
   public td() {
     try {
       Inimigo inimigo = new Inimigo();
-      Desenho frame2Inimigo = new Inimigo(); frame2Inimigo.mudarCor(new Color(Color.BLUE));
-      Desenho frame3Inimigo = new Inimigo(); frame3Inimigo.mudarCor(new Color(Color.BLACK));
-      inimigo.adicionarFrame(frame2Inimigo);
-      inimigo.adicionarFrame(frame3Inimigo);
+      Desenho primeiroQuadroInimigo = new Desenho(0, 0, 10, 10, 100);
+      Desenho segundoQuadroInimigo = new Desenho(0, 0, 10, 10, 100);
+      primeiroQuadroInimigo.mudarCor(new Color(Color.WHITE));
+      segundoQuadroInimigo.mudarCor(new Color(Color.BLACK));
+      inimigo.adicionarQuadro(primeiroQuadroInimigo);
+      inimigo.adicionarQuadro(segundoQuadroInimigo);
       Nivel niveis[] = new Nivel[1];
       niveis[0] = new Nivel(inimigo, 10);
       jogo = new Jogo(new Terreno(150, 50, 400, 400, 10, 10), niveis);
@@ -86,6 +89,8 @@ public class td {
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
+    GL11.glEnable(GL11.GL_BLEND);
+    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
   }
 
   public void processKeyboard() {
@@ -103,7 +108,7 @@ public class td {
         Vector<Desenho> todosDesenhosCriados = Desenho.getTodosDesenhosCriados();
         for(Desenho desenho : todosDesenhosCriados){
             if(desenho.contem(mouseX+desenho.getComprimento(), mouseY+desenho.getLargura())){
-                desenho.houveMouseDown();
+                desenho.tornarTransparente();
             }
         }
       }

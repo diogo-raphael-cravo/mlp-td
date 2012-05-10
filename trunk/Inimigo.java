@@ -11,7 +11,7 @@ import org.lwjgl.util.Color;
  *
  * @author diogo
  */
-public class Inimigo extends Desenho {
+public class Inimigo extends Filme {
 
     /**
      * Velocidade do inimigo em Tiles por segundo.
@@ -45,11 +45,6 @@ public class Inimigo extends Desenho {
      */
      public float getVelocidadeTilesPorSegundo(){
          return velocidadeTilesSegundo;
-     }
-
-     public void desenhar(){
-         System.out.println(toString());
-         super.desenhar();
      }
 
 }
