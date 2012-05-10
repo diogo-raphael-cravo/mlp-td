@@ -3,7 +3,6 @@ package mlptd;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.io.IOException;
-import java.util.Vector;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +24,7 @@ public class td {
   public static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
   Jogo jogo;
+  ControladorJogo controladorJogo;
 
   static {
     try {
@@ -47,6 +47,7 @@ public class td {
       Nivel niveis[] = new Nivel[1];
       niveis[0] = new Nivel(inimigo, 10);
       jogo = new Jogo(new Terreno(150, 50, 400, 400, 10, 10), niveis);
+      controladorJogo = new ControladorJogo(jogo);
       create();
       run();
     } catch(Exception ex) {
@@ -102,15 +103,8 @@ public class td {
 
   public void processMouse() {
       int BOTAO_ESQUERDO_MOUSE = 0;
-      float mouseX = Tela.xTelaParaGlobal(Mouse.getX());
-      float mouseY = Tela.yTelaParaGlobal(Mouse.getY());
       if(Mouse.isButtonDown(BOTAO_ESQUERDO_MOUSE)){
-        Vector<Desenho> todosDesenhosCriados = Desenho.getTodosDesenhosCriados();
-        for(Desenho desenho : todosDesenhosCriados){
-            if(desenho.contem(mouseX+desenho.getComprimento(), mouseY+desenho.getLargura())){
-                desenho.tornarTransparente();
-            }
-        }
+        controladorJogo.houveMouseDown();
       }
   }
 

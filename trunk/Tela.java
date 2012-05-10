@@ -52,6 +52,13 @@ public class Tela extends Desenho {
     }
 
     /**
+     * @return A gui da barra inferior.
+     */
+    public static Gui_BarraInferior getGuiBarraInferior(){
+        return tela.barraInformacoesInferior;
+    }
+
+    /**
      * @param _xTela Uma coordenada X em coordenadas de tela.
      * @return Coordenada X passada em coordenada globais.
      */
