@@ -81,7 +81,29 @@ public class Desenho implements MouseListener {
     public Color getCor(){
         return cor;
     }
-	
+
+    /**
+     * Compara este desenho com o desenho de parâmetro e retorna a posição em que
+     * o parâmetro deve ficar para estar no centro deste.
+     * @param _desenho O desenho que deseja-se que fique no centro deste.
+     * @return A posição x em que o parâmetro deve ficar para estar no centro deste.
+     */
+    public float xCentroParaDesenho(Desenho _desenho){
+        float xCentro = getPosX() + getComprimento()/2 - _desenho.getComprimento()/2;
+        return xCentro;
+    }
+    
+    /**
+     * Compara este desenho com o desenho de parâmetro e retorna a posição em que
+     * o parâmetro deve ficar para estar no centro deste.
+     * @param _desenho O desenho que deseja-se que fique no centro deste.
+     * @return A posição y em que o parâmetro deve ficar para estar no centro deste.
+     */
+    public float yCentroParaDesenho(Desenho _desenho){
+        float yCentro = getPosY() + getLargura()/2 - _desenho.getLargura()/2;
+        return yCentro;
+    }
+
     /**
      * Modifica a cor deste desenho.
      * @param _cor Cor do desenho.
@@ -122,16 +144,29 @@ public class Desenho implements MouseListener {
      */
     public boolean contem(float _posX, float _posY){
         boolean contem=false;
-        //Era sempre testado o desenho a sudoeste...
-        //Esta não é a melhor solução, mas funciona.
-        //Outra solução iria necessitar mudança de código fora desta classe.
-        float xTestado = _posX + comprimento;
-        float yTestado = _posY + largura;
-        if(posX <= xTestado && xTestado <= posX+comprimento){
-            if(posY <= yTestado && yTestado <= posY+largura){
+        if(posX <= _posX && _posX <= posX+comprimento){
+            if(posY <= _posY && _posY <= posY+largura){
                contem = true;
             }
         }
+        return contem;
+    }
+    public boolean contem(Desenho _desenho){
+        boolean contem=false;
+        boolean contemExtremoNoroeste = false;
+        boolean contemExtremoNordeste = false;
+        boolean contemExtremoSudoeste = false;
+        boolean contemExtremoSudeste = false;
+
+        contemExtremoNoroeste = contem(_desenho.getPosX(), _desenho.getPosY());
+        contemExtremoNordeste = contem(_desenho.getPosX()+_desenho.getComprimento(), _desenho.getPosY());
+        contemExtremoSudoeste = contem(_desenho.getPosX(), _desenho.getPosY()+_desenho.getLargura());
+        contemExtremoSudeste = contem(_desenho.getPosX()+_desenho.getComprimento(), _desenho.getPosY()+_desenho.getLargura());
+
+        contem = contemExtremoNoroeste
+              || contemExtremoNordeste
+              || contemExtremoSudoeste
+              || contemExtremoSudeste;
         return contem;
     }
 
@@ -155,9 +190,25 @@ public class Desenho implements MouseListener {
         glEnd();
         glPopMatrix();
     }
-
     
     public void houveMouseDown() {
         cor = new Color(Color.CYAN);
+    }
+
+    /**
+     * @return String com os dados deste desenho.
+     */
+    @Override
+    public String toString(){
+        StringBuffer string = new StringBuffer("Desenho {\n");
+        string.append("\t tamanhoEmPorcentagem = "+tamanhoEmPorcentagem+"\n");
+        string.append("\t posX = "+posX+"\n");
+        string.append("\t posY = "+posY+"\n");
+        string.append("\t comprimento = "+comprimento+"\n");
+        string.append("\t largura = "+largura+"\n");
+        string.append("\t altura = "+altura+"\n");
+        string.append("\t cor = "+cor.toString()+"\n");
+        string.append("}");
+        return string.toString();
     }
 }

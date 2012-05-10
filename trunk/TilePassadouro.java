@@ -25,6 +25,7 @@ public class TilePassadouro extends Tile{
 
     /**
      * Inimigo que ocupa esta tile.
+     * A variável é atualizada para null quando o inimigo excede os limites.
      */
     Inimigo inimigoQueEstahAqui;
 
@@ -55,14 +56,12 @@ public class TilePassadouro extends Tile{
     }
 
     /**
-     * Adiciona o inimigo a esta tile.
+     * Adiciona o inimigo a esta tile. O inimigo é o próprio, não uma cópia.
+     * Deste modo, ele é sempre desenhado em sua posição correta.
      * @param _inimigo Inimigo que será adicionado.
      */
      public void adicionarInimigo(Inimigo _inimigo){
-        float xCentro = getPosX() + getComprimento()/2 - _inimigo.getComprimento()/2;
-        float yCentro = getPosY() + getLargura()/2 - _inimigo.getLargura()/2;
-        inimigoQueEstahAqui = new Inimigo(_inimigo);
-        inimigoQueEstahAqui.mover(xCentro, yCentro);
+        inimigoQueEstahAqui = _inimigo;
      }
 
     /**
@@ -92,9 +91,12 @@ public class TilePassadouro extends Tile{
     public void desenhar(){
         super.desenhar();
         if(inimigoQueEstahAqui != null){
-            inimigoQueEstahAqui.desenhar();
+            if(contem(inimigoQueEstahAqui)){
+                inimigoQueEstahAqui.desenhar();
+            } else {
+                retirarTodosInimigos();
+            }
         }
     }
-
     
 }

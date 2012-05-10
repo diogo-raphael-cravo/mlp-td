@@ -15,9 +15,9 @@ public class Caminho {
     /**
      * Comprimento, em tiles, do caminho.
      */
-    int comprimento;
-    int[] linhasTiles;
-    int[] colunasTiles;
+    private int comprimento;
+    private int[] linhasTiles;
+    private int[] colunasTiles;
 
     /**
      * Cria um novo caminho com o comprimento passado.
