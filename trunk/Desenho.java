@@ -9,7 +9,7 @@ import static org.lwjgl.opengl.GL11.*;
  * Serve como forma de manter interfaces iguais nas classes descendentes.
  * @author diogo
  */
-public class Desenho {
+public class Desenho extends Object{
     protected int tamanhoEmPorcentagem;
     protected float posX;
     protected float posY;
@@ -67,7 +67,7 @@ public class Desenho {
     }
     public Desenho(Desenho _desenho){
         this(_desenho.getPosX(), _desenho.getPosY(), _desenho.getComprimento(), _desenho.getLargura(), _desenho.getTamanhoEmPorcentagem());
-        cor = _desenho.getCor();
+        cor = new Color(_desenho.getCor());
         for(Desenho desenho : _desenho.getFilhos()){
             adicionarFilho(desenho, desenho.getPosX()-posX, desenho.getPosY()-posY);
         }
@@ -282,18 +282,18 @@ public class Desenho {
         return string.toString();
     }
 
-    /*
-     *
-     *
+    /**
+     * Destrói este desenho, retirando-o da lista de desenhos existentes.
      */
-    protected void finalize() throws Throwable{
+    public void destruir() {
         int index=0;
+        int indexDesteDesenho=0;
         for(Desenho desenhoCriado : todosDesenhosCriados){
             if(desenhoCriado.getIdentificacaoUnica() == identificacaoUnica){
-                todosDesenhosCriados.remove(index);
+                indexDesteDesenho = index;
             }
             index++;
         }
-        super.finalize();
+        todosDesenhosCriados.remove(indexDesteDesenho);
     }
 }

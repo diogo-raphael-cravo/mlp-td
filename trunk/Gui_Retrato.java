@@ -41,6 +41,7 @@ public class Gui_Retrato extends Desenho {
         float xCentro = xCentroParaDesenho(_desenho) - posX;
         float yCentro = yCentroParaDesenho(_desenho) - posY;
         desenhoExibido = new Desenho(_desenho);
+        desenhoExibido.restaurarTransparencia();
         adicionarFilho(desenhoExibido, xCentro, yCentro);
     }
 

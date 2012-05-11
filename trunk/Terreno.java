@@ -64,7 +64,8 @@ public class Terreno extends Desenho{
 		
         tiles = new Tile[tilesPorLinha][tilesPorColuna];
 
-        //Pequeno teste. Notar que a tile (0,0) é sinalizada com verde, e não laranja.
+        //Pequeno teste. Notar que a tile (0,0) é sinalizada com verde, e não laranja
+        //(somente quando descomentadas as duas linhas seguintes).
         transformarEmTabuleiro(new Color(Color.ORANGE));
         //transformarEmTabuleiro(new Color(Color.GREEN));
 
@@ -260,9 +261,7 @@ public class Terreno extends Desenho{
             linha = _caminho.getLinhaTile(posicaoAtual);
             tileSubstituida = tiles[coluna][linha];
             tiles[coluna][linha] = new TilePassadouro(tileSubstituida);
-            /*
-             * Vazando memória aqui?
-             */
+            tileSubstituida.destruir();
         }
      }
 
