@@ -15,3 +15,4 @@ Você também vai precisar da biblioteca slick-util, mas esta já está incluíd
 ==No Netbeans==
 
 Tendo a biblioteca instalada (segundo instruções da seção anterior), basta criar um novo projeto que contenha um pacote chamado "mlptd" e colar diretamente todos os arquivos deste projeto dentro do pacote. Lembre de adicionar a biblioteca e modificar as propriedades do projeto, como também é especificado no link da seção anterior.
+Caso haja erro "Uncompilable code" ao compilar, tente deletar todos os arquivos e colá-los novamente.
