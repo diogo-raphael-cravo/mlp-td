@@ -43,7 +43,7 @@ public class ControladorJogo
                 desenhoSelecionado = desenho;
                 desenhoSelecionado.tornarTransparente();
                 selecionouDesenho = true;
-                Tela.getTela().getGuiBarraInferior().getGuiRetrato().exibir(desenhoSelecionado);
+                Tela.getGuiBarraInferior().getGuiRetrato().exibir(desenhoSelecionado);
             }
         }
         if(!selecionouDesenho && desenhoSelecionado != null){

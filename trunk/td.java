@@ -13,6 +13,9 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 /**
  * @author jediTofu
@@ -66,15 +69,13 @@ public class td {
   }
 
   public void create() throws LWJGLException {
-    Tela.inicializar();
-    Camera.inicializar();
-    Temporizador.inicializar();
-
+    
     //Display
     Display.setDisplayMode(new DisplayMode(DISPLAY_WIDTH,DISPLAY_HEIGHT));
     Display.setFullscreen(false);
     Display.setTitle("MLP Tower Defense!");
     Display.create();
+    Display.setVSyncEnabled(true);
 
     //Keyboard
     Keyboard.create();
@@ -102,6 +103,11 @@ public class td {
     glDisable(GL_LIGHTING);
     GL11.glEnable(GL11.GL_BLEND);
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+    GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+    Tela.inicializar();
+    Camera.inicializar();
+    Temporizador.inicializar();
   }
 
   public void processKeyboard() {
@@ -135,6 +141,7 @@ public class td {
     }
     jogo.desenhar();
     Tela.getTela().desenhar();
+
   }
 
   public void resizeGL() {

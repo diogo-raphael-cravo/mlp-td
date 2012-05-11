@@ -5,7 +5,15 @@
 
 package mlptd;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.Color;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 /**
  * Elemento da gui que fica na parte inferior da tela.
@@ -17,6 +25,10 @@ public class Gui_BarraInferior extends Desenho{
      */
     private Gui_Retrato gui_retrato;
 
+    /**
+     * Textura do fundo.
+     */
+    Texture texture;
 
     public Gui_BarraInferior(){
         /*
@@ -29,6 +41,7 @@ public class Gui_BarraInferior extends Desenho{
         mudarCor(new Color(Color.WHITE));
         gui_retrato = new Gui_Retrato(posX, posY, 100, 100, 100);
         adicionarFilho(gui_retrato, 30, 75);
+        adicionarTextura(Arquivos.ARQUIVO_TEXTURA_MURO, "PNG");
     }
 
     /**
@@ -37,6 +50,5 @@ public class Gui_BarraInferior extends Desenho{
     public Gui_Retrato getGuiRetrato(){
         return gui_retrato;
     }
-
 
 }

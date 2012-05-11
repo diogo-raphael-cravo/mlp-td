@@ -1,5 +1,13 @@
 package mlptd;
 
+
+import org.lwjgl.opengl.GL11;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import org.newdawn.slick.util.ResourceLoader;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.opengl.Texture;
+import java.io.IOException;
 import java.util.Vector;
 import org.lwjgl.util.Color;
 import static org.lwjgl.opengl.GL11.*;
@@ -40,6 +48,11 @@ public class Desenho extends Object{
     protected Vector<Desenho> filhos;
 
     /**
+     * A textura deste desenho, se houver.
+     */
+    private Texture textura;
+
+    /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
      * @param _comprimento, _largura, _altura Comprimento, largura e altura.
      * @param _tamanhoEmPorcentagem Usado para resize.
@@ -52,6 +65,7 @@ public class Desenho extends Object{
         largura = _largura;
         tamanhoEmPorcentagem = _tamanhoEmPorcentagem;
         altura = 1;
+        textura = null;
         redimensionar(1);
         if(todosDesenhosCriados == null){
             todosDesenhosCriados = new Vector<Desenho>();
@@ -226,10 +240,29 @@ public class Desenho extends Object{
     }
 
     /**
+     * Adiciona textura a este desenho.
+     * @param _caminho O caminho absoluto, no sistema de arquivos, do arquivo da textura.
+     * @param _tipo O tipo, pode ser "GIF", "JPG" ou "PNG".
+     */
+    public void adicionarTextura(String _caminho, String _tipo){
+        try {
+            textura = TextureLoader.getTexture(_tipo, ResourceLoader.getResourceAsStream(_caminho));
+        } catch (IOException ex) {
+            Logger.getLogger(Desenho.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
      * Desenha na tela com base em seu tamanho e posicao.
      * O objeto desenhado é um retângulo.
      */
     public void desenhar(){
+        if(textura != null){
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            textura.bind();
+        } else {
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+        }
         glPushMatrix();
         glTranslatef(posX,posY,0.0f);
         glRotatef(0,0.0f,0.0f,1.0f);
