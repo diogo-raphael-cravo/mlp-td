@@ -54,7 +54,7 @@ public class Terreno extends Desenho{
      */
      public Terreno(float _posX, float _posY, float _comprimentoTela, float _larguraTela,
                     int _comprimentoEmTiles, int _larguraEmTiles){
-        super(_posX, _posY+_larguraTela, _comprimentoTela, _larguraTela, 100);
+        super(_posX, _posY, _comprimentoTela, _larguraTela, 100);
          
         comprimentoCadaTile = _comprimentoTela/_comprimentoEmTiles;
         larguraCadaTile = _larguraTela/_larguraEmTiles;
@@ -88,7 +88,7 @@ public class Terreno extends Desenho{
           primeiraTileCaminho.adicionarInimigo(inimigoNovo);
           inimigosNoTerreno.add(inimigoNovo);
           inimigoNovo.inicializarEventos();
-          inimigoNovo.rotacionar(10, 0, 0);
+          inimigoNovo.rotacionar(-90, 0, 0);
           adicionarFilho(inimigoNovo, primeiraTileCaminho.getPosX(), primeiraTileCaminho.getPosY());
      }
 
