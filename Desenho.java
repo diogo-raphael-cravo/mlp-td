@@ -194,7 +194,7 @@ public class Desenho extends Object{
      *        Valores maiores são truncados.
      */
     public void rotacionar(float _rotacaoX, float _rotacaoY, float _rotacaoZ){
-        if(360 <= _rotacaoX){
+        /*if(360 <= _rotacaoX){
             rotacaoX = _rotacaoX%360;
         } else if(_rotacaoX <= -360){
             rotacaoX =  -(((-_rotacaoX)%360) - 360);
@@ -220,7 +220,10 @@ public class Desenho extends Object{
             rotacaoZ = 360 - _rotacaoZ;
         } else {
             rotacaoZ = _rotacaoZ;
-        }
+        }*/
+        rotacaoX += _rotacaoX;
+        rotacaoY += _rotacaoY;
+        rotacaoZ += _rotacaoZ;
 
         for(Desenho filho : filhos){
             filho.rotacionar(_rotacaoX, _rotacaoY, _rotacaoZ);

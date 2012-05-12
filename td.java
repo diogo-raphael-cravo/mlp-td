@@ -40,7 +40,7 @@ public class td {
     try {
       create();
       Inimigo inimigo = new Inimigo();
-      Desenho quadroInimigo = new Desenho(0, 0, 50, 50, 100);
+      Desenho quadroInimigo = new Desenho(0, 0, 30, 40, 100);
       quadroInimigo.adicionarTextura(Arquivos.ARQUIVO_TEXTURA_CAVEIRA);
       Color corInimigo = new Color(Color.BLACK);
       inimigo.adicionarQuadro(quadroInimigo);
@@ -149,15 +149,19 @@ public class td {
         Camera.rotacionarCameras(0, 1, 0);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
         Camera.rotacionarCameras(0, 0, -1);
+        jogo.getTerreno().rotacionarInimigosEmY(-1);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_C)){
         Camera.rotacionarCameras(0, 0, 1);
+        jogo.getTerreno().rotacionarInimigosEmY(1);
     }
   }
 
   public void processMouse() {
       int BOTAO_ESQUERDO_MOUSE = 0;
+
       if(Mouse.isButtonDown(BOTAO_ESQUERDO_MOUSE)){
-        controladorJogo.houveMouseDown();
+          System.out.println(Mouse.getX()+","+Mouse.getY());
+          controladorJogo.houveMouseDown();
       }
   }
 
