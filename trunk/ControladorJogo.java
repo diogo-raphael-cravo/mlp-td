@@ -24,6 +24,7 @@ public class ControladorJogo
      * O desenho que foi selecionado pelo mouse.
      */
      Desenho desenhoSelecionado;
+     Filme filmeSelecionado;
 
     public ControladorJogo(Jogo _jogo){
         jogo = _jogo;
@@ -39,11 +40,33 @@ public class ControladorJogo
             if(desenho.contem(mouseX, mouseY)){
                 if(desenhoSelecionado != null){
                     desenhoSelecionado.restaurarTransparencia();
+                } else if(filmeSelecionado != null){
+                    filmeSelecionado.restaurarTransparencia();
+                    filmeSelecionado = null;
                 }
                 desenhoSelecionado = desenho;
                 desenhoSelecionado.tornarTransparente();
                 selecionouDesenho = true;
-                Tela.getGuiBarraInferior().getGuiRetrato().exibir(desenhoSelecionado);
+                if(desenho instanceof Filme){
+                    Tela.getGuiBarraInferior().getGuiRetrato().exibir(desenhoSelecionado);
+                } else {
+                    Tela.getGuiBarraInferior().getGuiRetrato().exibir(desenhoSelecionado);
+                }
+            }
+        }
+        Vector<Filme> todosFilmesCriados = Filme.getTodosFilmesCriados();
+        for(Filme filme : todosFilmesCriados){
+            if(filme.contem(mouseX, mouseY)){
+                if(filmeSelecionado != null){
+                    filmeSelecionado.restaurarTransparencia();
+                } else if(desenhoSelecionado != null){
+                    desenhoSelecionado.restaurarTransparencia();
+                    desenhoSelecionado = null;
+                }
+                filmeSelecionado = filme;
+                filmeSelecionado.tornarTransparente();
+                selecionouDesenho = true;
+                Tela.getGuiBarraInferior().getGuiRetrato().exibir(filmeSelecionado);
             }
         }
         if(!selecionouDesenho && desenhoSelecionado != null){
@@ -51,6 +74,10 @@ public class ControladorJogo
             desenhoSelecionado = null;
             Tela.getTela().getGuiBarraInferior().getGuiRetrato().retirarDesenhoExibido();
         }
+        if(!selecionouDesenho && filmeSelecionado != null){
+            filmeSelecionado.restaurarTransparencia();
+            filmeSelecionado = null;
+            Tela.getTela().getGuiBarraInferior().getGuiRetrato().retirarDesenhoExibido();
+        }
     }
-
 }

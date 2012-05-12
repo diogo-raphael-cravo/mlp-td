@@ -23,6 +23,12 @@ public class Filme extends Desenho {
      */
     private Vector<Desenho> quadros;
 
+     /**
+     * Array que contém todos os filmes criados.
+     * Utilizado para aplicação de eventos.
+     */
+    private static Vector<Filme> todosFilmesCriados;
+
     /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
      * @param _comprimento, _largura, _altura Comprimento, largura e altura.
@@ -32,6 +38,9 @@ public class Filme extends Desenho {
         super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
         quadros = new Vector<Desenho>();
         quadroExibido = 0;
+        if(todosFilmesCriados == null){
+            todosFilmesCriados = new Vector<Filme>();
+        }
     }
     public Filme(Filme _filme){
         this(_filme.getPosX(), _filme.getPosY(),
@@ -40,6 +49,21 @@ public class Filme extends Desenho {
         for(Desenho desenho : _filme.getQuadros()){
             adicionarQuadro(desenho);
         }
+    }
+
+    /**
+     * Registra os eventos de mouse.
+     * Um filme só obedecerá a eventos quando esta função for invocada nele.
+     */
+    public void inicializarEventos(){
+        todosFilmesCriados.add(this);
+    }
+
+    /**
+     * @return Array com todos os filmes já criados. Útil para aplicação de eventos.
+     */
+    public static Vector<Filme> getTodosFilmesCriados(){
+        return todosFilmesCriados;
     }
 
     public Vector<Desenho> getQuadros(){
@@ -75,6 +99,18 @@ public class Filme extends Desenho {
     }
 
     /**
+     * Rotaciona o desenho.
+     * @param _rotacaoX, _rotacaoY, _rotacaoZ Valor da rotação em [0,360).
+     *        Valores maiores são truncados.
+     */
+    public void rotacionar(float _rotacaoX, float _rotacaoY, float _rotacaoZ){
+        super.rotacionar(_rotacaoX, _rotacaoY, _rotacaoZ);
+        for(Desenho desenho : quadros){
+            desenho.rotacionar(_rotacaoX, _rotacaoY, _rotacaoZ);
+        }
+    }
+
+    /**
      * Adiciona um quadro a este desenho.
      * Quando o filme é desenhado, alterna-se entre seus quadros.
      * @param _desenho Desenho do quadro a ser adicionado.
@@ -95,6 +131,25 @@ public class Filme extends Desenho {
                 quadroExibido = 0;
             }
             quadros.get(quadroExibido).desenhar();
+        }
+    }
+
+    /**
+     * Destrói este filme, retirando-o da lista de filme existentes.
+     */
+    public void destruir() {
+        int index=0;
+        int indexDesteDesenho=0;
+        boolean desenhoEncontrado = false;
+        for(Desenho desenhoCriado : todosFilmesCriados){
+            if(desenhoCriado.getIdentificacaoUnica() == getIdentificacaoUnica()){
+                indexDesteDesenho = index;
+                desenhoEncontrado = true;
+            }
+            index++;
+        }
+        if(desenhoEncontrado){
+            todosFilmesCriados.remove(indexDesteDesenho);
         }
     }
 }

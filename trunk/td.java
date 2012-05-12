@@ -22,8 +22,6 @@ import org.newdawn.slick.util.ResourceLoader;
  * @see <a href="http://lwjgl.org/">LWJGL Home Page</a>
  */
 public class td {
-  public static final int DISPLAY_HEIGHT = 480;
-  public static final int DISPLAY_WIDTH = 640;
   public static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
   Jogo jogo;
@@ -40,10 +38,13 @@ public class td {
 
   public td() {
     try {
+      create();
       Inimigo inimigo = new Inimigo();
-      Desenho quadroInimigo = new Desenho(0, 0, 10, 10, 100);
+      Desenho quadroInimigo = new Desenho(0, 0, 50, 50, 100);
+      quadroInimigo.adicionarTextura(Arquivos.ARQUIVO_TEXTURA_CAVEIRA);
       Color corInimigo = new Color(Color.BLACK);
-      for(int i=0; i<=255; i+=10){
+      inimigo.adicionarQuadro(quadroInimigo);
+      /*for(int i=0; i<=255; i+=10){
         corInimigo.setBlue(i);
         corInimigo.setRed(i);
         corInimigo.setGreen(i);
@@ -56,12 +57,12 @@ public class td {
         corInimigo.setGreen(i);
         quadroInimigo.mudarCor(corInimigo);
         inimigo.adicionarQuadro(quadroInimigo);
-      }
+      }*/
       Nivel niveis[] = new Nivel[1];
       niveis[0] = new Nivel(inimigo, 10);
-      jogo = new Jogo(new Terreno(150, -100, 400, 400, 10, 10), niveis);
+      jogo = new Jogo(new Terreno(Tela.WIDTH/2, Tela.HEIGHT/2, Tela.WIDTH, Tela.HEIGHT, 10, 10), niveis);
+      Camera.moverCameras(jogo.getTerreno().getPosX(), jogo.getTerreno().getPosY());
       controladorJogo = new ControladorJogo(jogo);
-      create();
       run();
     } catch(Exception ex) {
       LOGGER.log(Level.SEVERE,ex.toString(),ex);
@@ -71,7 +72,7 @@ public class td {
   public void create() throws LWJGLException {
     
     //Display
-    Display.setDisplayMode(new DisplayMode(DISPLAY_WIDTH,DISPLAY_HEIGHT));
+    Display.setDisplayMode(new DisplayMode(Tela.WIDTH,Tela.HEIGHT));
     Display.setFullscreen(false);
     Display.setTitle("MLP Tower Defense!");
     Display.create();
@@ -112,8 +113,44 @@ public class td {
 
   public void processKeyboard() {
     //Square's Size
-    if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-     
+    if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+        if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
+            Camera.deslocarCameras(-1.0f, 1.0f);
+        } else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
+            Camera.deslocarCameras(1.0f, 1.0f);
+        } else {
+            Camera.deslocarCameras(0.0f, 1.0f);
+        }
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
+        if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
+            Camera.deslocarCameras(-1.0f, -1.0f);
+        } else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
+            Camera.deslocarCameras(1.0f, -1.0f);
+        } else {
+            Camera.deslocarCameras(0.0f, -1.0f);
+        }
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
+        Camera.deslocarCameras(-1.0f, 0.0f);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
+        Camera.deslocarCameras(1.0f, 0.0f);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_O)){
+        Camera.setCamera(Camera.CAMERA.ORTOGRAFICA);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_P)){
+        Camera.setCamera(Camera.CAMERA.PERSPECTIVA);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_F)){
+        Camera.moverCameras(jogo.getTerreno().getPosX(), jogo.getTerreno().getPosY());
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
+        Camera.rotacionarCameras(-1, 0, 0);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_E)){
+        Camera.rotacionarCameras(1, 0, 0);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_A)){
+        Camera.rotacionarCameras(0, -1, 0);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+        Camera.rotacionarCameras(0, 1, 0);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
+        Camera.rotacionarCameras(0, 0, -1);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_C)){
+        Camera.rotacionarCameras(0, 0, 1);
     }
   }
 
@@ -128,20 +165,30 @@ public class td {
     Temporizador.marcarAgoraPrincipal();
 
     glClear(GL_COLOR_BUFFER_BIT);
-    glLoadIdentity();
 
-    if(Mouse.getX() < 5){
-        Camera.ortografica.deslocar(-1.0f, 0.0f);
+    if(Tela.HEIGHT - 5 < Mouse.getY()){
+        if(Mouse.getX() < 5){
+            Camera.deslocarCameras(-1.0f, 1.0f);
+        } else if(Tela.WIDTH - 5 < Mouse.getX()){
+            Camera.deslocarCameras(1.0f, 1.0f);
+        } else {
+            Camera.deslocarCameras(0.0f, 1.0f);
+        }
     } else if(Mouse.getY() < 5){
-        Camera.ortografica.deslocar(0.0f, -1.0f);
-    } else if(DISPLAY_WIDTH - 5 < Mouse.getX()){
-        Camera.ortografica.deslocar(1.0f, 0.0f);
-    } else if(DISPLAY_HEIGHT - 5 < Mouse.getY()){
-        Camera.ortografica.deslocar(0.0f, 1.0f);
+        if(Mouse.getX() < 5){
+            Camera.deslocarCameras(-1.0f, -1.0f);
+        } else if(Tela.WIDTH - 5 < Mouse.getX()){
+            Camera.deslocarCameras(1.0f, -1.0f);
+        } else {
+            Camera.deslocarCameras(0.0f, -1.0f);
+        }
+    } else if(Mouse.getX() < 5){
+        Camera.deslocarCameras(-1.0f, 0.0f);
+    } else if(Tela.WIDTH - 5 < Mouse.getX()){
+        Camera.deslocarCameras(1.0f, 0.0f);
     }
     jogo.desenhar();
     Tela.getTela().desenhar();
-
   }
 
   public void resizeGL() {
@@ -156,16 +203,13 @@ public class td {
         processMouse();
         update();
         render();
-      }
-      else {
+      } else {
         if(Display.isDirty()) {
           render();
         }
         try {
           Thread.sleep(100);
-        }
-        catch(InterruptedException ex) {
-        }
+        } catch(InterruptedException ex) { }
       }
       Display.update();
       Display.sync(60);
