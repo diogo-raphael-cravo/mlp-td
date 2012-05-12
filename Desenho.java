@@ -44,6 +44,8 @@ public class Desenho extends Object{
 
     /**
      * Filhos, que são sempre desenhados.
+     * O filho é um desenho que estará sempre na mesma posição,
+     * relativa à origem de seu desenho pai, não da tela.
      */
     protected Vector<Desenho> filhos;
 
@@ -51,6 +53,12 @@ public class Desenho extends Object{
      * A textura deste desenho, se houver.
      */
     private Texture textura;
+
+    /**
+     * Desenho pai deste desenho, quando houver.
+     * Quando não houver, contém null.
+     */
+    private Desenho pai;
 
     /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
@@ -72,6 +80,7 @@ public class Desenho extends Object{
             identificacaoUnicaLivre=0;
         }
         filhos = new Vector<Desenho>();
+        pai = null;
         identificacaoUnica = identificacaoUnicaLivre;
         identificacaoUnicaLivre++;
     }
@@ -83,7 +92,7 @@ public class Desenho extends Object{
         this(_desenho.getPosX(), _desenho.getPosY(), _desenho.getComprimento(), _desenho.getLargura(), _desenho.getTamanhoEmPorcentagem());
         cor = new Color(_desenho.getCor());
         for(Desenho desenho : _desenho.getFilhos()){
-            adicionarFilho(desenho, desenho.getPosX()-posX, desenho.getPosY()-posY);
+            adicionarFilho(desenho, desenho.getPosX(), desenho.getPosY());
         }
     }
 
@@ -130,6 +139,39 @@ public class Desenho extends Object{
         }
         return filhosRetorno;
     }
+    public Desenho getPai(){
+        return pai;
+    }
+    public float getGlobalX(){
+        float xGlobal = posX;
+        Desenho ancestral = getPai();
+        while(ancestral != null){
+            xGlobal += ancestral.getPosX();
+            ancestral = ancestral.getPai();
+        }
+        return xGlobal;
+    }
+    public float getGlobalY(){
+        float yGlobal = posY;
+        Desenho ancestral = getPai();
+        while(ancestral != null){
+            yGlobal += ancestral.getPosY();
+            ancestral = ancestral.getPai();
+        }
+        return yGlobal;
+    }
+
+
+    /**
+     * Modifica o pai deste desenho.
+     * @param _pai O pai do desenho.
+     * IMPORTANTE: esta função SÓ pode ser usada quando o desenho é adicionado
+     * como filho de outro! Se souber outra forma de modelar este comportamento,
+     * faça-a, por favor!
+     */
+    protected void setPai(Desenho _pai){
+        pai = _pai;
+    }
 
     /**
      * Adiciona um desenho filho a este desenho.
@@ -141,8 +183,29 @@ public class Desenho extends Object{
      * enquanto o frame alterna-se com os outros.
      */
      public void adicionarFilho(Desenho _desenhoFilho, float _posX, float _posY){
+         _desenhoFilho.mover(_posX, _posY);
          filhos.add(_desenhoFilho);
-         _desenhoFilho.mover(posX+_posX, posY+_posY);
+         _desenhoFilho.setPai(this);
+     }
+
+     /**
+      * Se o filho passado é um dos filhos deste desenho, retirá-o da lista de filhos.
+      * @param _desenho Desenho filho a ser procurado e retirado.
+      */
+     public void removerFilho(Desenho _desenhoFilho){
+        int index=0;
+        int indexFilho=0;
+        boolean filhoEncontrado = false;
+        for(Desenho desenhoCriado : filhos){
+            if(desenhoCriado.getIdentificacaoUnica() == _desenhoFilho.getIdentificacaoUnica()){
+                indexFilho = index;
+                filhoEncontrado = true;
+            }
+            index++;
+        }
+        if(filhoEncontrado){
+            filhos.remove(indexFilho);
+        }
      }
 
     /**
@@ -182,9 +245,6 @@ public class Desenho extends Object{
     public void mover(float _posX, float _posY){
         posX = _posX;
         posY = _posY;
-        for(Desenho desenhoFilho : filhos){
-            desenhoFilho.mover(_posX, _posY);
-        }
     }
 
     /**
@@ -194,9 +254,6 @@ public class Desenho extends Object{
     public void deslocar(float _deslocamentoX, float _deslocamentoY){
         posX += _deslocamentoX;
         posY += _deslocamentoY;
-        for(Desenho desenhoFilho : filhos){
-            desenhoFilho.deslocar(_deslocamentoX, _deslocamentoY);
-        }
     }
     
     /**
@@ -207,14 +264,16 @@ public class Desenho extends Object{
     }
 
     /**
-     * Indica se o ponto pertence a este desenho.
+     * Indica se o ponto (em coordenadas globais) pertence a este desenho.
      * @param _posX, _posY Ponto a ser testado
      * @return Boleano indicando se o ponto pertence ao desenho.
      */
     public boolean contem(float _posX, float _posY){
         boolean contem=false;
-        if(posX <= _posX && _posX <= posX+comprimento){
-            if(posY <= _posY && _posY <= posY+largura){
+        float xTestado = getGlobalX();
+        float yTestado = getGlobalY();
+        if(xTestado <= _posX && _posX <= xTestado+comprimento){
+            if(yTestado <= _posY && _posY <= yTestado+largura){
                contem = true;
             }
         }
@@ -227,10 +286,10 @@ public class Desenho extends Object{
         boolean contemExtremoSudoeste = false;
         boolean contemExtremoSudeste = false;
 
-        contemExtremoNoroeste = contem(_desenho.getPosX(), _desenho.getPosY());
-        contemExtremoNordeste = contem(_desenho.getPosX()+_desenho.getComprimento(), _desenho.getPosY());
-        contemExtremoSudoeste = contem(_desenho.getPosX(), _desenho.getPosY()+_desenho.getLargura());
-        contemExtremoSudeste = contem(_desenho.getPosX()+_desenho.getComprimento(), _desenho.getPosY()+_desenho.getLargura());
+        contemExtremoNoroeste = contem(_desenho.getGlobalX(), _desenho.getGlobalY());
+        contemExtremoNordeste = contem(_desenho.getGlobalX()+_desenho.getComprimento(), _desenho.getGlobalY());
+        contemExtremoSudoeste = contem(_desenho.getGlobalX(), _desenho.getGlobalY()+_desenho.getLargura());
+        contemExtremoSudeste = contem(_desenho.getGlobalX()+_desenho.getComprimento(), _desenho.getGlobalY()+_desenho.getLargura());
 
         contem = contemExtremoNoroeste
               || contemExtremoNordeste
@@ -241,14 +300,22 @@ public class Desenho extends Object{
 
     /**
      * Adiciona textura a este desenho.
+     * Não é necessário especificar o tipo da imagem, pois ele é "adivinhado" pela função.
      * @param _caminho O caminho absoluto, no sistema de arquivos, do arquivo da textura.
-     * @param _tipo O tipo, pode ser "GIF", "JPG" ou "PNG".
      */
-    public void adicionarTextura(String _caminho, String _tipo){
+    public void adicionarTextura(String _caminho){
         try {
-            textura = TextureLoader.getTexture(_tipo, ResourceLoader.getResourceAsStream(_caminho));
-        } catch (IOException ex) {
-            Logger.getLogger(Desenho.class.getName()).log(Level.SEVERE, null, ex);
+            textura = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream(_caminho));
+        } catch (IOException ex1) {
+            try {
+                textura = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(_caminho));
+            } catch (IOException ex2) {
+                try {
+                    textura = TextureLoader.getTexture("GIF", ResourceLoader.getResourceAsStream(_caminho));
+                } catch (IOException ex3) {
+                    Logger.getLogger(Desenho.class.getName()).log(Level.SEVERE, null, ex3);
+                }
+            }
         }
     }
 
@@ -264,22 +331,40 @@ public class Desenho extends Object{
             GL11.glDisable(GL11.GL_TEXTURE_2D);
         }
         glPushMatrix();
-        glTranslatef(posX,posY,0.0f);
-        glRotatef(0,0.0f,0.0f,1.0f);
-        glTranslatef(-(100 >> 1),-(100 >> 1),0.0f);
+        glTranslatef(0.0f,0.0f,0.0f);
+        glRotatef(0.0f,0.0f,0.0f,1.0f);
+        //glTranslatef(-(100 >> 1),-(100 >> 1),0.0f);
         glColor4f((float) (cor.getRed()/255.0),
                   (float) (cor.getGreen()/255.0),
                   (float) (cor.getBlue()/255.0),
                   (float) (cor.getAlpha()/255.0));
         glBegin(GL_QUADS);
-            glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
-            glTexCoord2f(1.0f,0.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, 0.0f);
-            glTexCoord2f(1.0f,1.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, tamanhoEmPorcentagem*largura);
-            glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f, tamanhoEmPorcentagem*largura);
+        if(textura != null){
+            glTexCoord2f(0.0f, largura/textura.getImageHeight());
+                glVertex2f(posX, posY);
+            glTexCoord2f(comprimento/textura.getImageWidth(), largura/textura.getImageHeight());
+                glVertex2f(posX+tamanhoEmPorcentagem*comprimento, posY);
+            glTexCoord2f(comprimento/textura.getImageWidth(),0.0f);
+                glVertex2f(posX+tamanhoEmPorcentagem*comprimento, posY+tamanhoEmPorcentagem*largura);
+            glTexCoord2f(0.0f,0.0f);
+                glVertex2f(posX, posY+tamanhoEmPorcentagem*largura);
+        } else {
+            glTexCoord2f(0.0f,1.0f);
+                glVertex2f(posX, posY);
+            glTexCoord2f(1.0f,1.0f);
+                glVertex2f(posX+tamanhoEmPorcentagem*comprimento, posY);
+            glTexCoord2f(1.0f,0.0f);
+                glVertex2f(posX+tamanhoEmPorcentagem*comprimento, posY+tamanhoEmPorcentagem*largura);
+            glTexCoord2f(0.0f,0.0f);
+                glVertex2f(posX, posY+tamanhoEmPorcentagem*largura);
+        }
         glEnd();
         glPopMatrix();
         for(Desenho desenhoFilho : filhos){
+            desenhoFilho.deslocar(posX, posY);
             desenhoFilho.desenhar();
+            //System.out.println("Desenhar filho ("+desenhoFilho.getPosX()+", "+desenhoFilho.getPosY()+")\n");
+            desenhoFilho.deslocar(-posX, -posY);
         }
     }
 
@@ -321,12 +406,16 @@ public class Desenho extends Object{
     public void destruir() {
         int index=0;
         int indexDesteDesenho=0;
+        boolean desenhoEncontrado = false;
         for(Desenho desenhoCriado : todosDesenhosCriados){
             if(desenhoCriado.getIdentificacaoUnica() == identificacaoUnica){
                 indexDesteDesenho = index;
+                desenhoEncontrado = true;
             }
             index++;
         }
-        todosDesenhosCriados.remove(indexDesteDesenho);
+        if(desenhoEncontrado){
+            todosDesenhosCriados.remove(indexDesteDesenho);
+        }
     }
 }

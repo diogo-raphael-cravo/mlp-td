@@ -36,7 +36,7 @@ public class ControladorJogo
         float mouseY = Tela.yTelaParaGlobal(Mouse.getY());
         Vector<Desenho> todosDesenhosCriados = Desenho.getTodosDesenhosCriados();
         for(Desenho desenho : todosDesenhosCriados){
-            if(desenho.contem(mouseX+desenho.getComprimento(), mouseY+desenho.getLargura())){
+            if(desenho.contem(mouseX, mouseY)){
                 if(desenhoSelecionado != null){
                     desenhoSelecionado.restaurarTransparencia();
                 }

@@ -59,7 +59,7 @@ public class td {
       }
       Nivel niveis[] = new Nivel[1];
       niveis[0] = new Nivel(inimigo, 10);
-      jogo = new Jogo(new Terreno(150, 50, 400, 400, 10, 10), niveis);
+      jogo = new Jogo(new Terreno(150, -100, 400, 400, 10, 10), niveis);
       controladorJogo = new ControladorJogo(jogo);
       create();
       run();
