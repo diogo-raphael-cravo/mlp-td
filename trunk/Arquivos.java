@@ -10,5 +10,5 @@ package mlptd;
  * @author diogo
  */
 public class Arquivos {
-    public static String ARQUIVO_TEXTURA_MURO = "C:\\Documents and Settings\\NUTED\\Desktop\\muro.png";
+    public static String ARQUIVO_TEXTURA_MURO = "/home/diogo/Área de Trabalho/mlp-td/muro2.png";
 }

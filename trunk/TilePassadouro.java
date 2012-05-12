@@ -85,12 +85,5 @@ public class TilePassadouro extends Tile{
          }
      }
 
-    /**
-     * Desenha a tile na tela com base em seu tamanho e posição.
-     */
-    @Override
-    public void desenhar(){
-        super.desenhar();
-    }
     
 }

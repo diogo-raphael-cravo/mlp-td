@@ -87,6 +87,7 @@ public class Terreno extends Desenho{
           inimigoNovo.mover(getPosX(), getPosY());
           primeiraTileCaminho.adicionarInimigo(inimigoNovo);
           inimigosNoTerreno.add(inimigoNovo);
+          adicionarFilho(inimigoNovo, primeiraTileCaminho.getPosX(), primeiraTileCaminho.getPosY());
      }
 
      /**
@@ -119,7 +120,7 @@ public class Terreno extends Desenho{
      private void moverInimigo(Inimigo _inimigo, Caminho _caminho){
         Inimigo inimigoNaoMovido = _inimigo;
         Tile exemploTileTerreno = tiles[0][0];
-        TilePassadouro tileInimigo = (TilePassadouro) getTileComPosicao(inimigoNaoMovido.getPosX(), inimigoNaoMovido.getPosY());
+        TilePassadouro tileInimigo = (TilePassadouro) getTileComPosicao(inimigoNaoMovido.getGlobalX(), inimigoNaoMovido.getGlobalY());
         TilePassadouro tileVizinhaTileInimigo = null;
         float tempoPassadoDesdeUltimoMovimentoEmSegundos = Temporizador.diferencaUltimasDuasMarcacoesPrincipal()/((float) 1000.0);
         float velocidadeInimigoEmPixelsPorSegundo = exemploTileTerreno.getComprimento()*
@@ -216,7 +217,7 @@ public class Terreno extends Desenho{
             colunaTileCaminho = caminho.getColunaTile(posicaoTestada);
             linhaTileCaminho = caminho.getLinhaTile(posicaoTestada);
             tileTestada = tiles[colunaTileCaminho][linhaTileCaminho];
-            encontrada_posicaoTileParametroNoCaminho = tileTestada.contem(_tile.getPosX()+1, _tile.getPosY()+1);
+            encontrada_posicaoTileParametroNoCaminho = tileTestada.contem(_tile.getGlobalX()+1, _tile.getGlobalY()+1);
             if(encontrada_posicaoTileParametroNoCaminho && posicaoTestada < caminho.getComprimento()-1){
                 encontrada_posicaoTileParametroNoCaminho = true;
                 posicaoTileCaminho = posicaoTestada;
@@ -261,6 +262,8 @@ public class Terreno extends Desenho{
             linha = _caminho.getLinhaTile(posicaoAtual);
             tileSubstituida = tiles[coluna][linha];
             tiles[coluna][linha] = new TilePassadouro(tileSubstituida);
+            adicionarFilho(tiles[coluna][linha], tiles[coluna][linha].getPosX(), tiles[coluna][linha].getPosY());
+            removerFilho(tileSubstituida);
             tileSubstituida.destruir();
         }
      }
@@ -301,50 +304,16 @@ public class Terreno extends Desenho{
          Tile tileQueDeveSerAdicionada;
          boolean tileEstahForaDosLimites = (tilesPorLinha <= _colunaTile || tilesPorColuna <= _linhaTile);
          if(!tileEstahForaDosLimites){
-            xTile = posX + _colunaTile*comprimentoCadaTile;
-            yTile = posY - _linhaTile*larguraCadaTile;
+            xTile = _colunaTile*comprimentoCadaTile;
+            yTile = _linhaTile*larguraCadaTile;
             
-            tileQueDeveSerAdicionada = new Tile(xTile, yTile, comprimentoCadaTile, larguraCadaTile);
+            tileQueDeveSerAdicionada = new Tile(0, 0, comprimentoCadaTile, larguraCadaTile);
             tileQueDeveSerAdicionada.mudarCor(_cor);
             tiles[_colunaTile][_linhaTile] = tileQueDeveSerAdicionada;
+            adicionarFilho(tiles[_colunaTile][_linhaTile], xTile, yTile);
          }
          //Apenas as tiles que não são passadouro têm eventos de mouse.
          tiles[_colunaTile][_linhaTile].inicializarEventos();
-     }
-     
-     /**
-      * Desenha todas as tiles do terreno.
-      */
-    @Override
-     public void desenhar(){
-         for(int linha=0; linha<tilesPorColuna; linha++){
-            for(int coluna=0; coluna<tilesPorLinha; coluna++){
-                tiles[coluna][linha].desenhar();
-            }
-         }
-         for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
-            inimigoNoTerreno.desenhar();
-         }
-     }
-
-     /**
-      * Move o terreno.
-      * @param _destino Posição para onde o terreno deve ir.
-      */
-    @Override
-     public void mover(float _posX, float _posY){
-        posX = _posX;
-        posY = _posY;
-
-        float xTile;
-        float yTile;
-        for(int linha=0; linha<tilesPorColuna; linha++){
-            for(int coluna=0; coluna<tilesPorLinha; coluna++){
-                xTile = posX + coluna*comprimentoCadaTile;
-                yTile = posY - linha*larguraCadaTile;
-                tiles[coluna][linha].mover(xTile, yTile);
-            }
-        }
      }
 
 }

@@ -37,11 +37,11 @@ public class Gui_BarraInferior extends Desenho{
          * A resposta é: mistério. Se descobrir, favor me dizer... Eu não consegui.
          * Acontece que, com este '+50' a barra fica na posição certa.
          */
-        super(Tela.xTelaParaGlobal(0) +50, Tela.yTelaParaGlobal(0), Tela.WIDTH, 200, 100);
+        super(0, 0, Tela.WIDTH, 200, 100);
         mudarCor(new Color(Color.WHITE));
         gui_retrato = new Gui_Retrato(posX, posY, 100, 100, 100);
         adicionarFilho(gui_retrato, 30, 75);
-        adicionarTextura(Arquivos.ARQUIVO_TEXTURA_MURO, "PNG");
+        adicionarTextura(Arquivos.ARQUIVO_TEXTURA_MURO);
     }
 
     /**

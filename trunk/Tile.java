@@ -28,26 +28,4 @@ public class Tile extends Desenho {
         super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
     }
 
-    /**
-     * Desenha a tile na tela com base em seu tamanho e posição.
-     */
-    @Override
-    public void desenhar(){
-        glPushMatrix();
-        glTranslatef(posX,posY,0.0f);
-        glRotatef(0,0.0f,0.0f,1.0f);
-        glTranslatef(-(100 >> 1),-(100 >> 1),0.0f);
-        glColor4f((float) (cor.getRed()/255.0),
-                  (float) (cor.getGreen()/255.0),
-                  (float) (cor.getBlue()/255.0),
-                  (float) (cor.getAlpha()/255.0));
-        glBegin(GL_QUADS);
-            glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
-            glTexCoord2f(1.0f,0.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, 0.0f);
-            glTexCoord2f(1.0f,1.0f); glVertex2f(tamanhoEmPorcentagem*comprimento, tamanhoEmPorcentagem*largura);
-            glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f, tamanhoEmPorcentagem*largura);
-        glEnd();
-        glPopMatrix();
-    }
-
 }

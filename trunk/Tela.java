@@ -31,6 +31,7 @@ public class Tela extends Desenho {
     public static void inicializar(){
         tela = new Tela();
         tela.inicializarInstancia();
+
     }
 
     /**
@@ -38,6 +39,7 @@ public class Tela extends Desenho {
      */
     private void inicializarInstancia(){
        barraInformacoesInferior = new Gui_BarraInferior();
+       adicionarFilho(barraInformacoesInferior, 0.0f, 0.0f);
     }
 
     private Tela(){
@@ -74,22 +76,5 @@ public class Tela extends Desenho {
          return tela.getPosY() + _yTela;
      }
 
-    /**
-     * O movimento é feito de uma só vez.
-     * @param _destino Ponto para onde o desenho deve ir.
-     */
-    @Override
-     public void deslocar(float _deslocamentoX, float _deslocamentoY){
-        super.deslocar(_deslocamentoX, _deslocamentoY);
-        barraInformacoesInferior.deslocar(_deslocamentoX, _deslocamentoY);
-     }
 
-     /**
-     * Desenha a todos os elementos de interface gráfica da tela.
-     */
-     @Override
-     public void desenhar(){
-        super.desenhar();
-        barraInformacoesInferior.desenhar();
-     }
 }
