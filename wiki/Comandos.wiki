@@ -2,6 +2,7 @@
 #labels Phase-Deploy
 
 ===Teclado====
+
 || *Comando* || *Ação* ||
 || flecha para esquerda || mover tela para a esquerda ||
 || flecha para direita || mover tela para a direita ||
@@ -16,7 +17,9 @@
 || d || rotacionar +1 grau em torno do eixo y (com limite de grau 45) ||
 || z || rotacionar -1 grau em torno do eixo z (sem limite) ||
 || c || rotacionar +1 grau em torno do eixo z (sem limite) ||
+
 ===Mouse===
+
 || *Comando* || *Ação* ||
 || mover perto das bordas || mover tela na direção da borda ||
 || clicar com botão esquerdo || selecionar objeto, permitindo ver e editar seus dados na barra inferior ||
