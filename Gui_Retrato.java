@@ -19,6 +19,7 @@ public class Gui_Retrato extends Desenho {
      * Desenho mostrado por este retrato.
      */
     private Desenho desenhoExibido;
+    private Filme filmeExibido;
 
     /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
@@ -38,11 +39,28 @@ public class Gui_Retrato extends Desenho {
      * @param _desenho Desenho a ser exibido.
      */
     public void exibir(Desenho _desenho){
-        float xCentro = xCentroParaDesenho(_desenho) - posX;
-        float yCentro = yCentroParaDesenho(_desenho) - posY;
+        float xCentro;
+        float yCentro;
+        float margemX = 10;
+        float margemY = 10;
+        if(comprimento-margemX < _desenho.comprimento){
+            _desenho.comprimento = comprimento-margemX;
+        }
+        if(largura-margemY < _desenho.largura){
+            _desenho.largura = largura-margemY;
+        }
+        xCentro = comprimento/2 - _desenho.comprimento/2;
+        yCentro = largura/2 - _desenho.largura/2;
         desenhoExibido = new Desenho(_desenho);
         desenhoExibido.restaurarTransparencia();
         adicionarFilho(desenhoExibido, xCentro, yCentro);
+    }
+    public void exibir(Filme _filme){
+        float xCentro = comprimento/2 - _filme.getQuadros().elementAt(0).getComprimento()/2;
+        float yCentro = largura/2 - _filme.getQuadros().elementAt(0).getLargura()/2;
+        filmeExibido = new Filme(_filme);
+        filmeExibido.restaurarTransparencia();
+        adicionarFilho(filmeExibido, xCentro, yCentro);
     }
 
     /**
@@ -50,15 +68,8 @@ public class Gui_Retrato extends Desenho {
      */
     public void retirarDesenhoExibido(){
         desenhoExibido = null;
+        filmeExibido = null;
         filhos = new Vector<Desenho>();
-    }
-
-    /**
-     * Desenha na tela com base em seu tamanho e posicao.
-     * O objeto desenhado é um retângulo.
-     */
-    public void desenhar(){
-        super.desenhar();
     }
     
 }

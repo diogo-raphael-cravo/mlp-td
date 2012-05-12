@@ -2,6 +2,7 @@ package mlptd;
 
 
 import org.lwjgl.opengl.GL11;
+import static org.lwjgl.util.glu.GLU.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import org.newdawn.slick.util.ResourceLoader;
@@ -25,6 +26,13 @@ public class Desenho extends Object{
     protected float largura;
     protected float altura;
     protected Color cor;
+
+    /**
+     * Rotação em torno de um eixo.
+     */
+    protected float rotacaoX;
+    protected float rotacaoY;
+    protected float rotacaoZ;
 
     /**
      * Utilizada para encontrar este objeto em todosDesenhosCriados.
@@ -52,7 +60,7 @@ public class Desenho extends Object{
     /**
      * A textura deste desenho, se houver.
      */
-    private Texture textura;
+    protected Texture textura;
 
     /**
      * Desenho pai deste desenho, quando houver.
@@ -83,6 +91,9 @@ public class Desenho extends Object{
         pai = null;
         identificacaoUnica = identificacaoUnicaLivre;
         identificacaoUnicaLivre++;
+        rotacaoX = 0;
+        rotacaoY = 0;
+        rotacaoZ = 0;
     }
     public Desenho(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem, float _altura){
         this(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
@@ -91,6 +102,7 @@ public class Desenho extends Object{
     public Desenho(Desenho _desenho){
         this(_desenho.getPosX(), _desenho.getPosY(), _desenho.getComprimento(), _desenho.getLargura(), _desenho.getTamanhoEmPorcentagem());
         cor = new Color(_desenho.getCor());
+        textura = _desenho.getTextura();
         for(Desenho desenho : _desenho.getFilhos()){
             adicionarFilho(desenho, desenho.getPosX(), desenho.getPosY());
         }
@@ -160,6 +172,9 @@ public class Desenho extends Object{
         }
         return yGlobal;
     }
+    public Texture getTextura(){
+        return textura;
+    }
 
 
     /**
@@ -171,6 +186,45 @@ public class Desenho extends Object{
      */
     protected void setPai(Desenho _pai){
         pai = _pai;
+    }
+
+    /**
+     * Rotaciona o desenho.
+     * @param _rotacaoX, _rotacaoY, _rotacaoZ Valor da rotação em [0,360).
+     *        Valores maiores são truncados.
+     */
+    public void rotacionar(float _rotacaoX, float _rotacaoY, float _rotacaoZ){
+        if(360 <= _rotacaoX){
+            rotacaoX = _rotacaoX%360;
+        } else if(_rotacaoX <= -360){
+            rotacaoX =  -(((-_rotacaoX)%360) - 360);
+        } else if(_rotacaoX < 0){
+            rotacaoX = 360 - _rotacaoX;
+        } else {
+            rotacaoX = _rotacaoX;
+        }
+        if(360 <= _rotacaoY){
+            rotacaoY = _rotacaoY%360;
+        } else if(_rotacaoY <= -360){
+            rotacaoY =  -(((-_rotacaoY)%360) - 360);
+        } else if(_rotacaoY < 0){
+            rotacaoY = 360 - _rotacaoY;
+        } else {
+            rotacaoY = _rotacaoY;
+        }
+        if(360 <= _rotacaoZ){
+            rotacaoZ = _rotacaoZ%360;
+        } else if(_rotacaoZ <= -360){
+            rotacaoZ =  -(((-_rotacaoZ)%360) - 360);
+        } else if(_rotacaoZ < 0){
+            rotacaoZ = 360 - _rotacaoZ;
+        } else {
+            rotacaoZ = _rotacaoZ;
+        }
+
+        for(Desenho filho : filhos){
+            filho.rotacionar(_rotacaoX, _rotacaoY, _rotacaoZ);
+        }
     }
 
     /**
@@ -214,8 +268,8 @@ public class Desenho extends Object{
      * @param _desenho O desenho que deseja-se que fique no centro deste.
      * @return A posição x em que o parâmetro deve ficar para estar no centro deste.
      */
-    public float xCentroParaDesenho(Desenho _desenho){
-        float xCentro = getPosX() + getComprimento()/2 - _desenho.getComprimento()/2;
+    public float xGlobalCentroParaDesenho(Desenho _desenho){
+        float xCentro = getGlobalX() + getComprimento()/2 - _desenho.getComprimento()/2;
         return xCentro;
     }
     
@@ -225,8 +279,8 @@ public class Desenho extends Object{
      * @param _desenho O desenho que deseja-se que fique no centro deste.
      * @return A posição y em que o parâmetro deve ficar para estar no centro deste.
      */
-    public float yCentroParaDesenho(Desenho _desenho){
-        float yCentro = getPosY() + getLargura()/2 - _desenho.getLargura()/2;
+    public float yGlobalCentroParaDesenho(Desenho _desenho){
+        float yCentro = getGlobalY() + getLargura()/2 - _desenho.getLargura()/2;
         return yCentro;
     }
 
@@ -331,39 +385,39 @@ public class Desenho extends Object{
             GL11.glDisable(GL11.GL_TEXTURE_2D);
         }
         glPushMatrix();
-        glTranslatef(0.0f,0.0f,0.0f);
-        glRotatef(0.0f,0.0f,0.0f,1.0f);
-        //glTranslatef(-(100 >> 1),-(100 >> 1),0.0f);
+        
+        glRotatef(rotacaoX,1.0f,0.0f,0.0f);
+        glRotatef(rotacaoY,0.0f,1.0f,0.0f);
+        glRotatef(rotacaoZ,0.0f,0.0f,1.0f);
         glColor4f((float) (cor.getRed()/255.0),
                   (float) (cor.getGreen()/255.0),
                   (float) (cor.getBlue()/255.0),
                   (float) (cor.getAlpha()/255.0));
         glBegin(GL_QUADS);
         if(textura != null){
-            glTexCoord2f(0.0f, largura/textura.getImageHeight());
-                glVertex2f(posX, posY);
-            glTexCoord2f(comprimento/textura.getImageWidth(), largura/textura.getImageHeight());
-                glVertex2f(posX+tamanhoEmPorcentagem*comprimento, posY);
-            glTexCoord2f(comprimento/textura.getImageWidth(),0.0f);
-                glVertex2f(posX+tamanhoEmPorcentagem*comprimento, posY+tamanhoEmPorcentagem*largura);
-            glTexCoord2f(0.0f,0.0f);
-                glVertex2f(posX, posY+tamanhoEmPorcentagem*largura);
+            glTexCoord3f(0.0f, largura/textura.getImageHeight(), 0.0f);
+                glVertex3f(posX, posY, 0.0f);
+            glTexCoord3f(comprimento/textura.getImageWidth(), largura/textura.getImageHeight(), 0.0f);
+                glVertex3f(posX+tamanhoEmPorcentagem*comprimento, posY, 0.0f);
+            glTexCoord3f(comprimento/textura.getImageWidth(),0.0f, 0.0f);
+                glVertex3f(posX+tamanhoEmPorcentagem*comprimento, posY+tamanhoEmPorcentagem*largura, 0.0f);
+            glTexCoord3f(0.0f,0.0f, 0.0f);
+                glVertex3f(posX, posY+tamanhoEmPorcentagem*largura, 0.0f);
         } else {
-            glTexCoord2f(0.0f,1.0f);
-                glVertex2f(posX, posY);
-            glTexCoord2f(1.0f,1.0f);
-                glVertex2f(posX+tamanhoEmPorcentagem*comprimento, posY);
-            glTexCoord2f(1.0f,0.0f);
-                glVertex2f(posX+tamanhoEmPorcentagem*comprimento, posY+tamanhoEmPorcentagem*largura);
-            glTexCoord2f(0.0f,0.0f);
-                glVertex2f(posX, posY+tamanhoEmPorcentagem*largura);
+            glTexCoord3f(0.0f,1.0f, 0.0f);
+                glVertex3f(posX, posY, 0.0f);
+            glTexCoord3f(1.0f,1.0f, 0.0f);
+                glVertex3f(posX+tamanhoEmPorcentagem*comprimento, posY, 0.0f);
+            glTexCoord3f(1.0f,0.0f, 0.0f);
+                glVertex3f(posX+tamanhoEmPorcentagem*comprimento, posY+tamanhoEmPorcentagem*largura, 0.0f);
+            glTexCoord3f(0.0f,0.0f, 0.0f);
+                glVertex3f(posX, posY+tamanhoEmPorcentagem*largura, 0.0f);
         }
         glEnd();
         glPopMatrix();
         for(Desenho desenhoFilho : filhos){
             desenhoFilho.deslocar(posX, posY);
             desenhoFilho.desenhar();
-            //System.out.println("Desenhar filho ("+desenhoFilho.getPosX()+", "+desenhoFilho.getPosY()+")\n");
             desenhoFilho.deslocar(-posX, -posY);
         }
     }

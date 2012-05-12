@@ -80,5 +80,11 @@ public class Jogo {
     public void desenhar(){
         terreno.desenhar();
     }
-    
+
+    /**
+     * @return O terreno utilizado no jogo.
+     */
+    public Terreno getTerreno(){
+        return terreno;
+    }
 }

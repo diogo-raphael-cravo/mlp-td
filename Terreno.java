@@ -87,6 +87,8 @@ public class Terreno extends Desenho{
           inimigoNovo.mover(getPosX(), getPosY());
           primeiraTileCaminho.adicionarInimigo(inimigoNovo);
           inimigosNoTerreno.add(inimigoNovo);
+          inimigoNovo.inicializarEventos();
+          inimigoNovo.rotacionar(10, 0, 0);
           adicionarFilho(inimigoNovo, primeiraTileCaminho.getPosX(), primeiraTileCaminho.getPosY());
      }
 
@@ -138,27 +140,27 @@ public class Terreno extends Desenho{
         }
 
         if(tileVizinhaTileInimigo != null){
-            xDestinoInimigo = tileVizinhaTileInimigo.xCentroParaDesenho(inimigoNaoMovido);
-            yDestinoInimigo = tileVizinhaTileInimigo.yCentroParaDesenho(inimigoNaoMovido);
+            xDestinoInimigo = tileVizinhaTileInimigo.xGlobalCentroParaDesenho(inimigoNaoMovido);
+            yDestinoInimigo = tileVizinhaTileInimigo.yGlobalCentroParaDesenho(inimigoNaoMovido);
 
-            if(xDestinoInimigo <= inimigoNaoMovido.getPosX()){
+            if(xDestinoInimigo <= inimigoNaoMovido.getGlobalX()){
                 direcaoX = -1;
             } else {
                 direcaoX = 1;
             }
 
-            if(yDestinoInimigo <= inimigoNaoMovido.getPosY()){
+            if(yDestinoInimigo <= inimigoNaoMovido.getGlobalY()){
                 direcaoY = 1;
             } else {
                 direcaoY = -1;
             }
 
-            if(inimigoNaoMovido.getPosX() == xDestinoInimigo){
+            if(inimigoNaoMovido.getGlobalX() == xDestinoInimigo){
                 xVariacaoInimigo = 0;
-                if(inimigoNaoMovido.getPosY() != yDestinoInimigo){
+                if(inimigoNaoMovido.getGlobalY() != yDestinoInimigo){
                     yVariacaoInimigo = - velocidadeInimigoEmPixelsPorSegundo;
                 }
-            } else if(inimigoNaoMovido.getPosY() == yDestinoInimigo){
+            } else if(inimigoNaoMovido.getGlobalY() == yDestinoInimigo){
                 xVariacaoInimigo = velocidadeInimigoEmPixelsPorSegundo;
                 yVariacaoInimigo = 0;
             } else {
