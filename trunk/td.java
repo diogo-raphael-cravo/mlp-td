@@ -60,7 +60,7 @@ public class td {
       }*/
       Nivel niveis[] = new Nivel[1];
       niveis[0] = new Nivel(inimigo, 10);
-      jogo = new Jogo(new Terreno(Tela.WIDTH/2, Tela.HEIGHT/2, Tela.WIDTH, Tela.HEIGHT, 10, 10), niveis);
+      jogo = new Jogo(new Terreno(-Tela.WIDTH/2, -Tela.HEIGHT/2, Tela.WIDTH, Tela.HEIGHT, 10, 10), niveis);
       Camera.moverCameras(jogo.getTerreno().getPosX(), jogo.getTerreno().getPosY());
       controladorJogo = new ControladorJogo(jogo);
       run();
@@ -115,24 +115,24 @@ public class td {
     //Square's Size
     if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
         if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-            Camera.deslocarCameras(-1.0f, 1.0f);
+            Camera.deslocarCameras(-5.0f, 5.0f);
         } else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-            Camera.deslocarCameras(1.0f, 1.0f);
+            Camera.deslocarCameras(5.0f, 5.0f);
         } else {
-            Camera.deslocarCameras(0.0f, 1.0f);
+            Camera.deslocarCameras(0.0f, 5.0f);
         }
     } else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
         if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-            Camera.deslocarCameras(-1.0f, -1.0f);
+            Camera.deslocarCameras(-5.0f, -5.0f);
         } else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-            Camera.deslocarCameras(1.0f, -1.0f);
+            Camera.deslocarCameras(5.0f, -5.0f);
         } else {
-            Camera.deslocarCameras(0.0f, -1.0f);
+            Camera.deslocarCameras(0.0f, -5.0f);
         }
     } else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-        Camera.deslocarCameras(-1.0f, 0.0f);
+        Camera.deslocarCameras(-5.0f, 0.0f);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-        Camera.deslocarCameras(1.0f, 0.0f);
+        Camera.deslocarCameras(5.0f, 0.0f);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_O)){
         Camera.setCamera(Camera.CAMERA.ORTOGRAFICA);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_P)){
@@ -193,7 +193,8 @@ public class td {
 
   public void resizeGL() {
     //2D Scene
-    Camera.setCamera(Camera.CAMERA.ORTOGRAFICA);
+    Camera.setCamera(Camera.CAMERA.PERSPECTIVA);
+    Camera.rotacionarCameras(-45, 0, 0);
   }
 
   public void run() {

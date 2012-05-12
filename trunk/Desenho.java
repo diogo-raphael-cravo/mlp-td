@@ -385,10 +385,13 @@ public class Desenho extends Object{
             GL11.glDisable(GL11.GL_TEXTURE_2D);
         }
         glPushMatrix();
-        
+
+        glTranslatef(getGlobalX(), getGlobalY(), 0);
         glRotatef(rotacaoX,1.0f,0.0f,0.0f);
         glRotatef(rotacaoY,0.0f,1.0f,0.0f);
         glRotatef(rotacaoZ,0.0f,0.0f,1.0f);
+        glTranslatef(-getGlobalX(), -getGlobalY(), 0);
+
         glColor4f((float) (cor.getRed()/255.0),
                   (float) (cor.getGreen()/255.0),
                   (float) (cor.getBlue()/255.0),

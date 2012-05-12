@@ -114,12 +114,16 @@ public class Camera {
             
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
-            glRotatef(perspectiva.rotacaoX,1.0f,0.0f,0.0f);
-            glRotatef(perspectiva.rotacaoY,0.0f,1.0f,0.0f);
-            glRotatef(perspectiva.rotacaoZ,0.0f,0.0f,1.0f);
             glTranslatef(-perspectiva.posX-400,
                          -perspectiva.posY-400,
                          -1000);
+            //glTranslatef(0,0,-1000);
+
+            //glTranslatef(perspectiva.posX, perspectiva.posY, 0);
+            glRotatef(perspectiva.rotacaoX,1.0f,0.0f,0.0f);
+            glRotatef(perspectiva.rotacaoY,0.0f,1.0f,0.0f);
+            glRotatef(perspectiva.rotacaoZ,0.0f,0.0f,1.0f);
+            //glTranslatef(-perspectiva.posX, -perspectiva.posY, 0);
 
             cameraAtual = CAMERA.PERSPECTIVA;
         } else if(_cameraEscolhida == CAMERA.ORTOGRAFICA){
@@ -134,9 +138,11 @@ public class Camera {
             
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
+            //glTranslatef(ortografica.posX, ortografica.posY, 0);
             glRotatef(ortografica.rotacaoX,1.0f,0.0f,0.0f);
             glRotatef(ortografica.rotacaoY,0.0f,1.0f,0.0f);
             glRotatef(ortografica.rotacaoZ,0.0f,0.0f,1.0f);
+            //glTranslatef(-ortografica.posX, -ortografica.posY, 0);
 
             cameraAtual = CAMERA.ORTOGRAFICA;
         } else if(_cameraEscolhida == CAMERA.ORTOGRAFICA_ESTATICA){
@@ -180,10 +186,10 @@ public class Camera {
         rotacaoY += _rotacaoY;
         rotacaoZ += _rotacaoZ;
 
-        if(45 < rotacaoX){
-            rotacaoX = 45;
-        } else if(rotacaoX < 0){
+        if(0 < rotacaoX){
             rotacaoX = 0;
+        } else if(rotacaoX < -45){
+            rotacaoX = -45;
         }
         if(45 < rotacaoY){
             rotacaoY = 45;
