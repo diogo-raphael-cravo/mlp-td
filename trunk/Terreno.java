@@ -47,6 +47,13 @@ public class Terreno extends Desenho{
     Vector<Inimigo> inimigosNoTerreno;
 
     /**
+     * Angulo de rotacao dos inimigos neste terreno.
+     */
+    private float xRotacaoInimigos;
+    private float yRotacaoInimigos;
+    private float zRotacaoInimigos;
+
+    /**
      * O terreno é criado com um número especificado de tiles de forma que ocupe as dimensões que lhe são especificadas.
      * @param _posicao Posição do terreno.
      * @param _dimensoesTela Comprimento e largura do terreno em unidades de tela.
@@ -74,6 +81,10 @@ public class Terreno extends Desenho{
         aplicar(caminho);
 
         inimigosNoTerreno = new Vector<Inimigo>();
+
+        xRotacaoInimigos = 90;
+        yRotacaoInimigos = 0;
+        zRotacaoInimigos = 0;
      }
 
      /**
@@ -88,7 +99,7 @@ public class Terreno extends Desenho{
           primeiraTileCaminho.adicionarInimigo(inimigoNovo);
           inimigosNoTerreno.add(inimigoNovo);
           inimigoNovo.inicializarEventos();
-          inimigoNovo.rotacionar(-90, 0, 0);
+          inimigoNovo.rotacionar(xRotacaoInimigos, -yRotacaoInimigos, zRotacaoInimigos);
           adicionarFilho(inimigoNovo, primeiraTileCaminho.getPosX(), primeiraTileCaminho.getPosY());
      }
 
@@ -316,6 +327,18 @@ public class Terreno extends Desenho{
          }
          //Apenas as tiles que não são passadouro têm eventos de mouse.
          tiles[_colunaTile][_linhaTile].inicializarEventos();
+     }
+
+     /**
+      * Rotaciona todos os inimigos deste terreno e somente eles.
+      * Só é possível rotacioná-los em torno do eixo y.
+      * @param _rotacaoY Valor da rotação.
+      */
+     public void rotacionarInimigosEmY(float _rotacaoY){
+         yRotacaoInimigos += _rotacaoY;
+         for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
+             inimigoNoTerreno.rotacionar(0, -_rotacaoY, 0);
+         }
      }
 
 }

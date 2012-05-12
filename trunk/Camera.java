@@ -76,12 +76,10 @@ public class Camera {
      * @param _posX, _posY A posição de destino.
      */
     public void mover(float _posX, float _posY){
-        System.out.println("para ("+_posX+","+_posY+")");
         posX = _posX;
         posY = _posY;
     }
     public static void moverCameras(float _posX, float _posY){
-        System.out.println("moverCameras");
         ortografica.mover(_posX, _posY);
         perspectiva.mover(_posX, _posY);
         Camera.atualizar();
