@@ -21,7 +21,7 @@ public class Gui_BarraInferior extends Desenho{
     /**
      * Botões.
      */
-    private Botao botao;
+    private Botao btAdicionarTorre;
 
     /**
      * Controlador de eventos desta gui.
@@ -29,21 +29,16 @@ public class Gui_BarraInferior extends Desenho{
     private ControladorGuiBarraInferior controlador;
 
     public Gui_BarraInferior(){
-        /*
-         * Nesta hora você se pergunta:
-         *      "Por que '+50'?"
-         * A resposta é: mistério. Se descobrir, favor me dizer... Eu não consegui.
-         * Acontece que, com este '+50' a barra fica na posição certa.
-         */
         super(0, 0, Tela.WIDTH, 200, 100);
         mudarCor(new Color(Color.WHITE));
         gui_retrato = new Gui_Retrato(posX, posY, 100, 100, 100);
         adicionarFilho(gui_retrato, 30, 75);
         adicionarTextura(Texturas.MURO);
 
-        botao = new Botao(0, 0, 35, 40, 100);
-        botao.adicionarTextura(Texturas.CAVEIRA);
-        adicionarFilho(botao, 200, 100);
+        btAdicionarTorre = new Botao(0, 0, 100, 200, 100);
+        btAdicionarTorre.adicionarTextura(Texturas.TORRE);
+        adicionarFilho(btAdicionarTorre, 200, 100);
+        btAdicionarTorre.redimensionar(30, 30, 0);
 
         controlador = new ControladorGuiBarraInferior(this);
     }
@@ -56,14 +51,17 @@ public class Gui_BarraInferior extends Desenho{
     }
 
     /**
-     *
-     */
-
-    /**
      * @return Controlador de eventos de mouse desta gui.
      */
     public ControladorGuiBarraInferior getControlador(){
         return controlador;
     }
 
+
+    /**
+     * @return Botão que adiciona torres.
+     */
+    public Botao getBtAdicionarTorre(){
+        return btAdicionarTorre;
+    }
 }

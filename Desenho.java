@@ -21,6 +21,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class Desenho extends Object{
     protected float posX; //IMPORANTE: a posição não considera a rotação.
     protected float posY; //IMPORANTE: a posição não considera a rotação.
+        //A posZ é utilizada somente para manter os filhos acima do pai. Não é modificável pela interface.
+    protected float posZ; //IMPORANTE: a posição não considera a rotação.
     protected float comprimento; //IMPORANTE: o comprimento nunca muda, mesmo que seja feita escala.
     protected float largura; //IMPORANTE: a largura nunca muda, mesmo que seja feita escala.
     protected float altura; //IMPORANTE: a altura nunca muda, mesmo que seja feita escala.
@@ -82,6 +84,7 @@ public class Desenho extends Object{
         cor = new Color(Color.WHITE);
         posX = _posX;
         posY = _posY;
+        posZ = 0;
         comprimento = _comprimento;
         largura = _largura;
         altura = 1;
@@ -116,7 +119,7 @@ public class Desenho extends Object{
         fatorEscalaY = _desenho.fatorEscalaY;
         fatorEscalaZ = _desenho.fatorEscalaZ;
         for(Desenho desenho : _desenho.getFilhos()){
-            adicionarFilho(desenho, desenho.getPosX(), desenho.getPosY());
+            adicionarFilho(new Desenho(desenho), desenho.getPosX(), desenho.getPosY());
         }
     }
 
@@ -141,6 +144,9 @@ public class Desenho extends Object{
     public float getPosY(){
         return posY;
     }
+    public float getPosZ(){
+        return posZ;
+    }
     public float getRotacaoX(){
         return rotacaoX;
     }
@@ -164,6 +170,9 @@ public class Desenho extends Object{
     }
     public float getLargura(){
         return largura;
+    }
+    public float getAltura(){
+        return altura;
     }
     public Color getCor(){
         return cor;
@@ -241,6 +250,11 @@ public class Desenho extends Object{
      */
      public void adicionarFilho(Desenho _desenhoFilho, float _posX, float _posY){
          _desenhoFilho.mover(_posX, _posY);
+         _desenhoFilho.rotacionar(rotacaoX, rotacaoY, rotacaoZ);
+         _desenhoFilho.redimensionar(fatorEscalaX*_desenhoFilho.getFatorEscalaX()*_desenhoFilho.getComprimento(),
+                 fatorEscalaY*_desenhoFilho.getFatorEscalaY()*_desenhoFilho.getLargura(),
+                 fatorEscalaZ*_desenhoFilho.getFatorEscalaZ()*_desenhoFilho.getAltura());
+         //_desenhoFilho.posZ = posZf;
          filhos.add(_desenhoFilho);
          _desenhoFilho.setPai(this);
      }
@@ -319,12 +333,15 @@ public class Desenho extends Object{
      * @param _altura Altura que deseja-se que o objeto tenha.
      */
     public void redimensionar(float _comprimento, float _largura, float _altura){
-        System.out.println("tem>"+comprimento+","+largura+","+altura);
-        System.out.println("quer>"+_comprimento+","+_largura+","+_altura);
         fatorEscalaX = _comprimento/comprimento;
         fatorEscalaY = _largura/largura;
         fatorEscalaZ = _altura/altura;
-        System.out.println("fatores>"+fatorEscalaX+","+fatorEscalaY+","+fatorEscalaZ);
+
+        for(Desenho filho : filhos){
+            filho.redimensionar(fatorEscalaX*filho.getFatorEscalaX()*filho.getComprimento(),
+                    fatorEscalaY*filho.getFatorEscalaY()*filho.getLargura(),
+                    fatorEscalaZ*filho.getFatorEscalaZ()*filho.getAltura());
+        }
     }
 
     /**
@@ -368,14 +385,18 @@ public class Desenho extends Object{
      * @param _caminho O caminho absoluto, no sistema de arquivos, do arquivo da textura.
      */
     public void adicionarTextura(String _caminho){
+        Texture texturaCriada;
         try {
-            textura = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream(_caminho));
+            texturaCriada = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream(_caminho));
+            adicionarTextura(texturaCriada);
         } catch (IOException ex1) {
             try {
-                textura = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(_caminho));
+                texturaCriada = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(_caminho));
+                adicionarTextura(texturaCriada);
             } catch (IOException ex2) {
                 try {
-                    textura = TextureLoader.getTexture("GIF", ResourceLoader.getResourceAsStream(_caminho));
+                    texturaCriada = TextureLoader.getTexture("GIF", ResourceLoader.getResourceAsStream(_caminho));
+                    adicionarTextura(texturaCriada);
                 } catch (IOException ex3) {
                     Logger.getLogger(Desenho.class.getName()).log(Level.SEVERE, null, ex3);
                 }
@@ -399,14 +420,12 @@ public class Desenho extends Object{
         }
         glPushMatrix();
 
-        glTranslatef(getGlobalX(), getGlobalY(), 0);
-        
+        glTranslatef(getGlobalX(), getGlobalY(), posZ);
         glRotatef(rotacaoX,1.0f,0.0f,0.0f);
         glRotatef(rotacaoY,0.0f,1.0f,0.0f);
         glRotatef(rotacaoZ,0.0f,0.0f,1.0f);
         glScalef(fatorEscalaX, fatorEscalaY, fatorEscalaZ);
-        glTranslatef(-getGlobalX(), -getGlobalY(), 0);
-        
+        glTranslatef(-getGlobalX(), -getGlobalY(), -posZ);
 
         glColor4f((float) (cor.getRed()/255.0),
                   (float) (cor.getGreen()/255.0),

@@ -15,8 +15,12 @@ public class Torre extends Desenho {
      * @param _comprimento, _largura Comprimento e largura.
      * @param _tamanhoEmPorcentagem Usado para resize.
      */
-    public Torre(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
-        super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
-        adicionarTextura(Arquivos.ARQUIVO_TEXTURA_TORRE);
+    public Torre(float _posX, float _posY, float _comprimento, float _largura){
+        super(_posX, _posY, _comprimento, _largura);
+        adicionarTextura(Texturas.TORRE);
+    }
+    public Torre(Torre _torre) {
+        super(_torre);
+        adicionarTextura(Texturas.TORRE);
     }
 }

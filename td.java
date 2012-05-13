@@ -26,6 +26,7 @@ public class td {
 
   Jogo jogo;
   ControladorJogo controladorJogo;
+  Temporizador temporizadorMouse; //Garante que o mouse não seja clicado com freqüência muito alta.
 
   static {
     try {
@@ -44,7 +45,6 @@ public class td {
       Desenho quadro2Inimigo = new Desenho(0, 0, 35, 40, 100);
       quadroInimigo.adicionarTextura(Texturas.CAVEIRA);
       quadro2Inimigo.adicionarTextura(Texturas.CAVEIRA2);
-      quadro2Inimigo.redimensionar(10, 10, 0);
       Color corInimigo = new Color(Color.BLACK);
       for(int i=0; i<100; i++){
           inimigo.adicionarQuadro(quadroInimigo);
@@ -119,30 +119,33 @@ public class td {
     Tela.inicializar();
     Camera.inicializar();
     Temporizador.inicializar();
+
+    temporizadorMouse = new Temporizador();
+    temporizadorMouse.marcarAgora();
   }
 
   public void processKeyboard() {
     //Square's Size
     if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
         if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-            Camera.deslocarCameras(-5.0f, 5.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(-5.0f, 5.0f);
         } else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-            Camera.deslocarCameras(5.0f, 5.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(5.0f, 5.0f);
         } else {
-            Camera.deslocarCameras(0.0f, 5.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(0.0f, 5.0f);
         }
     } else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
         if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-            Camera.deslocarCameras(-5.0f, -5.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(-5.0f, -5.0f);
         } else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-            Camera.deslocarCameras(5.0f, -5.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(5.0f, -5.0f);
         } else {
-            Camera.deslocarCameras(0.0f, -5.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(0.0f, -5.0f);
         }
     } else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-        Camera.deslocarCameras(-5.0f, 0.0f);
+        Camera.deslocarCamerasNaDirecaoQueOlham(-5.0f, 0.0f);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-        Camera.deslocarCameras(5.0f, 0.0f);
+        Camera.deslocarCamerasNaDirecaoQueOlham(5.0f, 0.0f);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_O)){
         Camera.setCamera(Camera.CAMERA.ORTOGRAFICA);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_P)){
@@ -160,17 +163,20 @@ public class td {
     } else if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
         Camera.rotacionarCameras(0, 0, -1);
         jogo.getTerreno().rotacionarInimigosEmY(-1);
+        jogo.getTerreno().rotacionarTorresEmY(-1);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_C)){
         Camera.rotacionarCameras(0, 0, 1);
         jogo.getTerreno().rotacionarInimigosEmY(1);
+        jogo.getTerreno().rotacionarTorresEmY(1);
     }
   }
 
   public void processMouse() {
       int BOTAO_ESQUERDO_MOUSE = 0;
 
-      if(Mouse.isButtonDown(BOTAO_ESQUERDO_MOUSE)){
-          System.out.println(Mouse.getX()+","+Mouse.getY());
+      if(Mouse.isButtonDown(BOTAO_ESQUERDO_MOUSE)
+              && 200 < temporizadorMouse.tempoDesdeUltimaMarcacao()){
+          temporizadorMouse.marcarAgora();
           controladorJogo.houveMouseDown();
       }
   }
@@ -182,24 +188,24 @@ public class td {
 
     if(Tela.HEIGHT - 5 < Mouse.getY()){
         if(Mouse.getX() < 5){
-            Camera.deslocarCameras(-1.0f, 1.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(-1.0f, 1.0f);
         } else if(Tela.WIDTH - 5 < Mouse.getX()){
-            Camera.deslocarCameras(1.0f, 1.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(1.0f, 1.0f);
         } else {
-            Camera.deslocarCameras(0.0f, 1.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(0.0f, 1.0f);
         }
     } else if(Mouse.getY() < 5){
         if(Mouse.getX() < 5){
-            Camera.deslocarCameras(-1.0f, -1.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(-1.0f, -1.0f);
         } else if(Tela.WIDTH - 5 < Mouse.getX()){
-            Camera.deslocarCameras(1.0f, -1.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(1.0f, -1.0f);
         } else {
-            Camera.deslocarCameras(0.0f, -1.0f);
+            Camera.deslocarCamerasNaDirecaoQueOlham(0.0f, -1.0f);
         }
     } else if(Mouse.getX() < 5){
-        Camera.deslocarCameras(-1.0f, 0.0f);
+        Camera.deslocarCamerasNaDirecaoQueOlham(-1.0f, 0.0f);
     } else if(Tela.WIDTH - 5 < Mouse.getX()){
-        Camera.deslocarCameras(1.0f, 0.0f);
+        Camera.deslocarCamerasNaDirecaoQueOlham(1.0f, 0.0f);
     }
     jogo.desenhar();
     Tela.getTela().desenhar();
