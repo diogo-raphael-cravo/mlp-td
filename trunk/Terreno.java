@@ -54,6 +54,11 @@ public class Terreno extends Desenho{
     private float zRotacaoInimigos;
 
     /**
+     * Ângulo de rotação das torres nas tiles edificáveis deste terreno.
+     */
+    private float yRotacaoTorres;
+
+    /**
      * O terreno é criado com um número especificado de tiles de forma que ocupe as dimensões que lhe são especificadas.
      * @param _posicao Posição do terreno.
      * @param _dimensoesTela Comprimento e largura do terreno em unidades de tela.
@@ -71,20 +76,19 @@ public class Terreno extends Desenho{
 		
         tiles = new Tile[tilesPorLinha][tilesPorColuna];
 
-        //Pequeno teste. Notar que a tile (0,0) é sinalizada com verde, e não laranja
-        //(somente quando descomentadas as duas linhas seguintes).
-        transformarEmTabuleiro(new Color(Color.ORANGE));
-        //transformarEmTabuleiro(new Color(Color.GREEN));
+        criarMatrizTilesEdificaveis();
 
         //caminho = Caminho.criarCaminhoDiagonalDecrescente(tilesPorColuna, tilesPorLinha, tilesPorColuna);
         caminho = Caminho.criarCaminhoLinhasAlternadas(tilesPorLinha, tilesPorColuna);
-        aplicar(caminho);
+        adicionarTilesPassadouroSegundoCaminho(caminho);
 
         inimigosNoTerreno = new Vector<Inimigo>();
 
         xRotacaoInimigos = 90;
         yRotacaoInimigos = 0;
         zRotacaoInimigos = 0;
+
+        yRotacaoTorres = 0;
      }
 
      /**
@@ -267,9 +271,10 @@ public class Terreno extends Desenho{
 
      /**
       * Aplica o caminho a este terreno, isto é, transforma as tiles que estão no caminho em TilePassadouro.
+      * Sobrescreve as tiles passadouro que estiverem no caminho.
       * @param _caminho O caminho a ser aplicado.
       */
-     private void aplicar(Caminho _caminho){
+     private void adicionarTilesPassadouroSegundoCaminho(Caminho _caminho){
         int posicaoAtual;
         int linha;
         int coluna;
@@ -283,28 +288,20 @@ public class Terreno extends Desenho{
             removerFilho(tileSubstituida);
             tileSubstituida.destruir();
         }
+        atualizarTilesEdificaveis(); //Para que sejam desenhadas corretamente.
      }
 
      /**
-      * Transforma este terreno em um tabuleiro.
-      * A casa de índice (0,0) é sinalizada com a cor de parâmetro.
+      * Cria as tiles de forma que o terreno tenha seu tamanho certo.
+      * Todas as tiles criadas são tiles edificáveis.
       */
-     private void transformarEmTabuleiro(Color _cor){
+     private void criarMatrizTilesEdificaveis(){
         int linha;
         int coluna;
-        Color corCasaAtual;
+        Color corCasaAtual = new Color(Color.WHITE);
         for(coluna=0; coluna<tilesPorLinha; coluna++){
             for(linha=0; linha<tilesPorColuna; linha++){
-                if(linha==0 && coluna == 0){
-                    corCasaAtual = new Color(_cor);
-                } else if((coluna%2==0 && linha%2==1)
-                   || (coluna%2==1 && linha%2==0)){
-                    corCasaAtual = new Color(Color.BLUE);
-                } else {
-                    corCasaAtual = new Color(Color.RED);
-                }
-                corCasaAtual = new Color(Color.WHITE);
-                adicionarTile(coluna, linha, corCasaAtual);
+                adicionarTileEdificavel(coluna, linha, corCasaAtual);
             }
         }
      }
@@ -316,16 +313,16 @@ public class Terreno extends Desenho{
       * @param _posicao Posição da tile na matriz de tiles (e no terreno).
       * @param _cor Cor da tile.
       */
-     private void adicionarTile(int _colunaTile, int _linhaTile, Color _cor){
+     private void adicionarTileEdificavel(int _colunaTile, int _linhaTile, Color _cor){
          float xTile;
          float yTile;
-         Tile tileQueDeveSerAdicionada;
+         TileEdificavel tileQueDeveSerAdicionada;
          boolean tileEstahForaDosLimites = (tilesPorLinha <= _colunaTile || tilesPorColuna <= _linhaTile);
          if(!tileEstahForaDosLimites){
             xTile = _colunaTile*comprimentoCadaTile;
             yTile = _linhaTile*larguraCadaTile;
             
-            tileQueDeveSerAdicionada = new Tile(0, 0, comprimentoCadaTile, larguraCadaTile);
+            tileQueDeveSerAdicionada = new TileEdificavel(0.0f, 0.0f, comprimentoCadaTile, larguraCadaTile);
             tileQueDeveSerAdicionada.mudarCor(_cor);
             tiles[_colunaTile][_linhaTile] = tileQueDeveSerAdicionada;
             adicionarFilho(tiles[_colunaTile][_linhaTile], xTile, yTile);
@@ -344,6 +341,70 @@ public class Terreno extends Desenho{
          for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
              inimigoNoTerreno.rotacionar(0, -_rotacaoY, 0);
          }
+     }
+
+     /**
+      * Rotaciona todas as torres deste terreno e somente elas.
+      * Só é possível rotacioná-las em torno do eixo y.
+      * @param _rotacaoY Valor da rotação.
+      */
+     public void rotacionarTorresEmY(float _rotacaoY){
+         Vector<Torre> torresTerreno = getTorres();
+         float yRotacaoDestaTorre;
+         for(Torre torreNoTerreno : torresTerreno){
+             if(torreNoTerreno.getRotacaoY() == -yRotacaoTorres){
+                 yRotacaoDestaTorre = -_rotacaoY;
+             } else {
+                yRotacaoDestaTorre = -yRotacaoTorres - _rotacaoY;
+             }
+             torreNoTerreno.rotacionar(0, yRotacaoDestaTorre, 0);
+         }
+         yRotacaoTorres += _rotacaoY;
+     }
+
+     /**
+      * @return Todas as torres que estão no terreno, isto é, torres
+      *         que pertencem a tiles edificáveis do terreno.
+      */
+     public Vector<Torre> getTorres(){
+         Vector<Torre> torres = new Vector<Torre>();
+         TileEdificavel tileAtual;
+         int coluna;
+         int linha;
+         for(coluna=0; coluna<tilesPorLinha; coluna++){
+            for(linha=0; linha<tilesPorColuna; linha++){
+                if(!caminho.contem(coluna, linha)){
+                    tileAtual = (TileEdificavel) tiles[coluna][linha];
+                    if(tileAtual.ocupadaPorTorre()){
+                        torres.add(tileAtual.getTorre());
+                    }
+                }
+            }
+        }
+        return torres;
+     }
+
+     /**
+      * Os filhos de um desenho são desenhados pela ordem em que são adicionados.
+      * Para fazer com que as torres sejam desenhadas corretamente, precisa-se garantir
+      * que as tiles edificáveis do terreno sejam desenhadas depois das tiles passadouro.
+      * Desta forma, é necessário atualizar as tiles depois de aplicar um caminho.
+      */
+     private void atualizarTilesEdificaveis(){
+         TileEdificavel tileParaAtualizar;
+         int coluna;
+         int linha;
+         for(coluna=0; coluna<tilesPorLinha; coluna++){
+            for(linha=0; linha<tilesPorColuna; linha++){
+                if(!caminho.contem(coluna, linha)){
+                    tileParaAtualizar = (TileEdificavel) tiles[coluna][linha];
+                    removerFilho(tileParaAtualizar);
+                    adicionarFilho(tileParaAtualizar, 
+                            tileParaAtualizar.getPosX(),
+                            tileParaAtualizar.getPosY());
+                }
+            }
+        }
      }
 
 }

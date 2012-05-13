@@ -64,6 +64,25 @@ public class Caminho {
     }
 
     /**
+     * @param _coluna Coluna a ser testada.
+     * @param _linha Linha a ser testada.
+     * @return Booleano indicando se o caminho contém a posição dada.
+     */
+    public boolean contem(int _coluna, int _linha){
+        boolean contem = false;
+        int posicaoAtual;
+        for(posicaoAtual=0; 
+            posicaoAtual<linhasTiles.length && posicaoAtual<colunasTiles.length;
+            posicaoAtual++){
+            if(colunasTiles[posicaoAtual] == _coluna &&
+               linhasTiles[posicaoAtual] == _linha){
+                contem = true;
+            }
+        }
+        return contem;
+    }
+
+    /**
      * Cria um caminho em diagonal, de (0,0) até o extremo inferior.
      * @param _comprimento O número de tiles no caminho.
      * @param _colunaMaxima Máximo valor para coluna no terreno de referência.

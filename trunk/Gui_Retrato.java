@@ -20,6 +20,7 @@ public class Gui_Retrato extends Desenho {
      */
     private Desenho desenhoExibido;
     private Filme filmeExibido;
+    private TileEdificavel tileEdificavelExibida;
 
     /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
@@ -31,6 +32,8 @@ public class Gui_Retrato extends Desenho {
         super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
         cor = new Color(Color.BLACK);
         desenhoExibido = null;
+        filmeExibido = null;
+        tileEdificavelExibida = null;
     }
 
     /**
@@ -43,17 +46,22 @@ public class Gui_Retrato extends Desenho {
         float yCentro;
         float margemX = 10;
         float margemY = 10;
-        if(comprimento-margemX < _desenho.comprimento){
-            _desenho.comprimento = comprimento-margemX;
-        }
-        if(largura-margemY < _desenho.largura){
-            _desenho.largura = largura-margemY;
-        }
+
         xCentro = comprimento/2 - _desenho.comprimento/2;
         yCentro = largura/2 - _desenho.largura/2;
         desenhoExibido = new Desenho(_desenho);
         desenhoExibido.restaurarTransparencia();
-        adicionarFilho(desenhoExibido, xCentro, yCentro);
+        if(comprimento-margemX < _desenho.comprimento){
+            desenhoExibido.redimensionar(comprimento-margemX, desenhoExibido.getLargura(), desenhoExibido.getAltura());
+        }
+        if(largura-margemY < _desenho.largura){
+            desenhoExibido.redimensionar(desenhoExibido.getComprimento(), largura-margemY, desenhoExibido.getAltura());
+        }
+        desenhoExibido.rotacionar(60, 0, 2);
+        adicionarFilho(desenhoExibido, xCentro, yCentro-20); //Constante para compensar rotação.
+
+        System.out.println("parametro>"+_desenho.toString());
+        System.out.println("criado>"+desenhoExibido.toString());
     }
     public void exibir(Filme _filme){
         float xCentro = comprimento/2 - _filme.getQuadros().elementAt(0).getComprimento()/2;
@@ -62,6 +70,28 @@ public class Gui_Retrato extends Desenho {
         filmeExibido.restaurarTransparencia();
         adicionarFilho(filmeExibido, xCentro, yCentro);
     }
+    public void exibir(TileEdificavel _desenho){
+        float xCentro;
+        float yCentro;
+        float margemX = 10;
+        float margemY = 10;
+
+        xCentro = comprimento/2 - _desenho.comprimento/2;
+        yCentro = largura/2 - _desenho.largura/2;
+        tileEdificavelExibida = new TileEdificavel(_desenho);
+        tileEdificavelExibida.restaurarTransparencia();
+        if(comprimento-margemX < _desenho.comprimento){
+            tileEdificavelExibida.redimensionar(comprimento-margemX, tileEdificavelExibida.getLargura(), tileEdificavelExibida.getAltura());
+        }
+        if(largura-margemY < _desenho.largura){
+            tileEdificavelExibida.redimensionar(tileEdificavelExibida.getComprimento(), largura-margemY, tileEdificavelExibida.getAltura());
+        }
+        tileEdificavelExibida.rotacionar(60, 0, 2);
+        adicionarFilho(tileEdificavelExibida, xCentro, yCentro-20); //Constante para compensar rotação.
+
+        System.out.println("parametro>"+_desenho.toString());
+        System.out.println("criado>"+tileEdificavelExibida.toString());
+    }
 
     /**
      * Limpa o desenho exibido.
@@ -69,6 +99,7 @@ public class Gui_Retrato extends Desenho {
     public void retirarDesenhoExibido(){
         desenhoExibido = null;
         filmeExibido = null;
+        tileEdificavelExibida = null;
         filhos = new Vector<Desenho>();
     }
     

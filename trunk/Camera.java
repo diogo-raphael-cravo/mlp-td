@@ -54,6 +54,13 @@ public class Camera {
     private float rotacaoZ;
 
     /**
+     * Deslocamento em um eixo, não na direção para a qual a camera olha.
+     */
+    private float deslocamentoX;
+    private float deslocamentoY;
+    private float deslocamentoZ;
+
+    /**
      * Inicializa todas as cameras, deixando-as prontas para uso.
      */
     public static void inicializar(){
@@ -69,6 +76,9 @@ public class Camera {
         rotacaoX = 0;
         rotacaoY = 0;
         rotacaoZ = 0;
+        deslocamentoX = 0;
+        deslocamentoY = 0;
+        deslocamentoZ = 0;
     }
 
     public float getRotacaoX(){
@@ -99,13 +109,21 @@ public class Camera {
      * Permite deslocar a camera.
      * @param _deslocamentoX, _deslocamentoY O deslocamento nestes eixos.
      */
-    public void deslocar(float _deslocamentoX, float _deslocamentoY){
+    public void deslocarNaDirecaoQueOlha(float _deslocamentoX, float _deslocamentoY){
         posX += _deslocamentoX;
         posY += _deslocamentoY;
     }
-    public static void deslocarCameras(float _deslocamentoX, float _deslocamentoY){
-        ortografica.deslocar(_deslocamentoX, _deslocamentoY);
-        perspectiva.deslocar(_deslocamentoX, _deslocamentoY);
+    public void deslocarNoEixoY(float _deslocamento){
+        deslocamentoY = _deslocamento;
+    }
+    public static void deslocarCamerasNaDirecaoQueOlham(float _deslocamentoX, float _deslocamentoY){
+        ortografica.deslocarNaDirecaoQueOlha(_deslocamentoX, _deslocamentoY);
+        perspectiva.deslocarNaDirecaoQueOlha(_deslocamentoX, _deslocamentoY);
+        Camera.atualizar();
+    }
+    public static void deslocarCamerasNoEixoY(float _deslocamento){
+        ortografica.deslocarNoEixoY(_deslocamento);
+        perspectiva.deslocarNoEixoY(_deslocamento);
         Camera.atualizar();
     }
 
@@ -125,6 +143,10 @@ public class Camera {
             glTranslatef(-perspectiva.posX-400,
                          -perspectiva.posY-400,
                          -1000);
+
+            glRotatef(perspectiva.rotacaoX,1.0f,0.0f,0.0f);
+            glTranslatef(perspectiva.deslocamentoY, perspectiva.deslocamentoY, perspectiva.deslocamentoZ);
+            glRotatef(-perspectiva.rotacaoX,1.0f,0.0f,0.0f);
             //glTranslatef(0,0,-1000);
 
             //glTranslatef(perspectiva.posX, perspectiva.posY, 0);
