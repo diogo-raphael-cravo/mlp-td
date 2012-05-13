@@ -33,11 +33,34 @@ public class ControladorJogo
 
     public void houveMouseDown() {
         boolean selecionouDesenho = false;
-        float mouseX = Tela.xTelaParaGlobal(Mouse.getX());
-        float mouseY = Tela.yTelaParaGlobal(Mouse.getY());
+        /**
+         * ATENÇÃO: elementos que foram rotacionados devem ser testados
+         *      em coordenadas rotacionadas!
+         */
+        /**
+         * Mouse.getX() e Mouse.getY() sempre retornam valores
+         * entre (0,0) e (Tela.WIDTH,Tela.HEIGHT).
+         */
+        float mouseX = Camera.xTelaParaGlobal(Mouse.getX());
+        float mouseY = Camera.yTelaParaGlobal(Mouse.getY());
+        System.out.println("Global>"+mouseX+","+mouseY);
+        float xMouseRotacionado = mouseX;//Camera.xGlobalParaCamera(mouseX, mouseY);
+        float yMouseRotacionado = mouseY+200;//-constante*angulo//Camera.yGlobalParaCamera(mouseX, mouseY);
+        System.out.println("CameraGlobal>"+xMouseRotacionado+","+yMouseRotacionado);
+        //System.out.println("("+mouseX+","+mouseY+")");
         Vector<Desenho> todosDesenhosCriados = Desenho.getTodosDesenhosCriados();
         for(Desenho desenho : todosDesenhosCriados){
-            if(desenho.contem(mouseX, mouseY)){
+            //rotacionar no plano xy
+            //xMouseRotacionado = (float) (hipotenusaMouseRotacionado*Math.cos(desenho.getRotacaoZ()));
+            //yMouseRotacionado = (float) (hipotenusaMouseRotacionado*Math.cos(desenho.getRotacaoZ()));
+            //rotacionar no plano xz
+            //xMouseRotacionado = (float) (hipotenusaMouseRotacionado*Math.cos(desenho.getRotacaoY()));
+            //rotacionar no plano yz
+            //yMouseRotacionado = (float) (hipotenusaMouseRotacionado*Math.cos(desenho.getRotacaoX()));
+            
+            //System.out.println("("+xMouseRotacionado+","+yMouseRotacionado+")");
+            System.out.println("Comparando com ("+desenho.getGlobalX()+","+desenho.getGlobalY()+")");
+            if(desenho.contem(xMouseRotacionado, yMouseRotacionado)){
                 if(desenhoSelecionado != null){
                     desenhoSelecionado.restaurarTransparencia();
                 } else if(filmeSelecionado != null){

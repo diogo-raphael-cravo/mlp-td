@@ -40,10 +40,18 @@ public class td {
     try {
       create();
       Inimigo inimigo = new Inimigo();
-      Desenho quadroInimigo = new Desenho(0, 0, 30, 40, 100);
+      Desenho quadroInimigo = new Desenho(0, 0, 35, 40, 100);
+      Desenho quadro2Inimigo = new Desenho(0, 0, 35, 40, 100);
       quadroInimigo.adicionarTextura(Arquivos.ARQUIVO_TEXTURA_CAVEIRA);
+      quadro2Inimigo.adicionarTextura(Arquivos.ARQUIVO_TEXTURA_CAVEIRA_INVERTIDA);
       Color corInimigo = new Color(Color.BLACK);
-      inimigo.adicionarQuadro(quadroInimigo);
+      for(int i=0; i<100; i++){
+          inimigo.adicionarQuadro(quadroInimigo);
+      }
+      for(int i=0; i<100; i++){
+          inimigo.adicionarQuadro(quadro2Inimigo);
+      }
+      
       /*for(int i=0; i<=255; i+=10){
         corInimigo.setBlue(i);
         corInimigo.setRed(i);
@@ -60,7 +68,7 @@ public class td {
       }*/
       Nivel niveis[] = new Nivel[1];
       niveis[0] = new Nivel(inimigo, 10);
-      jogo = new Jogo(new Terreno(-Tela.WIDTH/2, -Tela.HEIGHT/2, Tela.WIDTH, Tela.HEIGHT, 10, 10), niveis);
+      jogo = new Jogo(new Terreno(-Tela.WIDTH/2, -Tela.WIDTH/2, Tela.WIDTH, Tela.WIDTH, 10, 10), niveis);
       Camera.moverCameras(jogo.getTerreno().getPosX(), jogo.getTerreno().getPosY());
       controladorJogo = new ControladorJogo(jogo);
       run();

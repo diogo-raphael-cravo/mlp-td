@@ -138,11 +138,15 @@ public class Terreno extends Desenho{
         float tempoPassadoDesdeUltimoMovimentoEmSegundos = Temporizador.diferencaUltimasDuasMarcacoesPrincipal()/((float) 1000.0);
         float velocidadeInimigoEmPixelsPorSegundo = exemploTileTerreno.getComprimento()*
                                                     inimigoNaoMovido.getVelocidadeTilesPorSegundo();
+        //Vetor direção final, que o inimigo deseja obter após passado 1 segundo.
         float xDestinoInimigo = 0;
         float yDestinoInimigo = 0;
+
+        //Vetor variação da posição do inimigo, a ponderação do destino (anterior) pelo tempo passado.
         float xVariacaoInimigo = 0;
         float yVariacaoInimigo = 0;
 
+        //Vetor direção do movimento que será feito.
         int direcaoX = 1;
         int direcaoY = 1;
         
@@ -299,6 +303,7 @@ public class Terreno extends Desenho{
                 } else {
                     corCasaAtual = new Color(Color.RED);
                 }
+                corCasaAtual = new Color(Color.WHITE);
                 adicionarTile(coluna, linha, corCasaAtual);
             }
         }

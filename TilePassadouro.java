@@ -79,8 +79,8 @@ public class TilePassadouro extends Tile{
      public void setTipo(TIPO_PASSADOURO _tipo){
          tipo = _tipo;
          if(tipo == TIPO_PASSADOURO.TERRA){
-             cor = new Color(Color.GREEN);
-             adicionarTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
+             cor = new Color(Color.WHITE);
+             adicionarTextura(Arquivos.ARQUIVO_TEXTURA_LADRILHO);
          } else if(tipo == TIPO_PASSADOURO.AGUA){
              cor = new Color(Color.BLUE);
          }
