@@ -71,6 +71,16 @@ public class Camera {
         rotacaoZ = 0;
     }
 
+    public float getRotacaoX(){
+        return rotacaoX;
+    }
+    public float getRotacaoY(){
+        return rotacaoY;
+    }
+    public float getRotacaoZ(){
+        return rotacaoZ;
+    }
+
     /**
      * Permite mover a camera para uma posição de destino.
      * @param _posX, _posY A posição de destino.
@@ -200,4 +210,71 @@ public class Camera {
         perspectiva.rotacionar(_rotacaoX, _rotacaoY, _rotacaoZ);
         Camera.atualizar();
     }
+
+    /**
+     * @param _xTela Uma coordenada X em coordenadas de tela.
+     * @return Coordenada X passada em coordenada globais.
+     */
+     public static float xTelaParaGlobal(float _xTela){
+         return Tela.getTela().getPosX() + _xTela + perspectiva.posX;
+     }
+
+    /**
+     * @param _yTela Uma coordenada Y em coordenadas de tela.
+     * @return Coordenada Y passada em coordenada globais.
+     */
+     public static float yTelaParaGlobal(float _yTela){
+         return Tela.getTela().getPosY() + _yTela + perspectiva.posY;
+     }
+
+    /**
+     * Converte um ponto de coordenadas globais para as coordenadas de camera.
+     * Na prática, retorna a posição global em que o ponto é visto, não necessariamente
+     * a posição em que ele está.
+     * @param _posX A coordenada x do ponto a ser convertido.
+     * @return A coordenada x do ponto convertido.
+     */
+     public static float xGlobalParaCamera(float _posX, float _posY){
+         float xConvertido = _posX;
+         float yConvertido = _posY;
+         float hipotenusaMouseRotacionado = (float) Math.sqrt( Math.pow(xConvertido, 2) + Math.pow(yConvertido, 2));
+
+        //rotacionar no plano xy
+        hipotenusaMouseRotacionado = (float) Math.sqrt( Math.pow(xConvertido, 2) + Math.pow(yConvertido, 2));
+        xConvertido = (float) (hipotenusaMouseRotacionado*Math.cos(Camera.perspectiva.getRotacaoZ()));
+        yConvertido = (float) (hipotenusaMouseRotacionado*Math.cos(Camera.perspectiva.getRotacaoZ()));
+        //rotacionar no plano xz
+        hipotenusaMouseRotacionado = (float) Math.sqrt( Math.pow(xConvertido, 2) + Math.pow(yConvertido, 2));
+        xConvertido = (float) (hipotenusaMouseRotacionado*Math.cos(Camera.perspectiva.getRotacaoY()));
+        //rotacionar no plano yz
+        hipotenusaMouseRotacionado = (float) Math.sqrt( Math.pow(xConvertido, 2) + Math.pow(yConvertido, 2));
+        yConvertido = (float) (hipotenusaMouseRotacionado*Math.cos(Camera.perspectiva.getRotacaoX()));
+        return xConvertido;
+     }
+
+    /**
+     * Converte um ponto de coordenadas globais para as coordenadas de camera.
+     * Na prática, retorna a posição global em que o ponto é visto, não necessariamente
+     * a posição em que ele está.
+     * @param _posY A coordenada y do ponto a ser convertido.
+     * @return A coordenada y do ponto convertido.
+     */
+     public static float yGlobalParaCamera(float _posX, float _posY){
+         float xConvertido = _posX;
+         float yConvertido = _posY;
+         float hipotenusaMouseRotacionado = (float) Math.sqrt( Math.pow(xConvertido, 2) + Math.pow(yConvertido, 2));
+
+        //rotacionar no plano xy
+        hipotenusaMouseRotacionado = (float) Math.sqrt( Math.pow(xConvertido, 2) + Math.pow(yConvertido, 2));
+        xConvertido = (float) (hipotenusaMouseRotacionado*Math.cos(Camera.perspectiva.getRotacaoZ()));
+        yConvertido = (float) (hipotenusaMouseRotacionado*Math.cos(Camera.perspectiva.getRotacaoZ()));
+        //rotacionar no plano xz
+        hipotenusaMouseRotacionado = (float) Math.sqrt( Math.pow(xConvertido, 2) + Math.pow(yConvertido, 2));
+        xConvertido = (float) (hipotenusaMouseRotacionado*Math.cos(Camera.perspectiva.getRotacaoY()));
+        //rotacionar no plano yz
+        hipotenusaMouseRotacionado = (float) Math.sqrt( Math.pow(xConvertido, 2) + Math.pow(yConvertido, 2));
+        yConvertido = (float) (hipotenusaMouseRotacionado*Math.cos(Camera.perspectiva.getRotacaoX()));
+        return yConvertido;
+     }
+
 }

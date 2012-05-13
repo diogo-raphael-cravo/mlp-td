@@ -22,10 +22,11 @@ public class Tile extends Desenho {
      * @param _tamanhoEmPorcentagem Usado para resize.
      */
     public Tile(float _posX, float _posY, float _comprimento, float _largura){
-        super(_posX, _posY, _comprimento, _largura, 100);
+        this(_posX, _posY, _comprimento, _largura, 100);
     }
     public Tile(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
         super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
+        adicionarTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
     }
 
 }

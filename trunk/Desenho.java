@@ -20,8 +20,8 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Desenho extends Object{
     protected int tamanhoEmPorcentagem;
-    protected float posX;
-    protected float posY;
+    protected float posX; //IMPORANTE: a posição não considera a rotação.
+    protected float posY; //IMPORANTE: a posição não considera a rotação.
     protected float comprimento;
     protected float largura;
     protected float altura;
@@ -128,6 +128,15 @@ public class Desenho extends Object{
     }
     public float getPosY(){
         return posY;
+    }
+    public float getRotacaoX(){
+        return rotacaoX;
+    }
+    public float getRotacaoY(){
+        return rotacaoY;
+    }
+    public float getRotacaoZ(){
+        return rotacaoZ;
     }
     public float getComprimento(){
         return comprimento;
@@ -447,15 +456,15 @@ public class Desenho extends Object{
      */
     @Override
     public String toString(){
-        StringBuffer string = new StringBuffer("Desenho {\n");
-        string.append("\t tamanhoEmPorcentagem = "+tamanhoEmPorcentagem+"\n");
-        string.append("\t posX = "+posX+"\n");
-        string.append("\t posY = "+posY+"\n");
-        string.append("\t comprimento = "+comprimento+"\n");
-        string.append("\t largura = "+largura+"\n");
-        string.append("\t altura = "+altura+"\n");
-        string.append("\t cor = "+cor.toString()+"\n");
-        string.append("\t filhos = "+filhos.toString()+"\n");
+        StringBuilder string = new StringBuilder("Desenho {\n");
+        string.append("\t tamanhoEmPorcentagem = ").append(tamanhoEmPorcentagem).append("\n");
+        string.append("\t posX = ").append(posX).append("\n");
+        string.append("\t posY = ").append(posY).append("\n");
+        string.append("\t comprimento = ").append(comprimento).append("\n");
+        string.append("\t largura = ").append(largura).append("\n");
+        string.append("\t altura = ").append(altura).append("\n");
+        string.append("\t cor = ").append(cor.toString()).append("\n");
+        string.append("\t filhos = ").append(filhos.toString()).append("\n");
         string.append("}");
         return string.toString();
     }

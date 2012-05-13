@@ -36,7 +36,7 @@ public class Gui_BarraInferior extends Desenho{
         adicionarFilho(gui_retrato, 30, 75);
         adicionarTextura(Arquivos.ARQUIVO_TEXTURA_MURO);
 
-        botao = new Botao(0, 0, 30, 30, 100);
+        botao = new Botao(0, 0, 35, 40, 100);
         botao.adicionarTextura(Arquivos.ARQUIVO_TEXTURA_CAVEIRA);
         adicionarFilho(botao, 200, 100);
     }

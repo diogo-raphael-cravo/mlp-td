@@ -44,7 +44,6 @@ public class Tela extends Desenho {
     public static void inicializar(){
         tela = new Tela();
         tela.inicializarInstancia();
-
     }
 
     /**
@@ -74,22 +73,6 @@ public class Tela extends Desenho {
     }
 
     /**
-     * @param _xTela Uma coordenada X em coordenadas de tela.
-     * @return Coordenada X passada em coordenada globais.
-     */
-     public static float xTelaParaGlobal(float _xTela){
-         return tela.getPosX() + _xTela;
-     }
-
-    /**
-     * @param _yTela Uma coordenada Y em coordenadas de tela.
-     * @return Coordenada Y passada em coordenada globais.
-     */
-     public static float yTelaParaGlobal(float _yTela){
-         return tela.getPosY() + _yTela;
-     }
-
-       /**
      * Desenha na tela com base em seu tamanho e posicao.
      * O objeto desenhado é um retângulo.
      */
