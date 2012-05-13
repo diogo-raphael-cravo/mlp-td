@@ -15,4 +15,5 @@ public class Arquivos {
     public static String ARQUIVO_TEXTURA_CAVEIRA_INVERTIDA = "/home/diogo/Área de Trabalho/mlp-td/caveira42.gif";
     public static String ARQUIVO_TEXTURA_GRAMA = "/home/diogo/Área de Trabalho/mlp-td/grama.jpg";
     public static String ARQUIVO_TEXTURA_LADRILHO = "/home/diogo/Área de Trabalho/mlp-td/ladrilho.jpg";
+    public static String ARQUIVO_TEXTURA_TORRE = "/home/diogo/Área de Trabalho/mlp-td/torre.jpg";
 }

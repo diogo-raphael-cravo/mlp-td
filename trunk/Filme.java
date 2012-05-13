@@ -34,8 +34,8 @@ public class Filme extends Desenho {
      * @param _comprimento, _largura, _altura Comprimento, largura e altura.
      * @param _tamanhoEmPorcentagem Usado para resize.
      */
-    public Filme(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
-        super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
+    public Filme(float _posX, float _posY, float _comprimento, float _largura){
+        super(_posX, _posY, _comprimento, _largura);
         quadros = new Vector<Desenho>();
         quadroExibido = 0;
         if(todosFilmesCriados == null){
@@ -44,8 +44,7 @@ public class Filme extends Desenho {
     }
     public Filme(Filme _filme){
         this(_filme.getPosX(), _filme.getPosY(),
-             _filme.getComprimento(), _filme.getLargura(),
-             _filme.getTamanhoEmPorcentagem());
+             _filme.getComprimento(), _filme.getLargura());
         for(Desenho desenho : _filme.getQuadros()){
             adicionarQuadro(desenho);
         }

@@ -23,6 +23,11 @@ public class Gui_BarraInferior extends Desenho{
      */
     private Botao botao;
 
+    /**
+     * Controlador de eventos desta gui.
+     */
+    private ControladorGuiBarraInferior controlador;
+
     public Gui_BarraInferior(){
         /*
          * Nesta hora você se pergunta:
@@ -34,11 +39,13 @@ public class Gui_BarraInferior extends Desenho{
         mudarCor(new Color(Color.WHITE));
         gui_retrato = new Gui_Retrato(posX, posY, 100, 100, 100);
         adicionarFilho(gui_retrato, 30, 75);
-        adicionarTextura(Arquivos.ARQUIVO_TEXTURA_MURO);
+        adicionarTextura(Texturas.MURO);
 
         botao = new Botao(0, 0, 35, 40, 100);
-        botao.adicionarTextura(Arquivos.ARQUIVO_TEXTURA_CAVEIRA);
+        botao.adicionarTextura(Texturas.CAVEIRA);
         adicionarFilho(botao, 200, 100);
+
+        controlador = new ControladorGuiBarraInferior(this);
     }
 
     /**
@@ -48,5 +55,15 @@ public class Gui_BarraInferior extends Desenho{
         return gui_retrato;
     }
 
+    /**
+     *
+     */
+
+    /**
+     * @return Controlador de eventos de mouse desta gui.
+     */
+    public ControladorGuiBarraInferior getControlador(){
+        return controlador;
+    }
 
 }

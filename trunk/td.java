@@ -42,8 +42,9 @@ public class td {
       Inimigo inimigo = new Inimigo();
       Desenho quadroInimigo = new Desenho(0, 0, 35, 40, 100);
       Desenho quadro2Inimigo = new Desenho(0, 0, 35, 40, 100);
-      quadroInimigo.adicionarTextura(Arquivos.ARQUIVO_TEXTURA_CAVEIRA);
-      quadro2Inimigo.adicionarTextura(Arquivos.ARQUIVO_TEXTURA_CAVEIRA_INVERTIDA);
+      quadroInimigo.adicionarTextura(Texturas.CAVEIRA);
+      quadro2Inimigo.adicionarTextura(Texturas.CAVEIRA2);
+      quadro2Inimigo.redimensionar(10, 10, 0);
       Color corInimigo = new Color(Color.BLACK);
       for(int i=0; i<100; i++){
           inimigo.adicionarQuadro(quadroInimigo);
@@ -114,6 +115,7 @@ public class td {
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     GL11.glEnable(GL11.GL_TEXTURE_2D);
 
+    Texturas.inicializar(); //Tela.inicializar() utiliza texturas.
     Tela.inicializar();
     Camera.inicializar();
     Temporizador.inicializar();

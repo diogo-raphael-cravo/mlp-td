@@ -28,12 +28,12 @@ public class Inimigo extends Filme {
      * @param _comprimento, _largura Comprimento e largura.
      */
     public Inimigo(){
-        super(0, 0, 10, 10, 100);
+        super(0, 0, 10, 10);
         cor = new Color(Color.BLACK);
         velocidadeTilesSegundo = 3;
     }
     public Inimigo(float _posX, float _posY, float _comprimento, float _largura){
-         super(_posX, _posY, _comprimento, _largura, 100);
+         super(_posX, _posY, _comprimento, _largura);
     }
     public Inimigo(Inimigo _inimigo){
          super(_inimigo);
