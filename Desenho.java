@@ -19,13 +19,19 @@ import static org.lwjgl.opengl.GL11.*;
  * @author diogo
  */
 public class Desenho extends Object{
-    protected int tamanhoEmPorcentagem;
     protected float posX; //IMPORANTE: a posição não considera a rotação.
     protected float posY; //IMPORANTE: a posição não considera a rotação.
-    protected float comprimento;
-    protected float largura;
-    protected float altura;
+    protected float comprimento; //IMPORANTE: o comprimento nunca muda, mesmo que seja feita escala.
+    protected float largura; //IMPORANTE: a largura nunca muda, mesmo que seja feita escala.
+    protected float altura; //IMPORANTE: a altura nunca muda, mesmo que seja feita escala.
     protected Color cor;
+
+    /**
+     * Escala em um eixo.
+     */
+    protected float fatorEscalaX;
+    protected float fatorEscalaY;
+    protected float fatorEscalaZ;
 
     /**
      * Rotação em torno de um eixo.
@@ -71,18 +77,15 @@ public class Desenho extends Object{
     /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
      * @param _comprimento, _largura, _altura Comprimento, largura e altura.
-     * @param _tamanhoEmPorcentagem Usado para resize.
      */
-    public Desenho(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
+    public Desenho(float _posX, float _posY, float _comprimento, float _largura){
         cor = new Color(Color.WHITE);
         posX = _posX;
         posY = _posY;
         comprimento = _comprimento;
         largura = _largura;
-        tamanhoEmPorcentagem = _tamanhoEmPorcentagem;
         altura = 1;
         textura = null;
-        redimensionar(1);
         if(todosDesenhosCriados == null){
             todosDesenhosCriados = new Vector<Desenho>();
             identificacaoUnicaLivre=0;
@@ -94,15 +97,24 @@ public class Desenho extends Object{
         rotacaoX = 0;
         rotacaoY = 0;
         rotacaoZ = 0;
+        fatorEscalaX = 1;
+        fatorEscalaY = 1;
+        fatorEscalaZ = 1;
     }
-    public Desenho(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem, float _altura){
-        this(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
+    public Desenho(float _posX, float _posY, float _comprimento, float _largura, float _altura){
+        this(_posX, _posY, _comprimento, _largura);
         altura = _altura;
     }
     public Desenho(Desenho _desenho){
-        this(_desenho.getPosX(), _desenho.getPosY(), _desenho.getComprimento(), _desenho.getLargura(), _desenho.getTamanhoEmPorcentagem());
+        this(_desenho.getPosX(), _desenho.getPosY(), _desenho.getComprimento(), _desenho.getLargura());
         cor = new Color(_desenho.getCor());
         textura = _desenho.getTextura();
+        rotacaoX = _desenho.rotacaoX;
+        rotacaoY = _desenho.rotacaoY;
+        rotacaoZ = _desenho.rotacaoZ;
+        fatorEscalaX = _desenho.fatorEscalaX;
+        fatorEscalaY = _desenho.fatorEscalaY;
+        fatorEscalaZ = _desenho.fatorEscalaZ;
         for(Desenho desenho : _desenho.getFilhos()){
             adicionarFilho(desenho, desenho.getPosX(), desenho.getPosY());
         }
@@ -138,14 +150,20 @@ public class Desenho extends Object{
     public float getRotacaoZ(){
         return rotacaoZ;
     }
+    public float getFatorEscalaX(){
+        return fatorEscalaX;
+    }
+    public float getFatorEscalaY(){
+        return fatorEscalaY;
+    }
+    public float getFatorEscalaZ(){
+        return fatorEscalaZ;
+    }
     public float getComprimento(){
         return comprimento;
     }
     public float getLargura(){
         return largura;
-    }
-    public int getTamanhoEmPorcentagem(){
-        return tamanhoEmPorcentagem;
     }
     public Color getCor(){
         return cor;
@@ -203,33 +221,6 @@ public class Desenho extends Object{
      *        Valores maiores são truncados.
      */
     public void rotacionar(float _rotacaoX, float _rotacaoY, float _rotacaoZ){
-        /*if(360 <= _rotacaoX){
-            rotacaoX = _rotacaoX%360;
-        } else if(_rotacaoX <= -360){
-            rotacaoX =  -(((-_rotacaoX)%360) - 360);
-        } else if(_rotacaoX < 0){
-            rotacaoX = 360 - _rotacaoX;
-        } else {
-            rotacaoX = _rotacaoX;
-        }
-        if(360 <= _rotacaoY){
-            rotacaoY = _rotacaoY%360;
-        } else if(_rotacaoY <= -360){
-            rotacaoY =  -(((-_rotacaoY)%360) - 360);
-        } else if(_rotacaoY < 0){
-            rotacaoY = 360 - _rotacaoY;
-        } else {
-            rotacaoY = _rotacaoY;
-        }
-        if(360 <= _rotacaoZ){
-            rotacaoZ = _rotacaoZ%360;
-        } else if(_rotacaoZ <= -360){
-            rotacaoZ =  -(((-_rotacaoZ)%360) - 360);
-        } else if(_rotacaoZ < 0){
-            rotacaoZ = 360 - _rotacaoZ;
-        } else {
-            rotacaoZ = _rotacaoZ;
-        }*/
         rotacaoX += _rotacaoX;
         rotacaoY += _rotacaoY;
         rotacaoZ += _rotacaoZ;
@@ -323,10 +314,17 @@ public class Desenho extends Object{
     }
     
     /**
-     * @param _tamanhoEmPorcentagem O tamanho em rela��o ao tamanho inicial (de cria��o) do desenho.
+     * @param _comprimento Comprimento que deseja-se que o objeto tenha.
+     * @param _largura Largura que deseja-se que o objeto tenha.
+     * @param _altura Altura que deseja-se que o objeto tenha.
      */
-    public void redimensionar(int _tamanhoEmPorcentagem){
-        tamanhoEmPorcentagem = _tamanhoEmPorcentagem;
+    public void redimensionar(float _comprimento, float _largura, float _altura){
+        System.out.println("tem>"+comprimento+","+largura+","+altura);
+        System.out.println("quer>"+_comprimento+","+_largura+","+_altura);
+        fatorEscalaX = _comprimento/comprimento;
+        fatorEscalaY = _largura/largura;
+        fatorEscalaZ = _altura/altura;
+        System.out.println("fatores>"+fatorEscalaX+","+fatorEscalaY+","+fatorEscalaZ);
     }
 
     /**
@@ -384,6 +382,9 @@ public class Desenho extends Object{
             }
         }
     }
+    public void adicionarTextura(Texture _textura){
+        textura = _textura; //Por desempenho, a cópia é rasa.
+    }
 
     /**
      * Desenha na tela com base em seu tamanho e posicao.
@@ -399,10 +400,13 @@ public class Desenho extends Object{
         glPushMatrix();
 
         glTranslatef(getGlobalX(), getGlobalY(), 0);
+        
         glRotatef(rotacaoX,1.0f,0.0f,0.0f);
         glRotatef(rotacaoY,0.0f,1.0f,0.0f);
         glRotatef(rotacaoZ,0.0f,0.0f,1.0f);
+        glScalef(fatorEscalaX, fatorEscalaY, fatorEscalaZ);
         glTranslatef(-getGlobalX(), -getGlobalY(), 0);
+        
 
         glColor4f((float) (cor.getRed()/255.0),
                   (float) (cor.getGreen()/255.0),
@@ -413,20 +417,20 @@ public class Desenho extends Object{
             glTexCoord3f(0.0f, largura/textura.getImageHeight(), 0.0f);
                 glVertex3f(posX, posY, 0.0f);
             glTexCoord3f(comprimento/textura.getImageWidth(), largura/textura.getImageHeight(), 0.0f);
-                glVertex3f(posX+tamanhoEmPorcentagem*comprimento, posY, 0.0f);
+                glVertex3f(posX+comprimento, posY, 0.0f);
             glTexCoord3f(comprimento/textura.getImageWidth(),0.0f, 0.0f);
-                glVertex3f(posX+tamanhoEmPorcentagem*comprimento, posY+tamanhoEmPorcentagem*largura, 0.0f);
+                glVertex3f(posX+comprimento, posY+largura, 0.0f);
             glTexCoord3f(0.0f,0.0f, 0.0f);
-                glVertex3f(posX, posY+tamanhoEmPorcentagem*largura, 0.0f);
+                glVertex3f(posX, posY+largura, 0.0f);
         } else {
             glTexCoord3f(0.0f,1.0f, 0.0f);
                 glVertex3f(posX, posY, 0.0f);
             glTexCoord3f(1.0f,1.0f, 0.0f);
-                glVertex3f(posX+tamanhoEmPorcentagem*comprimento, posY, 0.0f);
+                glVertex3f(posX+comprimento, posY, 0.0f);
             glTexCoord3f(1.0f,0.0f, 0.0f);
-                glVertex3f(posX+tamanhoEmPorcentagem*comprimento, posY+tamanhoEmPorcentagem*largura, 0.0f);
+                glVertex3f(posX+comprimento, posY+largura, 0.0f);
             glTexCoord3f(0.0f,0.0f, 0.0f);
-                glVertex3f(posX, posY+tamanhoEmPorcentagem*largura, 0.0f);
+                glVertex3f(posX, posY+largura, 0.0f);
         }
         glEnd();
         glPopMatrix();
@@ -457,7 +461,6 @@ public class Desenho extends Object{
     @Override
     public String toString(){
         StringBuilder string = new StringBuilder("Desenho {\n");
-        string.append("\t tamanhoEmPorcentagem = ").append(tamanhoEmPorcentagem).append("\n");
         string.append("\t posX = ").append(posX).append("\n");
         string.append("\t posY = ").append(posY).append("\n");
         string.append("\t comprimento = ").append(comprimento).append("\n");

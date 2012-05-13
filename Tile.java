@@ -26,7 +26,7 @@ public class Tile extends Desenho {
     }
     public Tile(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
         super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
-        adicionarTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
+        adicionarTextura(Texturas.GRAMA);
     }
 
 }

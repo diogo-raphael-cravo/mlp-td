@@ -33,6 +33,8 @@ public class ControladorJogo
 
     public void houveMouseDown() {
         boolean selecionouDesenho = false;
+
+        Tela.getGuiBarraInferior().getControlador().houveMouseDown();
         /**
          * ATENÇÃO: elementos que foram rotacionados devem ser testados
          *      em coordenadas rotacionadas!
@@ -43,11 +45,10 @@ public class ControladorJogo
          */
         float mouseX = Camera.xTelaParaGlobal(Mouse.getX());
         float mouseY = Camera.yTelaParaGlobal(Mouse.getY());
-        System.out.println("Global>"+mouseX+","+mouseY);
+        //System.out.println("Global>"+mouseX+","+mouseY);
         float xMouseRotacionado = mouseX;//Camera.xGlobalParaCamera(mouseX, mouseY);
         float yMouseRotacionado = mouseY+200;//-constante*angulo//Camera.yGlobalParaCamera(mouseX, mouseY);
-        System.out.println("CameraGlobal>"+xMouseRotacionado+","+yMouseRotacionado);
-        //System.out.println("("+mouseX+","+mouseY+")");
+        //System.out.println("CameraGlobal>"+xMouseRotacionado+","+yMouseRotacionado);
         Vector<Desenho> todosDesenhosCriados = Desenho.getTodosDesenhosCriados();
         for(Desenho desenho : todosDesenhosCriados){
             //rotacionar no plano xy
@@ -59,7 +60,7 @@ public class ControladorJogo
             //yMouseRotacionado = (float) (hipotenusaMouseRotacionado*Math.cos(desenho.getRotacaoX()));
             
             //System.out.println("("+xMouseRotacionado+","+yMouseRotacionado+")");
-            System.out.println("Comparando com ("+desenho.getGlobalX()+","+desenho.getGlobalY()+")");
+            //System.out.println("Comparando com ("+desenho.getGlobalX()+","+desenho.getGlobalY()+")");
             if(desenho.contem(xMouseRotacionado, yMouseRotacionado)){
                 if(desenhoSelecionado != null){
                     desenhoSelecionado.restaurarTransparencia();
@@ -70,11 +71,7 @@ public class ControladorJogo
                 desenhoSelecionado = desenho;
                 desenhoSelecionado.tornarTransparente();
                 selecionouDesenho = true;
-                if(desenho instanceof Filme){
-                    Tela.getGuiBarraInferior().getGuiRetrato().exibir(desenhoSelecionado);
-                } else {
-                    Tela.getGuiBarraInferior().getGuiRetrato().exibir(desenhoSelecionado);
-                }
+                Tela.getGuiBarraInferior().getGuiRetrato().exibir(desenhoSelecionado);
             }
         }
         Vector<Filme> todosFilmesCriados = Filme.getTodosFilmesCriados();

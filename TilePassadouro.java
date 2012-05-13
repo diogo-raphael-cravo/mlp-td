@@ -40,17 +40,14 @@ public class TilePassadouro extends Tile{
         ocupada = false;
         setTipo(TIPO_PASSADOURO.TERRA);
     }
-    public TilePassadouro(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
-        this(_posX, _posY, _comprimento, _largura);
-    }
     public TilePassadouro(Tile _tile){
-        super(_tile.getPosX(), _tile.getPosY(), _tile.getComprimento(), _tile.getLargura(), _tile.getTamanhoEmPorcentagem());
+        super(_tile.getPosX(), _tile.getPosY(), _tile.getComprimento(), _tile.getLargura());
         mudarCor(_tile.getCor());
         setTipo(TIPO_PASSADOURO.TERRA);
         ocupada = false;
     }
     public TilePassadouro(TilePassadouro _tile){
-        super(_tile.getPosX(), _tile.getPosY(), _tile.getComprimento(), _tile.getLargura(), _tile.getTamanhoEmPorcentagem());
+        super(_tile.getPosX(), _tile.getPosY(), _tile.getComprimento(), _tile.getLargura());
         mudarCor(_tile.getCor());
         setTipo(_tile.getTipo());
         ocupada = false;
@@ -80,7 +77,7 @@ public class TilePassadouro extends Tile{
          tipo = _tipo;
          if(tipo == TIPO_PASSADOURO.TERRA){
              cor = new Color(Color.WHITE);
-             adicionarTextura(Arquivos.ARQUIVO_TEXTURA_LADRILHO);
+             adicionarTextura(Texturas.LADRILHO);
          } else if(tipo == TIPO_PASSADOURO.AGUA){
              cor = new Color(Color.BLUE);
          }
