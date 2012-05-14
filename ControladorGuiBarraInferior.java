@@ -40,6 +40,17 @@ public class ControladorGuiBarraInferior
         float mouseX = Mouse.getX();
         float mouseY = Mouse.getY();
 
+        System.out.println("mouseDown em "+mouseX+","+mouseY);
+        System.out.println("madeira em "+gui.getBtAdicionarTorreMadeira().getGlobalX()+
+                ","+gui.getBtAdicionarTorreMadeira().getGlobalY());
+        System.out.println("canhao em "+gui.getBtAdicionarTorreCanhao().getGlobalX()+
+                ","+gui.getBtAdicionarTorreCanhao().getGlobalY());
+        if(gui.getBtAdicionarTorreMadeira().contem(mouseX, mouseY)){
+            System.out.println("Madeira contém");
+        }
+        if(gui.getBtAdicionarTorreCanhao().contem(mouseX, mouseY)){
+            System.out.println("Canhão contém");
+        }
         
         if(gui.contem(mouseX, mouseY)){
             if(gui.getBtAdicionarTorreMadeira().contem(mouseX, mouseY)
