@@ -30,7 +30,7 @@ public class TileEdificavel extends Tile{
      */
     public TileEdificavel(float _posX, float _posY, float _comprimento, float _largura){
         super(_posX, _posY, _comprimento, _largura);
-        adicionarTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
+        definirTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
         torre = null;
         if(todasTilesEdificaveisCriadas == null){
             todasTilesEdificaveisCriadas = new Vector<TileEdificavel>();
@@ -40,7 +40,7 @@ public class TileEdificavel extends Tile{
         super(_tile);
         System.out.println("Criando tileEdificável de "+_tile.getIdentificacaoUnica()+
                 " com "+getIdentificacaoUnica());
-        adicionarTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
+        definirTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
         if(_tile.ocupadaPorTorre()){
             torre = new Torre(_tile.getTorre());
         } else {

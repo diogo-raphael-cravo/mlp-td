@@ -17,4 +17,5 @@ public class Arquivos {
     public static String ARQUIVO_TEXTURA_GRAMA = LINK_BASE+"grama.jpg";
     public static String ARQUIVO_TEXTURA_LADRILHO = LINK_BASE+"ladrilho.jpg";
     public static String ARQUIVO_TEXTURA_TORRE = LINK_BASE+"torre.jpg";
+    public static String ARQUIVO_TEXTURA_CANHAO = LINK_BASE+"canhao.jpg";
 }

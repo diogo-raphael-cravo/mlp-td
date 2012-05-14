@@ -43,8 +43,8 @@ public class td {
       Inimigo inimigo = new Inimigo();
       Desenho quadroInimigo = new Desenho(0, 0, 35, 40, 100);
       Desenho quadro2Inimigo = new Desenho(0, 0, 35, 40, 100);
-      quadroInimigo.adicionarTextura(Texturas.CAVEIRA);
-      quadro2Inimigo.adicionarTextura(Texturas.CAVEIRA2);
+      quadroInimigo.definirTextura(Texturas.CAVEIRA);
+      quadro2Inimigo.definirTextura(Texturas.CAVEIRA2);
       Color corInimigo = new Color(Color.BLACK);
       for(int i=0; i<100; i++){
           inimigo.adicionarQuadro(quadroInimigo);
