@@ -1,4 +1,4 @@
-package mlptd;
+package mlp.td;
 
 
 import org.lwjgl.opengl.GL11;
@@ -420,12 +420,19 @@ public class Desenho extends Object{
         }
         glPushMatrix();
 
-        glTranslatef(getGlobalX(), getGlobalY(), posZ);
+        glTranslatef(posX, posY, posZ);
+        
+        //girar sempre em torno do centro
+        //glTranslatef(-comprimento*fatorEscalaX/2, 
+          //      -largura*fatorEscalaY/2, 0);
         glRotatef(rotacaoX,1.0f,0.0f,0.0f);
         glRotatef(rotacaoY,0.0f,1.0f,0.0f);
         glRotatef(rotacaoZ,0.0f,0.0f,1.0f);
+        //glTranslatef(comprimento*fatorEscalaX/2, 
+          //      largura*fatorEscalaY/2, 0);
+        
         glScalef(fatorEscalaX, fatorEscalaY, fatorEscalaZ);
-        glTranslatef(-getGlobalX(), -getGlobalY(), -posZ);
+        glTranslatef(-posX, -posY, -posZ);
 
         glColor4f((float) (cor.getRed()/255.0),
                   (float) (cor.getGreen()/255.0),
@@ -482,6 +489,12 @@ public class Desenho extends Object{
         StringBuilder string = new StringBuilder("Desenho {\n");
         string.append("\t posX = ").append(posX).append("\n");
         string.append("\t posY = ").append(posY).append("\n");
+        string.append("\t rotacaoX = ").append(rotacaoX).append("\n");
+        string.append("\t rotacaoY = ").append(rotacaoY).append("\n");
+        string.append("\t rotacaoZ = ").append(rotacaoZ).append("\n");
+        string.append("\t fatorEscalaX = ").append(fatorEscalaX).append("\n");
+        string.append("\t fatorEscalaY = ").append(fatorEscalaY).append("\n");
+        string.append("\t fatorEscalaZ = ").append(fatorEscalaZ).append("\n");
         string.append("\t comprimento = ").append(comprimento).append("\n");
         string.append("\t largura = ").append(largura).append("\n");
         string.append("\t altura = ").append(altura).append("\n");
