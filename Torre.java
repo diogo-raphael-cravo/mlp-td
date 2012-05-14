@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
 /**
  * Uma torre, que pode atirar projéteis em inimigos.

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
 import java.util.Vector;
 
@@ -73,13 +73,9 @@ public class TileEdificavel extends Tile{
     public void construirTorre(Torre _torre){
         torre = new Torre(_torre);
         torre.rotacionar(90, 0, 0);
-        System.out.println("estou em "+(posX)+","+posY);
-        System.out.println("rotacionará em "+(rotacaoX));
-        System.out.println("construir em "+(comprimento/2 - torre.comprimento/2)+","+
-                (largura/2 - torre.largura/2));
-        adicionarFilho(_torre, 
-                comprimento/2 - torre.comprimento/2,
-                largura/2 - torre.largura/2);
+        adicionarFilho(torre, 
+                comprimento/2,
+                largura/2);
     }
 
     /**

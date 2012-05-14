@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
 import java.util.Vector;
 import org.lwjgl.util.Color;
@@ -60,8 +60,8 @@ public class Gui_Retrato extends Desenho {
         desenhoExibido.rotacionar(60, 0, 2);
         adicionarFilho(desenhoExibido, xCentro, yCentro-20); //Constante para compensar rotação.
 
-        System.out.println("parametro>"+_desenho.toString());
-        System.out.println("criado>"+desenhoExibido.toString());
+        //System.out.println("parametro>"+_desenho.toString());
+        //System.out.println("criado>"+desenhoExibido.toString());
     }
     public void exibir(Filme _filme){
         float xCentro = comprimento/2 - _filme.getQuadros().elementAt(0).getComprimento()/2;
@@ -87,10 +87,10 @@ public class Gui_Retrato extends Desenho {
             tileEdificavelExibida.redimensionar(tileEdificavelExibida.getComprimento(), largura-margemY, tileEdificavelExibida.getAltura());
         }
         tileEdificavelExibida.rotacionar(60, 0, 2);
-        adicionarFilho(tileEdificavelExibida, xCentro, yCentro-20); //Constante para compensar rotação.
+        adicionarFilho(tileEdificavelExibida, xCentro, yCentro);
 
-        System.out.println("parametro>"+_desenho.toString());
-        System.out.println("criado>"+tileEdificavelExibida.toString());
+        //System.out.println("parametro>"+_desenho.toString());
+        //System.out.println("criado>"+tileEdificavelExibida.toString());
     }
 
     /**

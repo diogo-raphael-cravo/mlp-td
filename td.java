@@ -1,4 +1,4 @@
-package mlptd;
+package mlp.td;
 
 import static org.lwjgl.opengl.GL11.*;
 
