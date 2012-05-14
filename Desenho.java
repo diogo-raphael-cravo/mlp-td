@@ -1,8 +1,6 @@
 package mlp.td;
 
 
-import org.lwjgl.opengl.GL11;
-import static org.lwjgl.util.glu.GLU.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import org.newdawn.slick.util.ResourceLoader;
@@ -10,6 +8,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.opengl.Texture;
 import java.io.IOException;
 import java.util.Vector;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -208,6 +207,60 @@ public class Desenho extends Object{
         }
         return yGlobal;
     }
+    public float getGlobalRotacaoX(){
+        float xRotacaoGlobal = rotacaoX;
+        Desenho ancestral = getPai();
+        while(ancestral != null){
+            xRotacaoGlobal += ancestral.getRotacaoX();
+            ancestral = ancestral.getPai();
+        }
+        return xRotacaoGlobal;
+    }
+    public float getGlobalRotacaoY(){
+        float yRotacaoGlobal = rotacaoY;
+        Desenho ancestral = getPai();
+        while(ancestral != null){
+            yRotacaoGlobal += ancestral.getRotacaoY();
+            ancestral = ancestral.getPai();
+        }
+        return yRotacaoGlobal;
+    }
+    public float getGlobalRotacaoZ(){
+        float zRotacaoGlobal = rotacaoZ;
+        Desenho ancestral = getPai();
+        while(ancestral != null){
+            zRotacaoGlobal += ancestral.getRotacaoZ();
+            ancestral = ancestral.getPai();
+        }
+        return zRotacaoGlobal;
+    }
+    public float getGlobalFatorEscalaX(){
+        float xFatorEscalaGlobal = fatorEscalaX;
+        Desenho ancestral = getPai();
+        while(ancestral != null){
+            xFatorEscalaGlobal *= ancestral.getFatorEscalaX();
+            ancestral = ancestral.getPai();
+        }
+        return xFatorEscalaGlobal;
+    }
+    public float getGlobalFatorEscalaY(){
+        float yFatorEscalaGlobal = fatorEscalaY;
+        Desenho ancestral = getPai();
+        while(ancestral != null){
+            yFatorEscalaGlobal *= ancestral.getFatorEscalaY();
+            ancestral = ancestral.getPai();
+        }
+        return yFatorEscalaGlobal;
+    }
+    public float getGlobalFatorEscalaZ(){
+        float zFatorEscalaGlobal = fatorEscalaZ;
+        Desenho ancestral = getPai();
+        while(ancestral != null){
+            zFatorEscalaGlobal *= ancestral.getFatorEscalaZ();
+            ancestral = ancestral.getPai();
+        }
+        return zFatorEscalaGlobal;
+    }
     public Texture getTextura(){
         return textura;
     }
@@ -233,10 +286,6 @@ public class Desenho extends Object{
         rotacaoX += _rotacaoX;
         rotacaoY += _rotacaoY;
         rotacaoZ += _rotacaoZ;
-
-        for(Desenho filho : filhos){
-            filho.rotacionar(_rotacaoX, _rotacaoY, _rotacaoZ);
-        }
     }
 
     /**
@@ -250,11 +299,6 @@ public class Desenho extends Object{
      */
      public void adicionarFilho(Desenho _desenhoFilho, float _posX, float _posY){
          _desenhoFilho.mover(_posX, _posY);
-         _desenhoFilho.rotacionar(rotacaoX, rotacaoY, rotacaoZ);
-         _desenhoFilho.redimensionar(fatorEscalaX*_desenhoFilho.getFatorEscalaX()*_desenhoFilho.getComprimento(),
-                 fatorEscalaY*_desenhoFilho.getFatorEscalaY()*_desenhoFilho.getLargura(),
-                 fatorEscalaZ*_desenhoFilho.getFatorEscalaZ()*_desenhoFilho.getAltura());
-         //_desenhoFilho.posZ = posZf;
          filhos.add(_desenhoFilho);
          _desenhoFilho.setPai(this);
      }
@@ -336,14 +380,8 @@ public class Desenho extends Object{
         fatorEscalaX = _comprimento/comprimento;
         fatorEscalaY = _largura/largura;
         fatorEscalaZ = _altura/altura;
-
-        for(Desenho filho : filhos){
-            filho.redimensionar(fatorEscalaX*filho.getFatorEscalaX()*filho.getComprimento(),
-                    fatorEscalaY*filho.getFatorEscalaY()*filho.getLargura(),
-                    fatorEscalaZ*filho.getFatorEscalaZ()*filho.getAltura());
-        }
     }
-
+    
     /**
      * Indica se o ponto (em coordenadas globais) pertence a este desenho.
      * @param _posX, _posY Ponto a ser testado
@@ -384,26 +422,26 @@ public class Desenho extends Object{
      * Não é necessário especificar o tipo da imagem, pois ele é "adivinhado" pela função.
      * @param _caminho O caminho absoluto, no sistema de arquivos, do arquivo da textura.
      */
-    public void adicionarTextura(String _caminho){
+    public void definirTextura(String _caminho){
         Texture texturaCriada;
         try {
             texturaCriada = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream(_caminho));
-            adicionarTextura(texturaCriada);
+            definirTextura(texturaCriada);
         } catch (IOException ex1) {
             try {
                 texturaCriada = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(_caminho));
-                adicionarTextura(texturaCriada);
+                definirTextura(texturaCriada);
             } catch (IOException ex2) {
                 try {
                     texturaCriada = TextureLoader.getTexture("GIF", ResourceLoader.getResourceAsStream(_caminho));
-                    adicionarTextura(texturaCriada);
+                    definirTextura(texturaCriada);
                 } catch (IOException ex3) {
                     Logger.getLogger(Desenho.class.getName()).log(Level.SEVERE, null, ex3);
                 }
             }
         }
     }
-    public void adicionarTextura(Texture _textura){
+    public void definirTextura(Texture _textura){
         textura = _textura; //Por desempenho, a cópia é rasa.
     }
 
@@ -423,13 +461,15 @@ public class Desenho extends Object{
         glTranslatef(posX, posY, posZ);
         
         //girar sempre em torno do centro
-        //glTranslatef(-comprimento*fatorEscalaX/2, 
-          //      -largura*fatorEscalaY/2, 0);
+        glTranslatef(comprimento*fatorEscalaX/2, 
+                largura*fatorEscalaY/2, 
+                altura*fatorEscalaZ/2);
         glRotatef(rotacaoX,1.0f,0.0f,0.0f);
         glRotatef(rotacaoY,0.0f,1.0f,0.0f);
         glRotatef(rotacaoZ,0.0f,0.0f,1.0f);
-        //glTranslatef(comprimento*fatorEscalaX/2, 
-          //      largura*fatorEscalaY/2, 0);
+        glTranslatef(-comprimento*fatorEscalaX/2, 
+                -largura*fatorEscalaY/2, 
+                -altura*fatorEscalaZ/2);
         
         glScalef(fatorEscalaX, fatorEscalaY, fatorEscalaZ);
         glTranslatef(-posX, -posY, -posZ);
@@ -461,8 +501,18 @@ public class Desenho extends Object{
         glEnd();
         glPopMatrix();
         for(Desenho desenhoFilho : filhos){
+            float comprimentoFilho = desenhoFilho.comprimento*desenhoFilho.fatorEscalaX;
+            float larguraFilho = desenhoFilho.largura*desenhoFilho.fatorEscalaY;
+            float alturaFilho = desenhoFilho.altura*desenhoFilho.fatorEscalaZ;
+            
             desenhoFilho.deslocar(posX, posY);
+            desenhoFilho.rotacionar(rotacaoX, rotacaoY, rotacaoZ);
+            desenhoFilho.redimensionar(fatorEscalaX*desenhoFilho.fatorEscalaX*desenhoFilho.comprimento, 
+                    fatorEscalaY*desenhoFilho.fatorEscalaY*desenhoFilho.largura, 
+                    fatorEscalaZ*desenhoFilho.fatorEscalaZ*desenhoFilho.altura);
             desenhoFilho.desenhar();
+            desenhoFilho.redimensionar(comprimentoFilho, larguraFilho, alturaFilho);
+            desenhoFilho.rotacionar(-rotacaoX, -rotacaoY, -rotacaoZ);
             desenhoFilho.deslocar(-posX, -posY);
         }
     }

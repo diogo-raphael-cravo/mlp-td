@@ -42,10 +42,17 @@ public class ControladorGuiBarraInferior
 
         
         if(gui.contem(mouseX, mouseY)){
-            if(gui.getBtAdicionarTorre().contem(mouseX, mouseY)
+            if(gui.getBtAdicionarTorreMadeira().contem(mouseX, mouseY)
                     && tileEdificavelSelecionada != null
                     && !tileEdificavelSelecionada.ocupadaPorTorre()){
-                Torre torreAdicionada = new Torre(0, 0, 100, 200);
+                Torre torreAdicionada = new Torre(0, 0, 100, 200, Torre.TIPO_TORRE.MADEIRA);
+                torreAdicionada.redimensionar(50, 100, 0);
+                tileEdificavelSelecionada.construirTorre(torreAdicionada);
+                gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
+            } else if(gui.getBtAdicionarTorreCanhao().contem(mouseX, mouseY)
+                    && tileEdificavelSelecionada != null
+                    && !tileEdificavelSelecionada.ocupadaPorTorre()){
+                Torre torreAdicionada = new Torre(0, 0, 100, 200, Torre.TIPO_TORRE.CANHAO);
                 torreAdicionada.redimensionar(50, 100, 0);
                 tileEdificavelSelecionada.construirTorre(torreAdicionada);
                 gui.getGuiRetrato().exibir(tileEdificavelSelecionada);

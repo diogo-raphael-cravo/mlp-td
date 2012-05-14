@@ -45,6 +45,7 @@ public class Camera {
      */
     private float posX;
     private float posY;
+    private float posZ;
 
     /**
      * Rotação da camera.
@@ -73,6 +74,7 @@ public class Camera {
     private Camera(){
         posX = 0;
         posY = 0;
+        posZ = 0;
         rotacaoX = 0;
         rotacaoY = 0;
         rotacaoZ = 0;
@@ -90,7 +92,34 @@ public class Camera {
     public float getRotacaoZ(){
         return rotacaoZ;
     }
-
+    public static float xCameraAtual(){
+        if(cameraAtual == CAMERA.ORTOGRAFICA){
+            return ortografica.posX;
+        } else if(cameraAtual == CAMERA.PERSPECTIVA){
+            return perspectiva.posX;
+        } else {
+            return 0;
+        }
+    }
+    public static float yCameraAtual(){
+        if(cameraAtual == CAMERA.ORTOGRAFICA){
+            return ortografica.posY;
+        } else if(cameraAtual == CAMERA.PERSPECTIVA){
+            return perspectiva.posY;
+        } else {
+            return 0;
+        }
+    }
+    public static float zCameraAtual(){
+        if(cameraAtual == CAMERA.ORTOGRAFICA){
+            return ortografica.posZ;
+        } else if(cameraAtual == CAMERA.PERSPECTIVA){
+            return perspectiva.posZ;
+        } else {
+            return 0;
+        }
+    }
+    
     /**
      * Permite mover a camera para uma posição de destino.
      * @param _posX, _posY A posição de destino.
@@ -168,6 +197,7 @@ public class Camera {
             
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
+            
             //glTranslatef(ortografica.posX, ortografica.posY, 0);
             glRotatef(ortografica.rotacaoX,1.0f,0.0f,0.0f);
             glRotatef(ortografica.rotacaoY,0.0f,1.0f,0.0f);

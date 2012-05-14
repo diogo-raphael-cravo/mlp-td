@@ -23,7 +23,7 @@ public class Tile extends Desenho {
      */
     public Tile(float _posX, float _posY, float _comprimento, float _largura){
         super(_posX, _posY, _comprimento, _largura);
-        adicionarTextura(Texturas.GRAMA);
+        definirTextura(Texturas.GRAMA);
     }
     public Tile(Tile _tile){
         super(_tile);

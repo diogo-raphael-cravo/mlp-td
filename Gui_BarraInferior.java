@@ -21,7 +21,8 @@ public class Gui_BarraInferior extends Desenho{
     /**
      * Botões.
      */
-    private Botao btAdicionarTorre;
+    private Botao btAdicionarTorreMadeira;
+    private Botao btAdicionarTorreCanhao;
 
     /**
      * Controlador de eventos desta gui.
@@ -33,13 +34,18 @@ public class Gui_BarraInferior extends Desenho{
         mudarCor(new Color(Color.WHITE));
         gui_retrato = new Gui_Retrato(posX, posY, 100, 100, 100);
         adicionarFilho(gui_retrato, 30, 75);
-        adicionarTextura(Texturas.MURO);
+        definirTextura(Texturas.MURO);
 
-        btAdicionarTorre = new Botao(0, 0, 100, 200, 100);
-        btAdicionarTorre.adicionarTextura(Texturas.TORRE);
-        adicionarFilho(btAdicionarTorre, 200, 100);
-        btAdicionarTorre.redimensionar(30, 30, 0);
+        btAdicionarTorreMadeira = new Botao(0, 0, 100, 200, 100);
+        btAdicionarTorreMadeira.definirTextura(Texturas.TORRE);
+        adicionarFilho(btAdicionarTorreMadeira, 200, 100);
+        btAdicionarTorreMadeira.redimensionar(30, 30, 0);
 
+        btAdicionarTorreCanhao = new Botao(0, 0, 480, 220, 100);
+        btAdicionarTorreCanhao.definirTextura(Texturas.CANHAO);
+        adicionarFilho(btAdicionarTorreCanhao, 300, 100);
+        btAdicionarTorreCanhao.redimensionar(30, 30, 0);
+        
         controlador = new ControladorGuiBarraInferior(this);
     }
 
@@ -61,7 +67,10 @@ public class Gui_BarraInferior extends Desenho{
     /**
      * @return Botão que adiciona torres.
      */
-    public Botao getBtAdicionarTorre(){
-        return btAdicionarTorre;
+    public Botao getBtAdicionarTorreMadeira(){
+        return btAdicionarTorreMadeira;
+    }
+    public Botao getBtAdicionarTorreCanhao(){
+        return btAdicionarTorreCanhao;
     }
 }

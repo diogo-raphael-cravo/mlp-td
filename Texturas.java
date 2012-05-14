@@ -25,6 +25,7 @@ public class Texturas {
      public static Texture GRAMA;
      public static Texture MURO;
      public static Texture TORRE;
+     public static Texture CANHAO;
 
      public static void inicializar(){
          try {
@@ -44,6 +45,9 @@ public class Texturas {
          } catch (Exception ex) {}
          try {
             TORRE = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_TORRE));
+         } catch (Exception ex) {}
+         try {
+            CANHAO = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_CANHAO));
          } catch (Exception ex) {}
      }
 
