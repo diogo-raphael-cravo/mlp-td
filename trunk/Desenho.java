@@ -391,8 +391,8 @@ public class Desenho extends Object{
         boolean contem=false;
         float xTestado = getGlobalX();
         float yTestado = getGlobalY();
-        if(xTestado <= _posX && _posX <= xTestado+comprimento){
-            if(yTestado <= _posY && _posY <= yTestado+largura){
+        if(xTestado <= _posX && _posX <= xTestado+comprimento*getGlobalFatorEscalaX()){
+            if(yTestado <= _posY && _posY <= yTestado+largura*getGlobalFatorEscalaY()){
                contem = true;
             }
         }
@@ -406,9 +406,12 @@ public class Desenho extends Object{
         boolean contemExtremoSudeste = false;
 
         contemExtremoNoroeste = contem(_desenho.getGlobalX(), _desenho.getGlobalY());
-        contemExtremoNordeste = contem(_desenho.getGlobalX()+_desenho.getComprimento(), _desenho.getGlobalY());
-        contemExtremoSudoeste = contem(_desenho.getGlobalX(), _desenho.getGlobalY()+_desenho.getLargura());
-        contemExtremoSudeste = contem(_desenho.getGlobalX()+_desenho.getComprimento(), _desenho.getGlobalY()+_desenho.getLargura());
+        contemExtremoNordeste = contem(_desenho.getGlobalX()+_desenho.getComprimento()*_desenho.getGlobalFatorEscalaX(), 
+                _desenho.getGlobalY());
+        contemExtremoSudoeste = contem(_desenho.getGlobalX(),
+                _desenho.getGlobalY()+_desenho.getLargura()*_desenho.getGlobalFatorEscalaY());
+        contemExtremoSudeste = contem(_desenho.getGlobalX()+_desenho.getComprimento()*_desenho.getGlobalFatorEscalaX(),
+                _desenho.getGlobalY()+_desenho.getLargura()*_desenho.getGlobalFatorEscalaY());
 
         contem = contemExtremoNoroeste
               || contemExtremoNordeste
