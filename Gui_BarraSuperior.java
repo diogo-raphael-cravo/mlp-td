@@ -47,6 +47,8 @@ public class Gui_BarraSuperior extends Desenho {
         iconeVidas.definirTextura(Texturas.CAVEIRA);
         iconeVidas.redimensionar(15, 15, 0);
         adicionarFilho(iconeVidas, 7.5f+comprimento/2, 7.5f);
+
+        adicionarFilho(Texto.converterParaDesenho("0123456789"), 100f, 0f);
     }
 
     
