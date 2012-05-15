@@ -170,5 +170,10 @@ public class ControladorGuiBarraInferior
         } else {
             gui.getGuiEdicaoTiles().getBtAdicionarTorreCanhao().soltar();
         }
+        if(gui.getGuiEdicaoTiles().getBtRemoverTorre().contem(mouseX, mouseY)){
+            gui.getGuiEdicaoTiles().getBtRemoverTorre().pressionar();
+        } else {
+            gui.getGuiEdicaoTiles().getBtRemoverTorre().soltar();
+        }
     }
 }
