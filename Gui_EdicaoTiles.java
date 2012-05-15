@@ -16,6 +16,7 @@ public class Gui_EdicaoTiles extends Gui{
      */
     private Botao btAdicionarTorreMadeira;
     private Botao btAdicionarTorreCanhao;
+    private Botao btRemoverTorre;
     
     /**
      * @param _comprimento, _largura Comprimento e largura da gui.
@@ -33,6 +34,11 @@ public class Gui_EdicaoTiles extends Gui{
         adicionarFilho(btAdicionarTorreCanhao, 300, 100);
         btAdicionarTorreCanhao.redimensionar(30, 30, 0);
         
+        btRemoverTorre = new Botao(200, 200);
+        btRemoverTorre.definirTextura(Texturas.X);
+        adicionarFilho(btRemoverTorre, 300, 150);
+        btRemoverTorre.redimensionar(30, 30, 0);
+        
         float comprimentoAtual = comprimento;
         float larguraAtual = largura;
         comprimento = 300;
@@ -41,6 +47,7 @@ public class Gui_EdicaoTiles extends Gui{
         redimensionar(fatorEscalaX*comprimentoAtual, fatorEscalaY*larguraAtual, altura);
         btAdicionarTorreMadeira.redimensionar(30*(1/fatorEscalaX), 30*(1/fatorEscalaY), 0);
         btAdicionarTorreCanhao.redimensionar(30*(1/fatorEscalaX), 30*(1/fatorEscalaY), 0);
+        btRemoverTorre.redimensionar(30*(1/fatorEscalaX), 30*(1/fatorEscalaY), 0);
     }
     
     /**
@@ -51,6 +58,9 @@ public class Gui_EdicaoTiles extends Gui{
     }
     public Botao getBtAdicionarTorreCanhao(){
         return btAdicionarTorreCanhao;
+    }
+    public Botao getBtRemoverTorre(){
+        return btRemoverTorre;
     }
 
     
