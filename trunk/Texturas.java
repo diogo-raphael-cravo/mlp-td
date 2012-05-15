@@ -30,6 +30,17 @@ public class Texturas {
      public static Texture X;
      public static Texture OURO;
 
+     public static Texture TIMES_NEW_ROMAN_0;
+     public static Texture TIMES_NEW_ROMAN_1;
+     public static Texture TIMES_NEW_ROMAN_2;
+     public static Texture TIMES_NEW_ROMAN_3;
+     public static Texture TIMES_NEW_ROMAN_4;
+     public static Texture TIMES_NEW_ROMAN_5;
+     public static Texture TIMES_NEW_ROMAN_6;
+     public static Texture TIMES_NEW_ROMAN_7;
+     public static Texture TIMES_NEW_ROMAN_8;
+     public static Texture TIMES_NEW_ROMAN_9;
+
      public static void inicializar(){
          try {
             CAVEIRA = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_CAVEIRA));
@@ -60,6 +71,40 @@ public class Texturas {
          } catch (Exception ex) {}
          try {
             OURO = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_OURO));
+         } catch (Exception ex) {}
+
+         try {
+            TIMES_NEW_ROMAN_0 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"0.PNG"));
+         } catch (Exception ex) { ex.printStackTrace(); }
+         try {
+            TIMES_NEW_ROMAN_1 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"1.PNG"));
+         } catch (Exception ex) {}
+         try {
+            TIMES_NEW_ROMAN_2 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"2.PNG"));
+         } catch (Exception ex) {}
+         try {
+            TIMES_NEW_ROMAN_3 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"3.PNG"));
+         } catch (Exception ex) {}
+         try {
+            TIMES_NEW_ROMAN_4 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"4.PNG"));
+         } catch (Exception ex) {}
+         try {
+            TIMES_NEW_ROMAN_5 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"5.PNG"));
+         } catch (Exception ex) {}
+         try {
+            TIMES_NEW_ROMAN_6 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"6.PNG"));
+         } catch (Exception ex) {}
+         try {
+            TIMES_NEW_ROMAN_7 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"7.PNG"));
+         } catch (Exception ex) {}
+         try {
+            TIMES_NEW_ROMAN_8 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"8.PNG"));
+         } catch (Exception ex) {}
+         try {
+            TIMES_NEW_ROMAN_9 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"9.PNG"));
+         } catch (Exception ex) {}
+         try {
+            TIMES_NEW_ROMAN_0 = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_TIMES_NEW_ROMAN+"0"));
          } catch (Exception ex) {}
      }
 
