@@ -5,6 +5,7 @@
 
 package mlp.td;
 
+import org.lwjgl.util.Color;
 import java.util.Vector;
 import org.lwjgl.input.Mouse;
 
@@ -150,6 +151,23 @@ public class ControladorGuiBarraInferior
             tileEdificavelSelecionada.restaurarTransparencia();
             tileEdificavelSelecionada = null;
             gui.getGuiRetrato().retirarDesenhoExibido();
+        }
+    }
+
+    @Override
+    public void mouseMoveu() {
+        float mouseX = Mouse.getX();
+        float mouseY = Mouse.getY();
+        
+        if(gui.getBtAdicionarTorreMadeira().contem(mouseX, mouseY)){
+            gui.getBtAdicionarTorreMadeira().pressionar();
+        } else {
+            gui.getBtAdicionarTorreMadeira().soltar();
+        }
+        if(gui.getBtAdicionarTorreCanhao().contem(mouseX, mouseY)){
+            gui.getBtAdicionarTorreCanhao().pressionar();
+        } else {
+            gui.getBtAdicionarTorreCanhao().soltar();
         }
     }
 }

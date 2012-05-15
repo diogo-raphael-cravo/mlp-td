@@ -5,11 +5,15 @@
 
 package mlp.td;
 
+import org.lwjgl.util.Color;
+
 /**
  * Um botão simples.
  * @author diogo
  */
 public class Botao extends Desenho {
+    
+    
     /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
      * @param _comprimento, _largura, _altura Comprimento, largura e altura.
@@ -19,8 +23,19 @@ public class Botao extends Desenho {
         super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
     }
 
-
+    /**
+     * Pressiona o botão, mudando sua aparência.
+     */
+    public void pressionar(){
+        mudarCor(new Color(Color.DKGREY));
+    }
     
+    /**
+     * Desfaz o pressionamento do botão, caso esteja pressionado.
+     */
+    public void soltar(){
+        mudarCor(new Color(Color.WHITE));
+    }
     
 }
 

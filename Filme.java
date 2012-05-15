@@ -131,6 +131,7 @@ public class Filme extends Desenho {
             }
             quadros.get(quadroExibido).desenhar();
         }
+        desenharFilhos();
     }
 
     /**
