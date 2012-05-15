@@ -58,6 +58,11 @@ public class ControladorGuiBarraInferior
                 tileEdificavelSelecionada.construirTorre(torreAdicionada);
                 gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
                 gui.getGuiEdicaoTiles().mostrar();
+            } else if(gui.getGuiEdicaoTiles().getBtRemoverTorre().contem(mouseX, mouseY)
+                    && tileEdificavelSelecionada != null){
+                tileEdificavelSelecionada.destruirTorre();
+                gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
+                gui.getGuiEdicaoTiles().mostrar();
             } else {
                 desfazerSelecoes();
             }

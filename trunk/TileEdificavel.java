@@ -71,15 +71,21 @@ public class TileEdificavel extends Tile{
      * @param _torre A torre que deve ser construída.
      */
     public void construirTorre(Torre _torre){
-        
         torre = new Torre(_torre);
         torre.rotacionar(90, 0, 0);
         adicionarFilho(torre, 
                 comprimento/2,
                 largura/2);
-        adicionarFilho(new BarraCarregamento(0,0,50,10),
-                0,
-                largura/2 + 100);
+    }
+    
+    /**
+     * Caso haja, destrói a torre desta tile.
+     */
+    public void destruirTorre(){
+        if(ocupadaPorTorre()){
+            removerFilho(torre);
+            torre = null;
+        }
     }
 
     /**
