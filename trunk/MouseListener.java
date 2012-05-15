@@ -10,5 +10,6 @@ package mlp.td;
  * @author NUTED
  */
 public interface MouseListener {
+    public void mouseMoveu();
     public void houveMouseDown();
 }

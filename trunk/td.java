@@ -24,6 +24,14 @@ import org.newdawn.slick.util.ResourceLoader;
 public class td {
   public static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
+  /**
+   * Posição do mouse, para checagem de mudança.
+   * Gera o evento mouseMove.
+   */
+  float xMouse;
+  float yMouse;
+  
+  BarraCarregamento carregamentoJogo;
   Jogo jogo;
   ControladorJogo controladorJogo;
   Temporizador temporizadorMouse; //Garante que o mouse não seja clicado com freqüência muito alta.
@@ -40,6 +48,7 @@ public class td {
   public td() {
     try {
       create();
+      
       Inimigo inimigo = new Inimigo();
       Desenho quadroInimigo = new Desenho(0, 0, 35, 40, 100);
       Desenho quadro2Inimigo = new Desenho(0, 0, 35, 40, 100);
@@ -107,6 +116,9 @@ public class td {
   }
 
   public void initGL() {
+    xMouse = Mouse.getX();
+    yMouse = Mouse.getY();
+      
     //2D Initialization
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glDisable(GL_DEPTH_TEST);
@@ -174,6 +186,12 @@ public class td {
   public void processMouse() {
       int BOTAO_ESQUERDO_MOUSE = 0;
 
+      if(xMouse != Mouse.getX() || yMouse != Mouse.getY()){
+          xMouse = Mouse.getX();
+          yMouse = Mouse.getY();
+          controladorJogo.mouseMoveu();
+      }
+      
       if(Mouse.isButtonDown(BOTAO_ESQUERDO_MOUSE)
               && 200 < temporizadorMouse.tempoDesdeUltimaMarcacao()){
           temporizadorMouse.marcarAgora();

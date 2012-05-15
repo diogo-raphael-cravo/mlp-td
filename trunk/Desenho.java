@@ -503,6 +503,9 @@ public class Desenho extends Object{
         }
         glEnd();
         glPopMatrix();
+        desenharFilhos();
+    }
+    public void desenharFilhos(){
         for(Desenho desenhoFilho : filhos){
             float comprimentoFilho = desenhoFilho.comprimento*desenhoFilho.fatorEscalaX;
             float larguraFilho = desenhoFilho.largura*desenhoFilho.fatorEscalaY;

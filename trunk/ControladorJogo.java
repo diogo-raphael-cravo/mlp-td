@@ -24,10 +24,16 @@ public class ControladorJogo
         jogo = _jogo;
     }
 
+    @Override
     public void houveMouseDown() {
         boolean selecionouDesenho = false;
 
         Tela.getGuiBarraInferior().getControlador().houveMouseDown();
         
+    }
+
+    @Override
+    public void mouseMoveu() {
+        Tela.getGuiBarraInferior().getControlador().mouseMoveu();
     }
 }
