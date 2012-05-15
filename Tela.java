@@ -37,6 +37,10 @@ public class Tela extends Desenho {
      */
     private Gui_BarraInferior barraInformacoesInferior;
 
+    /**
+     * Barra de informações que fica no topo da tela.
+     */
+    private Gui_BarraSuperior barraInformacoesSuperior;
 
     /**
      * Faz as inicializações necessárias para a tela.
@@ -52,6 +56,9 @@ public class Tela extends Desenho {
     private void inicializarInstancia(){
        barraInformacoesInferior = new Gui_BarraInferior();
        adicionarFilho(barraInformacoesInferior, 0.0f, 0.0f);
+
+       barraInformacoesSuperior = new Gui_BarraSuperior();
+       adicionarFilho(barraInformacoesSuperior, 0.0f, Tela.HEIGHT-barraInformacoesSuperior.largura);
     }
 
     private Tela(){
