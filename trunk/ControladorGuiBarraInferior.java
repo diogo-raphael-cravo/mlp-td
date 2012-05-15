@@ -40,34 +40,24 @@ public class ControladorGuiBarraInferior
     public void houveMouseDown() {
         float mouseX = Mouse.getX();
         float mouseY = Mouse.getY();
-
-        System.out.println("mouseDown em "+mouseX+","+mouseY);
-        System.out.println("madeira em "+gui.getBtAdicionarTorreMadeira().getGlobalX()+
-                ","+gui.getBtAdicionarTorreMadeira().getGlobalY());
-        System.out.println("canhao em "+gui.getBtAdicionarTorreCanhao().getGlobalX()+
-                ","+gui.getBtAdicionarTorreCanhao().getGlobalY());
-        if(gui.getBtAdicionarTorreMadeira().contem(mouseX, mouseY)){
-            System.out.println("Madeira contém");
-        }
-        if(gui.getBtAdicionarTorreCanhao().contem(mouseX, mouseY)){
-            System.out.println("Canhão contém");
-        }
         
         if(gui.contem(mouseX, mouseY)){
-            if(gui.getBtAdicionarTorreMadeira().contem(mouseX, mouseY)
+            if(gui.getGuiEdicaoTiles().getBtAdicionarTorreMadeira().contem(mouseX, mouseY)
                     && tileEdificavelSelecionada != null
                     && !tileEdificavelSelecionada.ocupadaPorTorre()){
                 Torre torreAdicionada = new Torre(0, 0, 100, 200, Torre.TIPO_TORRE.MADEIRA);
                 torreAdicionada.redimensionar(50, 100, 0);
                 tileEdificavelSelecionada.construirTorre(torreAdicionada);
                 gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
-            } else if(gui.getBtAdicionarTorreCanhao().contem(mouseX, mouseY)
+                gui.getGuiEdicaoTiles().mostrar();
+            } else if(gui.getGuiEdicaoTiles().getBtAdicionarTorreCanhao().contem(mouseX, mouseY)
                     && tileEdificavelSelecionada != null
                     && !tileEdificavelSelecionada.ocupadaPorTorre()){
                 Torre torreAdicionada = new Torre(0, 0, 100, 200, Torre.TIPO_TORRE.CANHAO);
                 torreAdicionada.redimensionar(50, 100, 0);
                 tileEdificavelSelecionada.construirTorre(torreAdicionada);
                 gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
+                gui.getGuiEdicaoTiles().mostrar();
             } else {
                 desfazerSelecoes();
             }
@@ -113,6 +103,7 @@ public class ControladorGuiBarraInferior
                 desenhoSelecionado = desenho;
                 desenhoSelecionado.tornarTransparente();
                 gui.getGuiRetrato().exibir(desenhoSelecionado);
+                gui.getGuiEdicaoTiles().mostrar();
             }
         }
         Vector<Filme> todosFilmesCriados = Filme.getTodosFilmesCriados();
@@ -121,6 +112,7 @@ public class ControladorGuiBarraInferior
                 filmeSelecionado = filme;
                 filmeSelecionado.tornarTransparente();
                 gui.getGuiRetrato().exibir(filmeSelecionado);
+                gui.getGuiEdicaoTiles().mostrar();
             }
         }
         Vector<TileEdificavel> todasTilesEdificaveisCriadas = TileEdificavel.getTodasTilesEdificaveisCriadas();
@@ -129,6 +121,7 @@ public class ControladorGuiBarraInferior
                 tileEdificavelSelecionada = tileEdificavel;
                 tileEdificavelSelecionada.tornarTransparente();
                 gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
+                gui.getGuiEdicaoTiles().mostrar();
             }
         }
     }
@@ -141,16 +134,19 @@ public class ControladorGuiBarraInferior
             desenhoSelecionado.restaurarTransparencia();
             desenhoSelecionado = null;
             gui.getGuiRetrato().retirarDesenhoExibido();
+            gui.getGuiEdicaoTiles().esconder();
         }
         if(filmeSelecionado != null){
             filmeSelecionado.restaurarTransparencia();
             filmeSelecionado = null;
             gui.getGuiRetrato().retirarDesenhoExibido();
+            gui.getGuiEdicaoTiles().esconder();
         }
         if(tileEdificavelSelecionada != null){
             tileEdificavelSelecionada.restaurarTransparencia();
             tileEdificavelSelecionada = null;
             gui.getGuiRetrato().retirarDesenhoExibido();
+            gui.getGuiEdicaoTiles().esconder();
         }
     }
 
@@ -159,15 +155,15 @@ public class ControladorGuiBarraInferior
         float mouseX = Mouse.getX();
         float mouseY = Mouse.getY();
         
-        if(gui.getBtAdicionarTorreMadeira().contem(mouseX, mouseY)){
-            gui.getBtAdicionarTorreMadeira().pressionar();
+        if(gui.getGuiEdicaoTiles().getBtAdicionarTorreMadeira().contem(mouseX, mouseY)){
+            gui.getGuiEdicaoTiles().getBtAdicionarTorreMadeira().pressionar();
         } else {
-            gui.getBtAdicionarTorreMadeira().soltar();
+            gui.getGuiEdicaoTiles().getBtAdicionarTorreMadeira().soltar();
         }
-        if(gui.getBtAdicionarTorreCanhao().contem(mouseX, mouseY)){
-            gui.getBtAdicionarTorreCanhao().pressionar();
+        if(gui.getGuiEdicaoTiles().getBtAdicionarTorreCanhao().contem(mouseX, mouseY)){
+            gui.getGuiEdicaoTiles().getBtAdicionarTorreCanhao().pressionar();
         } else {
-            gui.getBtAdicionarTorreCanhao().soltar();
+            gui.getGuiEdicaoTiles().getBtAdicionarTorreCanhao().soltar();
         }
     }
 }

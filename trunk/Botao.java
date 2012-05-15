@@ -11,7 +11,7 @@ import org.lwjgl.util.Color;
  * Um botão simples.
  * @author diogo
  */
-public class Botao extends Desenho {
+public class Botao extends Gui {
     
     
     /**
@@ -19,8 +19,8 @@ public class Botao extends Desenho {
      * @param _comprimento, _largura, _altura Comprimento, largura e altura.
      * @param _tamanhoEmPorcentagem Usado para resize.
      */
-    public Botao(float _posX, float _posY, float _comprimento, float _largura, int _tamanhoEmPorcentagem){
-        super(_posX, _posY, _comprimento, _largura, _tamanhoEmPorcentagem);
+    public Botao(float _comprimento, float _largura){
+        super(_comprimento, _largura);
     }
 
     /**
