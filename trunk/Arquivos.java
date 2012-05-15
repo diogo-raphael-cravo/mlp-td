@@ -3,14 +3,14 @@
  * and open the template in the editor.
  */
 
-package mlp.td;
+package mlptd;
 
 /**
  * Classe para acesso estático de nomes de arquivos.
  * @author diogo
  */
 public class Arquivos {
-    public static final String LINK_BASE = "C:\\Users\\admin\\Desktop\\mlp-td\\";
+    public static final String LINK_BASE = "/home/grad/drcravo/Desktop/mlp-td/texturas/";
     public static String ARQUIVO_TEXTURA_MURO = LINK_BASE+"muro2.png";
     public static String ARQUIVO_TEXTURA_CAVEIRA = LINK_BASE+"caveira4.png";
     public static String ARQUIVO_TEXTURA_CAVEIRA_INVERTIDA = LINK_BASE+"caveira42.png";
@@ -20,4 +20,5 @@ public class Arquivos {
     public static String ARQUIVO_TEXTURA_CANHAO = LINK_BASE+"canhao.png";
     public static String ARQUIVO_TEXTURA_MADEIRA = LINK_BASE+"madeira.jpg";
     public static String ARQUIVO_TEXTURA_X = LINK_BASE+"x.png";
+    public static String ARQUIVO_TEXTURA_OURO = LINK_BASE+"ouro.png";
 }

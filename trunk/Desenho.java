@@ -1,4 +1,4 @@
-package mlp.td;
+package mlptd;
 
 
 import java.util.logging.Logger;

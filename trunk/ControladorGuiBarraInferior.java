@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlp.td;
+package mlptd;
 
 import org.lwjgl.util.Color;
 import java.util.Vector;
