@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mlp.td;
+package mlptd;
 
 import org.lwjgl.util.Color;
 
@@ -27,17 +27,17 @@ public class Gui_EdicaoTiles extends Gui{
         btAdicionarTorreMadeira = new Botao(100, 200);
         btAdicionarTorreMadeira.definirTextura(Texturas.TORRE);
         adicionarFilho(btAdicionarTorreMadeira, 200, 100);
-        btAdicionarTorreMadeira.redimensionar(30, 30, 0);
+        btAdicionarTorreMadeira.redimensionar(50, 50, 0);
 
         btAdicionarTorreCanhao = new Botao(480, 220);
         btAdicionarTorreCanhao.definirTextura(Texturas.CANHAO);
         adicionarFilho(btAdicionarTorreCanhao, 300, 100);
-        btAdicionarTorreCanhao.redimensionar(30, 30, 0);
+        btAdicionarTorreCanhao.redimensionar(50, 50, 0);
         
         btRemoverTorre = new Botao(200, 200);
-        btRemoverTorre.definirTextura(Texturas.X);
+        btRemoverTorre.definirTextura(Texturas.OURO);
         adicionarFilho(btRemoverTorre, 300, 150);
-        btRemoverTorre.redimensionar(30, 30, 0);
+        btRemoverTorre.redimensionar(50, 50, 0);
         
         float comprimentoAtual = comprimento;
         float larguraAtual = largura;
@@ -45,9 +45,9 @@ public class Gui_EdicaoTiles extends Gui{
         largura = 250;
         definirTextura(Texturas.MADEIRA);
         redimensionar(fatorEscalaX*comprimentoAtual, fatorEscalaY*larguraAtual, altura);
-        btAdicionarTorreMadeira.redimensionar(30*(1/fatorEscalaX), 30*(1/fatorEscalaY), 0);
-        btAdicionarTorreCanhao.redimensionar(30*(1/fatorEscalaX), 30*(1/fatorEscalaY), 0);
-        btRemoverTorre.redimensionar(30*(1/fatorEscalaX), 30*(1/fatorEscalaY), 0);
+        btAdicionarTorreMadeira.redimensionar(50*(1/fatorEscalaX), 50*(1/fatorEscalaY), 0);
+        btAdicionarTorreCanhao.redimensionar(50*(1/fatorEscalaX), 50*(1/fatorEscalaY), 0);
+        btRemoverTorre.redimensionar(50*(1/fatorEscalaX), 50*(1/fatorEscalaY), 0);
     }
     
     /**

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlp.td;
+package mlptd;
 
 /**
  * Um caminho por onde os inimigos podem movimentar-se.

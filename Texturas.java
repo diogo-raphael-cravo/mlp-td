@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlp.td;
+package mlptd;
 
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.opengl.Texture;
@@ -28,6 +28,7 @@ public class Texturas {
      public static Texture CANHAO;
      public static Texture MADEIRA;
      public static Texture X;
+     public static Texture OURO;
 
      public static void inicializar(){
          try {
@@ -56,6 +57,9 @@ public class Texturas {
          } catch (Exception ex) {}
          try {
             X = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_X));
+         } catch (Exception ex) {}
+         try {
+            OURO = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_OURO));
          } catch (Exception ex) {}
      }
 
