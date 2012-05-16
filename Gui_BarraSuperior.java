@@ -48,7 +48,9 @@ public class Gui_BarraSuperior extends Desenho {
         iconeVidas.redimensionar(15, 15, 0);
         adicionarFilho(iconeVidas, 7.5f+comprimento/2, 7.5f);
 
-        adicionarFilho(Texto.converterParaDesenho("0123456789"), 100f, 0f);
+        Desenho stringTeste = Texto.converterParaDesenho("0123456789");
+        stringTeste.redimensionar(200, 20, 0);
+        adicionarFilho(stringTeste, 100f, 0f);
     }
 
     

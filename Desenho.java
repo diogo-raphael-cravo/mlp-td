@@ -507,10 +507,13 @@ public class Desenho extends Object{
     }
     public void desenharFilhos(){
         for(Desenho desenhoFilho : filhos){
+            float xFilho = desenhoFilho.posX;
+            float yFilho = desenhoFilho.posY;
             float comprimentoFilho = desenhoFilho.comprimento*desenhoFilho.fatorEscalaX;
             float larguraFilho = desenhoFilho.largura*desenhoFilho.fatorEscalaY;
             float alturaFilho = desenhoFilho.altura*desenhoFilho.fatorEscalaZ;
-            
+
+            desenhoFilho.mover(fatorEscalaX*xFilho, fatorEscalaY*yFilho);
             desenhoFilho.deslocar(posX, posY);
             desenhoFilho.rotacionar(rotacaoX, rotacaoY, rotacaoZ);
             desenhoFilho.redimensionar(fatorEscalaX*desenhoFilho.fatorEscalaX*desenhoFilho.comprimento, 
@@ -519,7 +522,8 @@ public class Desenho extends Object{
             desenhoFilho.desenhar();
             desenhoFilho.redimensionar(comprimentoFilho, larguraFilho, alturaFilho);
             desenhoFilho.rotacionar(-rotacaoX, -rotacaoY, -rotacaoZ);
-            desenhoFilho.deslocar(-posX, -posY);
+            desenhoFilho.deslocar(posX, posY);
+            desenhoFilho.mover(xFilho, yFilho);
         }
     }
 
@@ -535,6 +539,13 @@ public class Desenho extends Object{
      */
     public void restaurarTransparencia() {
         cor.setAlpha(255);
+    }
+
+    /**
+     * Faz com que este desenho não seja visível, mas seus filhos sim.
+     */
+    public void esconderSohEste(){
+        cor.setAlpha(0);
     }
 
     /**

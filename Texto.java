@@ -5,6 +5,8 @@
 
 package mlptd;
 
+import org.lwjgl.util.Color;
+
 /**
  * Classe para criação de desenhos que contenham textos.
  * Oferece apenas métodos estáticos, não possui construtor.
@@ -24,6 +26,12 @@ public class Texto {
     }
 
     /**
+     * Dimensões de letras.
+     */
+    private static float COMPRIMENTO_LETRAS = 3f;
+    private static float ESPACO_LETRAS = 1f; //Não confundir com o espaço da barra de espaço.
+
+    /**
      * Cria um desenho com a string passada e o retorna.
      * @param _string A string que irá aparecer no desenho.
      * @return Desenho da string.
@@ -33,13 +41,14 @@ public class Texto {
             inicializar();
         }
 
-        Desenho desenhoDaString = new Desenho(0f, 0f, _string.length()*15f, 20f);
+        Desenho desenhoDaString = new Desenho(0f, 0f, _string.length()*(COMPRIMENTO_LETRAS+ESPACO_LETRAS), 5f);
+        desenhoDaString.esconderSohEste();
         char charDaString;
         
         for(int charAtual=0; charAtual<_string.length(); charAtual++){
             charDaString = _string.charAt(charAtual);
             desenhoDaString.adicionarFilho(converterParaDesenho(charDaString), 
-                    charAtual*15f, 0);
+                    charAtual*(COMPRIMENTO_LETRAS+ESPACO_LETRAS), 0);
         }
         
         return desenhoDaString;
@@ -51,30 +60,29 @@ public class Texto {
      * @return Desenho do caractere.
      */
      public static Desenho converterParaDesenho(char _char){
-         Desenho desenhoDoChar = new Desenho(0f, 0f, 7.5f, 15f);
+         Desenho desenhoDoChar = new Desenho(0f, 0f, 2.5f, 3.5f);
          switch(_char){
-             case '0': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_0);
+             case '0': desenhoDoChar.definirTextura(Texturas.PIXEL_0);
                 break;
-             case '1': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_1);
+             case '1': desenhoDoChar.definirTextura(Texturas.PIXEL_1);
                 break;
-             case '2': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_2);
+             case '2': desenhoDoChar.definirTextura(Texturas.PIXEL_2);
                 break;
-             case '3': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_3);
+             case '3': desenhoDoChar.definirTextura(Texturas.PIXEL_3);
                 break;
-             case '4': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_4);
+             case '4': desenhoDoChar.definirTextura(Texturas.PIXEL_4);
                 break;
-             case '5': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_5);
+             case '5': desenhoDoChar.definirTextura(Texturas.PIXEL_5);
                 break;
-             case '6': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_6);
+             case '6': desenhoDoChar.definirTextura(Texturas.PIXEL_6);
                 break;
-             case '7': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_7);
+             case '7': desenhoDoChar.definirTextura(Texturas.PIXEL_7);
                 break;
-             case '8': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_8);
+             case '8': desenhoDoChar.definirTextura(Texturas.PIXEL_8);
                 break;
-             case '9': desenhoDoChar.definirTextura(Texturas.TIMES_NEW_ROMAN_9);
+             case '9': desenhoDoChar.definirTextura(Texturas.PIXEL_9);
                 break;
          }
-         desenhoDoChar.redimensionar(15, 20, 0);
          return desenhoDoChar;
      }
     
