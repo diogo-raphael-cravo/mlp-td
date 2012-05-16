@@ -5,7 +5,9 @@
 
 package mlptd;
 
+import java.util.Map;
 import org.lwjgl.util.Color;
+import org.newdawn.slick.opengl.Texture;
 
 /**
  * Classe para criação de desenhos que contenham textos.
@@ -18,37 +20,40 @@ public class Texto {
      */
     private static boolean foi_inicializada = false;
 
+    /**
+     * Fontes oferecidas.
+     */
+    public static Fonte FONTE_PIXEL;
+    public static Fonte FONTE_TIMES_NEW_ROMAN;
+
    /**
     * Inicializa os desenhos.
     */
-    private static void inicializar(){
+    public static void inicializar(){
         foi_inicializada = true;
+        FONTE_PIXEL = new Fonte(Texturas.FONTE_PIXEL, 2.5f, 3.5f, 1.0f);
+        FONTE_TIMES_NEW_ROMAN = new Fonte(Texturas.FONTE_TIMES_NEW_ROMAN, 7.5f, 11f, 0.0f);
     }
-
-    /**
-     * Dimensões de letras.
-     */
-    private static float COMPRIMENTO_LETRAS = 3f;
-    private static float ESPACO_LETRAS = 1f; //Não confundir com o espaço da barra de espaço.
 
     /**
      * Cria um desenho com a string passada e o retorna.
      * @param _string A string que irá aparecer no desenho.
      * @return Desenho da string.
      */
-    public static Desenho converterParaDesenho(String _string){
+    public static Desenho converterParaDesenho(String _string, Fonte _fonte){
         if(!foi_inicializada){
             inicializar();
         }
 
-        Desenho desenhoDaString = new Desenho(0f, 0f, _string.length()*(COMPRIMENTO_LETRAS+ESPACO_LETRAS), 5f);
+        Desenho desenhoDaString = new Desenho(0f, 0f, _string.length()*(_fonte.getComprimento()+_fonte.getEspacamento()), 5f);
         desenhoDaString.esconderSohEste();
-        char charDaString;
-        
+        String charDaString;
+
+        //Vector<Desenho> linhas = new Vector<Desenho>();
         for(int charAtual=0; charAtual<_string.length(); charAtual++){
-            charDaString = _string.charAt(charAtual);
-            desenhoDaString.adicionarFilho(converterParaDesenho(charDaString), 
-                    charAtual*(COMPRIMENTO_LETRAS+ESPACO_LETRAS), 0);
+            charDaString = _string.substring(charAtual, charAtual+1);
+            desenhoDaString.adicionarFilho(converterCaractereParaDesenho(charDaString, _fonte),
+                    charAtual*(_fonte.getComprimento()+_fonte.getEspacamento()), 0);
         }
         
         return desenhoDaString;
@@ -56,32 +61,15 @@ public class Texto {
 
     /**
      * À partir de um caractere, cria um desenho e o retorna.
+     * Se o caractere não existir na fonte, retornará um desenho vazio.
      * @param _caractere Caractere que deve aparecer no desenho.
+     * @param _fonte A fonte, uma daquelas fornecidas por Texturas.
      * @return Desenho do caractere.
      */
-     public static Desenho converterParaDesenho(char _char){
-         Desenho desenhoDoChar = new Desenho(0f, 0f, 2.5f, 3.5f);
-         switch(_char){
-             case '0': desenhoDoChar.definirTextura(Texturas.PIXEL_0);
-                break;
-             case '1': desenhoDoChar.definirTextura(Texturas.PIXEL_1);
-                break;
-             case '2': desenhoDoChar.definirTextura(Texturas.PIXEL_2);
-                break;
-             case '3': desenhoDoChar.definirTextura(Texturas.PIXEL_3);
-                break;
-             case '4': desenhoDoChar.definirTextura(Texturas.PIXEL_4);
-                break;
-             case '5': desenhoDoChar.definirTextura(Texturas.PIXEL_5);
-                break;
-             case '6': desenhoDoChar.definirTextura(Texturas.PIXEL_6);
-                break;
-             case '7': desenhoDoChar.definirTextura(Texturas.PIXEL_7);
-                break;
-             case '8': desenhoDoChar.definirTextura(Texturas.PIXEL_8);
-                break;
-             case '9': desenhoDoChar.definirTextura(Texturas.PIXEL_9);
-                break;
+     private static Desenho converterCaractereParaDesenho(String _caractere, Fonte _fonte){
+         Desenho desenhoDoChar = new Desenho(0f, 0f, _fonte.getComprimento(), _fonte.getLargura());
+         if(_fonte.getTextura(_caractere) != null){
+             desenhoDoChar.definirTextura(_fonte.getTextura(_caractere));
          }
          return desenhoDoChar;
      }
