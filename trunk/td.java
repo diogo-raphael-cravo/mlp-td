@@ -128,6 +128,7 @@ public class td {
     GL11.glEnable(GL11.GL_TEXTURE_2D);
 
     Texturas.inicializar(); //Tela.inicializar() utiliza texturas.
+    Texto.inicializar(); //Tela.inicializar() utiliza textos.
     Tela.inicializar();
     Camera.inicializar();
     Temporizador.inicializar();
