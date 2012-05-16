@@ -22,6 +22,7 @@ public class Fonte {
     /**
      * As dimensões associam-se com a melhor visualização da textura em um desenho.
      * Não são as dimensões exatas que os desenhos terão, servem apenas para carregamento de texturas.
+     * Se for necessário mudar o tamanho do desenho que contenha a fonte, utilize Desenho.redimensionar.
      */
     private float comprimento;
     private float largura;
@@ -34,7 +35,9 @@ public class Fonte {
     /**
      * @param _fonte O mapeamento de caracteres em texturas da fonte.
      * @param _comprimento O comprimento ideal para a fonte. A dimensão associa-se com a melhor visualização da textura em um desenho.
+     *                     Se for necessário mudar o tamanho do desenho que contenha a fonte, utilize Desenho.redimensionar.
      * @param _largura A largura ideal para a fonte. A dimensão associa-se com a melhor visualização da textura em um desenho.
+     *                     Se for necessário mudar o tamanho do desenho que contenha a fonte, utilize Desenho.redimensionar.
      * @param _espacamento Espaçamento em pixels entre letras. Não confundir com o espaço da barra de espaço.
      */
     public Fonte(Map<String, Texture> _fonte, float _comprimento, float _largura, float _espacamento){
