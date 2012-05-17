@@ -18,39 +18,40 @@ public class Gui_BarraSuperior extends Desenho {
      */
      private Desenho iconeOuro;
      private CaixaDeTexto ctOuro;
+     private Integer quantidadeOuro;
 
     /**
      * Desenho que indica vidas, ao lado do qual é impressa a quantidade de vidas.
      */
      private Desenho iconeVidas;
      private CaixaDeTexto ctVidas;
+     private Integer quantidadeVidas;
 
     /**
      * Desenho que indica a quantidade de inimigos mortos.
      */
      private Desenho iconeInimigos;
      private CaixaDeTexto ctInimigos;
+     private Integer quantidadeInimigos;
 
     /**
      * Desenho que indica unidades de tempo.
      */
      private Desenho iconeRelogio;
      private CaixaDeTexto ctTempo;
-
-    /**
-     * Quantidade de vidas informada pela gui.
-     */
-    private float vidasInformadas;
-
-    /**
-     * Quantidade de ouro informada pela gui.
-     */
-    private float ouroInformado;
+     private Integer segundos;
+     private Integer minutos;
 
     public Gui_BarraSuperior(){
         super(0, Tela.HEIGHT-30, Tela.WIDTH, 30);
         mudarCor(new Color(Color.WHITE));
         definirTextura(Texturas.MURO);
+
+        quantidadeOuro = 0;
+        quantidadeInimigos = 0;
+        quantidadeVidas = 0;
+        segundos = 0;
+        minutos = 0;
 
         iconeOuro = new Desenho(0, 0, 200, 200);
         iconeOuro.definirTextura(Texturas.OURO);
@@ -77,21 +78,39 @@ public class Gui_BarraSuperior extends Desenho {
          * Assim, elas não interferem no desenhar() dos ícones.
          */
         ctOuro = new CaixaDeTexto(50, 0);
-        ctOuro.setTexto("0");
+        ctOuro.setTexto(quantidadeOuro.toString());
         adicionarFilho(ctOuro, 7.5f+20, 7.5f);
-
+        
         ctInimigos = new CaixaDeTexto(50, 0);
-        ctInimigos.setTexto("0");
+        ctInimigos.setTexto(quantidadeInimigos.toString());
         adicionarFilho(ctInimigos, 7.5f+comprimento/4+20, 7.5f);
 
         ctVidas = new CaixaDeTexto(50, 0);
-        ctVidas.setTexto("30");
+        ctVidas.setTexto(quantidadeVidas.toString());
         adicionarFilho(ctVidas, 7.5f+comprimento/2+20, 7.5f);
 
         ctTempo = new CaixaDeTexto(50, 0);
-        ctTempo.setTexto("0");
+        ctTempo.setTexto(minutos.toString()+":"+segundos.toString());
         adicionarFilho(ctTempo, 7.5f+3*comprimento/4+20, 7.5f);
     }
 
+    public void setQuantidadeOuro(int _ouro){
+        quantidadeOuro = _ouro;
+        ctOuro.setTexto(quantidadeOuro.toString());
+    }
+    public void setQuantidadeInimigos(int _inimigos){
+        quantidadeInimigos = _inimigos;
+        ctInimigos.setTexto(quantidadeInimigos.toString());
+    }
+    public void setQuantidadeVidas(int _vidas){
+        quantidadeVidas = _vidas;
+        ctVidas.setTexto(quantidadeVidas.toString());
+    }
+    public void setTempo(int _segundos){
+        minutos = _segundos/60;
+        segundos = _segundos%60;
+        
+        ctTempo.setTexto(minutos.toString()+":"+segundos.toString());
+    }
     
 }

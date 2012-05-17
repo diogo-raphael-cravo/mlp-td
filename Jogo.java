@@ -71,6 +71,10 @@ public class Jogo {
             niveis[nivelAtual].criarInimigo(terreno);
             temporizadorNascimentos.marcarAgora();
         }
+        Tela.getTela().getGuiBarraSuperior().setQuantidadeOuro(nivelAtual);
+        Tela.getTela().getGuiBarraSuperior().setQuantidadeInimigos(nivelAtual);
+        Tela.getTela().getGuiBarraSuperior().setQuantidadeVidas(nivelAtual);
+        Tela.getTela().getGuiBarraSuperior().setTempo(temporizadorNascimentos.tempoDesdeUltimaMarcacao()/1000);
         terreno.moverInimigos();
     }
 
