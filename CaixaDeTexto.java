@@ -60,7 +60,7 @@ public class CaixaDeTexto extends Gui {
      * @param _fonte Nova fonte a ser utilizada pela caixa de texto.
      */
     public void setFonte(Font _fonte){
-        fonte = new Font("Monospace", Font.BOLD, 10);
+        fonte = _fonte;
         fonteParaImpressao = new TrueTypeFont(fonte, false);
     }
 
@@ -83,7 +83,6 @@ public class CaixaDeTexto extends Gui {
             // -  pois está imprimindo de cima para baixo
             yDesenhado = yEspelhadoEmY - (linhasDoConteudo.size()*largura)/linhaAtual -fonte.getSize();
             fonteParaImpressao.drawString(xDesenhado, yDesenhado, texto);
-            System.out.println("Em ("+xDesenhado+","+yDesenhado+") espelhado="+yEspelhadoEmY+", posY="+posY+", paiY"+this.getPai().getPosY());
             linhaAtual++;
         }
 
