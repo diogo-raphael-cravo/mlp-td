@@ -68,20 +68,20 @@ public class CaixaDeTexto extends Gui {
     public void desenhar(){
         int linhaAtual=1;
 
-        //glTranslatef(posX, posY, posZ);
-        //glRotatef(90f, 0.0f, 1.0f, 0.0f);
-        //glTranslatef(-posX, -posY, -posZ);
+        Camera.CAMERA cameraUsada = Camera.cameraAtiva();
+        Camera.setCamera(Camera.CAMERA.ORTOGRAFICA_ESTATICA_INVERTIDA_Y);
 
+        float yDesenhado = Camera.ortografica_estatica.getY()+Tela.HEIGHT - posY;
         for(String texto : linhasDoConteudo){
             fonteParaImpressao.drawString(posX,
-                    posY + (linhasDoConteudo.size()*largura)/linhaAtual,
+                    yDesenhado + (linhasDoConteudo.size()*largura)/linhaAtual,
                     texto);
-            System.out.println("Em ("+posX+","+(posY + (linhasDoConteudo.size()*largura)/linhaAtual)
+            System.out.println("Em ("+posX+","+(yDesenhado + (linhasDoConteudo.size()*largura)/linhaAtual)
                     +")");
             linhaAtual++;
         }
 
-        //glRotatef(-90f, 0.0f, 1.0f, 0.0f);
+        Camera.setCamera(cameraUsada);
     }
 
     

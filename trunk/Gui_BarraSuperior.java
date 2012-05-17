@@ -49,7 +49,7 @@ public class Gui_BarraSuperior extends Desenho {
         adicionarFilho(iconeVidas, 7.5f+comprimento/2, 7.5f);
 
         CaixaDeTexto caixa = new CaixaDeTexto(100, 20);
-        adicionarFilho(caixa, 100f, -100f);
+        adicionarFilho(caixa, 100f, 0f);
         caixa.setTexto("ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n01234567890");
     }
 
