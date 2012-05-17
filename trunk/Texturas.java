@@ -34,6 +34,8 @@ public class Texturas {
      public static Texture MADEIRA;
      public static Texture X;
      public static Texture OURO;
+     public static Texture CORACAO;
+     public static Texture RELOGIO;
 
      public static void inicializar(){
          try {
@@ -66,7 +68,12 @@ public class Texturas {
          try {
             OURO = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_OURO));
          } catch (Exception ex) {}
-
+         try {
+            CORACAO = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_CORACAO));
+         } catch (Exception ex) {}
+         try {
+            RELOGIO = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_RELOGIO));
+         } catch (Exception ex) {}
      }
 
 
