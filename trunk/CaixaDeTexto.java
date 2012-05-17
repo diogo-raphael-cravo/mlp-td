@@ -39,7 +39,7 @@ public class CaixaDeTexto extends Gui {
     public CaixaDeTexto(float _comprimento, float _largura){
         super(_comprimento, _largura);
         linhasDoConteudo = new Vector<String>();
-        fonte = new Font("Arial", Font.BOLD, 10);
+        fonte = new Font("Lucida Console", Font.BOLD, 15);
         fonteParaImpressao = new TrueTypeFont(fonte, false);
     }
 
@@ -48,7 +48,11 @@ public class CaixaDeTexto extends Gui {
      * @param _texto Texto que será exibido pela caixa de texto.
      */
     public void setTexto(String _texto){
-        linhasDoConteudo = Texto.quebrarEmLinhas(_texto);
+        if(1 < _texto.length()){
+            linhasDoConteudo = Texto.quebrarEmLinhas(_texto);
+        } else {
+            linhasDoConteudo.add(_texto);
+        }
     }
 
     /**
@@ -71,13 +75,15 @@ public class CaixaDeTexto extends Gui {
         Camera.CAMERA cameraUsada = Camera.cameraAtiva();
         Camera.setCamera(Camera.CAMERA.ORTOGRAFICA_ESTATICA_INVERTIDA_Y);
 
-        float yDesenhado = Camera.ortografica_estatica.getY()+Tela.HEIGHT - posY;
+        
+        float yEspelhadoEmY = Camera.ortografica_estatica.getY()+Tela.HEIGHT - posY; //2 vezes pois imprime de cima para baixo.
+        float xDesenhado = posX;
+        float yDesenhado;
         for(String texto : linhasDoConteudo){
-            fonteParaImpressao.drawString(posX,
-                    yDesenhado + (linhasDoConteudo.size()*largura)/linhaAtual,
-                    texto);
-            System.out.println("Em ("+posX+","+(yDesenhado + (linhasDoConteudo.size()*largura)/linhaAtual)
-                    +")");
+            // -  pois está imprimindo de cima para baixo
+            yDesenhado = yEspelhadoEmY - (linhasDoConteudo.size()*largura)/linhaAtual -fonte.getSize();
+            fonteParaImpressao.drawString(xDesenhado, yDesenhado, texto);
+            System.out.println("Em ("+xDesenhado+","+yDesenhado+") espelhado="+yEspelhadoEmY+", posY="+posY+", paiY"+this.getPai().getPosY());
             linhaAtual++;
         }
 
