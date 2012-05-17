@@ -38,7 +38,7 @@ public class Camera {
     /**
      * Tipos de cameras.
      */
-    public static enum CAMERA{PERSPECTIVA, ORTOGRAFICA, ORTOGRAFICA_ESTATICA};
+    public static enum CAMERA{PERSPECTIVA, ORTOGRAFICA, ORTOGRAFICA_ESTATICA, ORTOGRAFICA_ESTATICA_INVERTIDA_Y};
 
     /**
      * Posiçao da camera.
@@ -83,6 +83,12 @@ public class Camera {
         deslocamentoZ = 0;
     }
 
+    public float getX(){
+        return posX;
+    }
+    public float getY(){
+        return posY;
+    }
     public float getRotacaoX(){
         return rotacaoX;
     }
@@ -212,6 +218,20 @@ public class Camera {
             glLoadIdentity();
             glOrtho(ortografica_estatica.posX,ortografica_estatica.posX+Tela.WIDTH,
                     ortografica_estatica.posY,ortografica_estatica.posY+Tela.HEIGHT,
+                    -100000f, 100000f);
+            glPushMatrix();
+
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+
+            cameraAtual = CAMERA.ORTOGRAFICA;
+        } else if(_cameraEscolhida == CAMERA.ORTOGRAFICA_ESTATICA_INVERTIDA_Y){
+            glViewport(0,0,Tela.WIDTH,Tela.HEIGHT);
+
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            glOrtho(ortografica_estatica.posX,ortografica_estatica.posX+Tela.WIDTH,
+                    ortografica_estatica.posY+Tela.HEIGHT,ortografica_estatica.posY,
                     -100000f, 100000f);
             glPushMatrix();
 
