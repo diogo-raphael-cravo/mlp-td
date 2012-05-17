@@ -12,9 +12,7 @@ package mlptd;
  * @author diogo
  */
 public class Arquivos {
-    public static final String LINK_BASE = "C:\\Documents and Settings\\NUTED\\Desktop\\Nova pasta\\texturas\\";
-    public static final String LINK_TIMES_NEW_ROMAN = LINK_BASE+"times new roman\\";
-    public static final String LINK_PIXEL = LINK_BASE+"pixel\\";
+    public static final String LINK_BASE = "/home/grad/drcravo/Desktop/mlp-td/texturas/";
     public static String ARQUIVO_TEXTURA_MURO = LINK_BASE+"muro2.png";
     public static String ARQUIVO_TEXTURA_CAVEIRA = LINK_BASE+"caveira4.png";
     public static String ARQUIVO_TEXTURA_CAVEIRA_INVERTIDA = LINK_BASE+"caveira42.png";
