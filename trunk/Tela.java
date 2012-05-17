@@ -72,11 +72,11 @@ public class Tela extends Desenho {
         return tela;
     }
 
-    /**
-     * @return A gui da barra inferior.
-     */
     public static Gui_BarraInferior getGuiBarraInferior(){
         return tela.barraInformacoesInferior;
+    }
+    public static Gui_BarraSuperior getGuiBarraSuperior(){
+        return tela.barraInformacoesSuperior;
     }
 
     /**
