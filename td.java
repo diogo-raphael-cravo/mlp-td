@@ -90,8 +90,8 @@ public class td {
       segundoInimigo.setQuadrosPorSegundo(3);
 
       Nivel niveis[] = new Nivel[2];
-      niveis[0] = new Nivel(inimigo, 10);
-      niveis[1] = new Nivel(segundoInimigo, 10);
+      niveis[0] = new Nivel(segundoInimigo, 10);
+      niveis[1] = new Nivel(inimigo, 10);
       jogo = new Jogo(new Terreno(-Tela.WIDTH/2, -Tela.WIDTH/2, Tela.WIDTH, Tela.WIDTH, 10, 10), niveis);
       Camera.moverCameras(jogo.getTerreno().getPosX(), jogo.getTerreno().getPosY());
       controladorJogo = new ControladorJogo(jogo);
