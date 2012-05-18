@@ -55,29 +55,43 @@ public class td {
       quadroInimigo.definirTextura(Texturas.CAVEIRA);
       quadro2Inimigo.definirTextura(Texturas.CAVEIRA2);
       Color corInimigo = new Color(Color.BLACK);
-      for(int i=0; i<100; i++){
-          inimigo.adicionarQuadro(quadroInimigo);
-      }
-      for(int i=0; i<100; i++){
-          inimigo.adicionarQuadro(quadro2Inimigo);
-      }
-      
-      /*for(int i=0; i<=255; i+=10){
-        corInimigo.setBlue(i);
-        corInimigo.setRed(i);
-        corInimigo.setGreen(i);
-        quadroInimigo.mudarCor(corInimigo);
-        inimigo.adicionarQuadro(quadroInimigo);
-      }
-      for(int i=255; 0<=i; i-=10){
-        corInimigo.setBlue(i);
-        corInimigo.setRed(i);
-        corInimigo.setGreen(i);
-        quadroInimigo.mudarCor(corInimigo);
-        inimigo.adicionarQuadro(quadroInimigo);
-      }*/
-      Nivel niveis[] = new Nivel[1];
+      inimigo.adicionarQuadro(quadroInimigo);
+      inimigo.adicionarQuadro(quadro2Inimigo);
+      inimigo.setQuadrosPorSegundo(2);
+
+      Inimigo segundoInimigo = new Inimigo();
+      Desenho quadro1SegundoInimigo = new Desenho(0, 0, 35, 40, 100);
+      Desenho quadro2SegundoInimigo = new Desenho(0, 0, 35, 40, 100);
+      Desenho quadro3SegundoInimigo = new Desenho(0, 0, 35, 40, 100);
+      Desenho quadro4SegundoInimigo = new Desenho(0, 0, 35, 40, 100);
+      Desenho quadro5SegundoInimigo = new Desenho(0, 0, 35, 40, 100);
+      Desenho quadro6SegundoInimigo = new Desenho(0, 0, 35, 40, 100);
+      Desenho quadro7SegundoInimigo = new Desenho(0, 0, 35, 40, 100);
+      Desenho quadro8SegundoInimigo = new Desenho(0, 0, 35, 40, 100);
+      Desenho quadro9SegundoInimigo = new Desenho(0, 0, 35, 40, 100);
+      quadro1SegundoInimigo.definirTextura(Texturas.SLIMEKING[0]);
+      quadro2SegundoInimigo.definirTextura(Texturas.SLIMEKING[1]);
+      quadro3SegundoInimigo.definirTextura(Texturas.SLIMEKING[2]);
+      quadro4SegundoInimigo.definirTextura(Texturas.SLIMEKING[3]);
+      quadro5SegundoInimigo.definirTextura(Texturas.SLIMEKING[4]);
+      quadro6SegundoInimigo.definirTextura(Texturas.SLIMEKING[5]);
+      quadro7SegundoInimigo.definirTextura(Texturas.SLIMEKING[6]);
+      quadro8SegundoInimigo.definirTextura(Texturas.SLIMEKING[7]);
+      quadro9SegundoInimigo.definirTextura(Texturas.SLIMEKING[8]);
+      segundoInimigo.adicionarQuadro(quadro1SegundoInimigo);
+      segundoInimigo.adicionarQuadro(quadro2SegundoInimigo);
+      segundoInimigo.adicionarQuadro(quadro3SegundoInimigo);
+      segundoInimigo.adicionarQuadro(quadro4SegundoInimigo);
+      segundoInimigo.adicionarQuadro(quadro5SegundoInimigo);
+      segundoInimigo.adicionarQuadro(quadro6SegundoInimigo);
+      segundoInimigo.adicionarQuadro(quadro7SegundoInimigo);
+      segundoInimigo.adicionarQuadro(quadro8SegundoInimigo);
+      segundoInimigo.adicionarQuadro(quadro9SegundoInimigo);
+      segundoInimigo.setQuadrosPorSegundo(3);
+
+      Nivel niveis[] = new Nivel[2];
       niveis[0] = new Nivel(inimigo, 10);
+      niveis[1] = new Nivel(segundoInimigo, 10);
       jogo = new Jogo(new Terreno(-Tela.WIDTH/2, -Tela.WIDTH/2, Tela.WIDTH, Tela.WIDTH, 10, 10), niveis);
       Camera.moverCameras(jogo.getTerreno().getPosX(), jogo.getTerreno().getPosY());
       controladorJogo = new ControladorJogo(jogo);

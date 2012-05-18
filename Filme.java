@@ -30,6 +30,17 @@ public class Filme extends Desenho {
     private static Vector<Filme> todosFilmesCriados;
 
     /**
+     * Define o número de quadros que devem ser exibidos
+     * a cada segundo.
+     */
+    private int quadrosPorSegundo;
+
+    /**
+     * Compasso para troca dos quadros.
+     */
+    private Temporizador compasso;
+
+    /**
      * @param _posX, _posY A posi��o do ponto superior esquerdo na tela.
      * @param _comprimento, _largura, _altura Comprimento, largura e altura.
      * @param _tamanhoEmPorcentagem Usado para resize.
@@ -41,10 +52,14 @@ public class Filme extends Desenho {
         if(todosFilmesCriados == null){
             todosFilmesCriados = new Vector<Filme>();
         }
+        quadrosPorSegundo = 24;
+        compasso = new Temporizador();
+        compasso.marcarAgora();
     }
     public Filme(Filme _filme){
         this(_filme.getPosX(), _filme.getPosY(),
              _filme.getComprimento(), _filme.getLargura());
+        quadrosPorSegundo = _filme.getQuadrosPorSegundo();
         for(Desenho desenho : _filme.getQuadros()){
             adicionarQuadro(desenho);
         }
@@ -71,6 +86,17 @@ public class Filme extends Desenho {
             quadrosRetorno.add(desenho);
         }
         return quadrosRetorno;
+    }
+    public int getQuadrosPorSegundo(){
+        return quadrosPorSegundo;
+    }
+
+    /**
+     * Define quantos quadros podem ser executados por segundo.
+     * @param _quadrosPorSegundo Número de quadros que serão exibidos por segundo.
+     */
+    public void setQuadrosPorSegundo(int _quadrosPorSegundo){
+        quadrosPorSegundo = _quadrosPorSegundo;
     }
 
     /**
@@ -124,11 +150,18 @@ public class Filme extends Desenho {
      * baseada no tempo total de animação e número de frames que possui.
      */
     public void desenhar(){
+        float tempoDuracaoQuadroMilissegundos = 1000/quadrosPorSegundo;
+
         if(0 < quadros.size()){
-            quadroExibido++;
-            if(quadroExibido == quadros.size()){
-                quadroExibido = 0;
+            if(tempoDuracaoQuadroMilissegundos
+                    <= compasso.tempoDesdeUltimaMarcacao()){
+                quadroExibido++;
+                if(quadroExibido == quadros.size()){
+                    quadroExibido = 0;
+                }
+                compasso.marcarAgora();
             }
+
             quadros.get(quadroExibido).desenhar();
         }
         desenharFilhos();

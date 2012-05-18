@@ -38,8 +38,6 @@ public class TileEdificavel extends Tile{
     }
     public TileEdificavel(TileEdificavel _tile){
         super(_tile);
-        System.out.println("Criando tileEdificável de "+_tile.getIdentificacaoUnica()+
-                " com "+getIdentificacaoUnica());
         definirTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
         if(_tile.ocupadaPorTorre()){
             torre = new Torre(_tile.getTorre());

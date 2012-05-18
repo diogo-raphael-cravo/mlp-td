@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Vector;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.util.ResourceLoader;
@@ -36,6 +37,7 @@ public class Texturas {
      public static Texture OURO;
      public static Texture CORACAO;
      public static Texture RELOGIO;
+     public static Texture[] SLIMEKING;
 
      public static void inicializar(){
          try {
@@ -74,6 +76,38 @@ public class Texturas {
          try {
             RELOGIO = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_RELOGIO));
          } catch (Exception ex) {}
+
+         SLIMEKING = new Texture[9];
+         try {
+            SLIMEKING[0] = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_BASE_TEXTURA_SLIMEKING+"1.png"));
+         } catch (Exception ex) {}
+         try {
+            SLIMEKING[1] = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_BASE_TEXTURA_SLIMEKING+"2.png"));
+         } catch (Exception ex) {}
+         try {
+            SLIMEKING[2] = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_BASE_TEXTURA_SLIMEKING+"3.png"));
+         } catch (Exception ex) {}
+         try {
+            SLIMEKING[3] = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_BASE_TEXTURA_SLIMEKING+"4.png"));
+         } catch (Exception ex) {}
+         try {
+            SLIMEKING[4] = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_BASE_TEXTURA_SLIMEKING+"5.png"));
+         } catch (Exception ex) {}
+         try {
+            SLIMEKING[5] = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_BASE_TEXTURA_SLIMEKING+"6.png"));
+         } catch (Exception ex) {}
+         try {
+            SLIMEKING[6] = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_BASE_TEXTURA_SLIMEKING+"7.png"));
+         } catch (Exception ex) {}
+         try {
+            SLIMEKING[7] = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_BASE_TEXTURA_SLIMEKING+"8.png"));
+         } catch (Exception ex) {}
+         try {
+            SLIMEKING[8] = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.LINK_BASE_TEXTURA_SLIMEKING+"9.png"));
+         } catch (Exception ex) {}
+
+
+
      }
 
 
