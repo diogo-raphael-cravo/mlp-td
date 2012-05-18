@@ -5,6 +5,7 @@
 
 package mlptd;
 
+import java.awt.Font;
 import org.lwjgl.opengl.GL11;
 import static org.lwjgl.util.glu.GLU.*;
 import java.util.logging.Logger;
@@ -43,6 +44,11 @@ public class Tela extends Desenho {
     private Gui_BarraSuperior barraInformacoesSuperior;
 
     /**
+     * Exibe a quantidade de frames por segundo a que o projeto está rodando.
+     */
+    private CaixaDeTexto ctFramesPorSegundo;
+
+    /**
      * Faz as inicializações necessárias para a tela.
      */
     public static void inicializar(){
@@ -59,6 +65,11 @@ public class Tela extends Desenho {
 
        barraInformacoesSuperior = new Gui_BarraSuperior();
        adicionarFilho(barraInformacoesSuperior, 0.0f, Tela.HEIGHT-barraInformacoesSuperior.largura);
+
+       ctFramesPorSegundo = new CaixaDeTexto(200, 0);
+       ctFramesPorSegundo.setTexto("Frames por segundo> ");
+       ctFramesPorSegundo.setFonte(new Font("Lucida Console", Font.LAYOUT_LEFT_TO_RIGHT, 8));
+       adicionarFilho(ctFramesPorSegundo, 0.0f, 0.0f);
     }
 
     private Tela(){
@@ -88,6 +99,11 @@ public class Tela extends Desenho {
         Camera.setCamera(Camera.CAMERA.ORTOGRAFICA_ESTATICA);
         super.desenhar();
         Camera.setCamera(cameraUsada);
+        if(Temporizador.frameRate() == Integer.MAX_VALUE){
+            ctFramesPorSegundo.setTexto("Frames por segundo> MÁXIMO");
+        } else {
+            ctFramesPorSegundo.setTexto("Frames por segundo> "+Temporizador.frameRate());
+        }
     }
 
 

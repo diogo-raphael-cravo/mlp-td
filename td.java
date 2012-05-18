@@ -3,9 +3,11 @@ package mlptd;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -129,6 +131,29 @@ public class td {
     Display.destroy();
   }
 
+  //----------- Variables added for Lighting Test -----------//
+
+        private FloatBuffer matSpecular;
+        private FloatBuffer lightPosition;
+        private FloatBuffer whiteLight;
+        private FloatBuffer lModelAmbient;
+
+        //----------- END: Variables added for Lighting Test -----------//
+
+  private void initLightArrays() {
+                matSpecular = BufferUtils.createFloatBuffer(4);
+                matSpecular.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+
+                lightPosition = BufferUtils.createFloatBuffer(4);
+                lightPosition.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
+
+                whiteLight = BufferUtils.createFloatBuffer(4);
+                whiteLight.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+
+                lModelAmbient = BufferUtils.createFloatBuffer(4);
+                lModelAmbient.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
+        }
+
   public void initGL() {
     xMouse = Mouse.getX();
     yMouse = Mouse.getY();
@@ -136,7 +161,29 @@ public class td {
     //2D Initialization
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glDisable(GL_DEPTH_TEST);
-    glDisable(GL_LIGHTING);
+
+
+    //----------- Variables & method calls added for Lighting Test -----------//
+
+                initLightArrays();
+                glShadeModel(GL_SMOOTH);
+                glMaterial(GL_FRONT, GL_SPECULAR, matSpecular);                         // sets specular material color
+                glMaterialf(GL_FRONT, GL_SHININESS, 50.0f);                                     // sets shininess
+
+                glLight(GL_LIGHT0, GL_POSITION, lightPosition);                         // sets light position
+                glLight(GL_LIGHT0, GL_SPECULAR, whiteLight);                            // sets specular light to white
+                glLight(GL_LIGHT0, GL_DIFFUSE, whiteLight);                                     // sets diffuse light to white
+                glLightModel(GL_LIGHT_MODEL_AMBIENT, lModelAmbient);            // global ambient light
+
+                glEnable(GL_LIGHTING);                                                                          // enables lighting
+                glEnable(GL_LIGHT0);                                                                            // enables light0
+
+                glEnable(GL_COLOR_MATERIAL);                                                            // enables opengl to use glColor3f to define material color
+
+                glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);                      // tell opengl glColor3f effects the ambient and diffuse properties of material
+
+                //----------- END: Variables & method calls added for Lighting Test -----------//
+    
     GL11.glEnable(GL11.GL_BLEND);
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -218,6 +265,20 @@ public class td {
     Temporizador.marcarAgoraPrincipal();
 
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glPushMatrix();
+                glLoadIdentity();
+
+                //Sets the position of the light in the world
+                //glTranslatef(this->transx, this->transy, this->transz);
+
+                //Do translation around the origin
+                glRotatef(45,1.0f,0.0f,0.0f);
+                glRotatef(0f,0.0f,1.0f,0.0f);
+                glRotatef(0f,0.0f,0.0f,1.0f);
+                glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+
+    glPopMatrix();
 
     if(Tela.HEIGHT - 5 < Mouse.getY()){
         if(Mouse.getX() < 5){
