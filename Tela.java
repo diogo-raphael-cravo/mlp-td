@@ -95,6 +95,7 @@ public class Tela extends Desenho {
      * O objeto desenhado é um retângulo.
      */
     public void desenhar(){
+        glDisable(GL_LIGHTING);
         Camera.CAMERA cameraUsada = Camera.cameraAtiva();
         Camera.setCamera(Camera.CAMERA.ORTOGRAFICA_ESTATICA);
         super.desenhar();
@@ -104,6 +105,7 @@ public class Tela extends Desenho {
         } else {
             ctFramesPorSegundo.setTexto("Frames por segundo> "+Temporizador.frameRate());
         }
+        glEnable(GL_LIGHTING);
     }
 
 

@@ -38,9 +38,11 @@ public class TileEdificavel extends Tile{
     }
     public TileEdificavel(TileEdificavel _tile){
         super(_tile);
+        filhos = new Vector<Desenho>();
         definirTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
         if(_tile.ocupadaPorTorre()){
-            torre = new Torre(_tile.getTorre());
+            construirTorre(new Torre(_tile.getTorre()));
+            torre.rotacionar(-90, 0, 0);
         } else {
             torre = null;
         }
@@ -72,8 +74,8 @@ public class TileEdificavel extends Tile{
         torre = new Torre(_torre);
         torre.rotacionar(90, 0, 0);
         adicionarFilho(torre, 
-                comprimento/2,
-                largura/2);
+                10,
+                10);
     }
     
     /**
@@ -127,24 +129,4 @@ public class TileEdificavel extends Tile{
         }
     }
 
-    /**
-     * Dados da tile são transformados em String.
-     */
-    @Override
-    public String toString(){
-        StringBuilder string = new StringBuilder("TileEdificavel {\n");
-        string.append("\t posX = ").append(posX).append("\n");
-        string.append("\t posY = ").append(posY).append("\n");
-        string.append("\t comprimento = ").append(comprimento).append("\n");
-        string.append("\t largura = ").append(largura).append("\n");
-        string.append("\t altura = ").append(altura).append("\n");
-        string.append("\t cor = ").append(cor.toString()).append("\n");
-        string.append("\t filhos = ").append(filhos.toString()).append("\n");
-        string.append("\t identificacaoUnica = ").append(getIdentificacaoUnica()).append("\n");
-        if(ocupadaPorTorre()){
-            string.append("\t identificacaoUnicaTorre = ").append(torre.getIdentificacaoUnica()).append("\n");
-        }
-        string.append("}");
-        return string.toString();
-    }
 }
