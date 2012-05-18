@@ -113,8 +113,31 @@ public class Terreno extends Desenho{
       * Na prática, o melhor é o menor caminho que o inimigo pode usar.
       */
      public void moverInimigos(){
+         Tile tileInimigo;
+         Tile tileVizinhaTileInimigo;
+         Vector<Long> apagados = new Vector<Long>();
+
          for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
             moverInimigo(inimigoNoTerreno, caminho);
+
+            tileInimigo = getTileComPosicao(inimigoNoTerreno.getGlobalX(), inimigoNoTerreno.getGlobalY());
+            tileVizinhaTileInimigo = getTileVizinha(tileInimigo, caminho);
+            if(tileVizinhaTileInimigo == null){
+                apagados.add(inimigoNoTerreno.getIdentificacaoUnica());
+            }
+         }
+
+         for(Long identificacaoApagado : apagados){
+             for(int i=0; i<inimigosNoTerreno.size(); i++){
+                if(inimigosNoTerreno.get(i).getIdentificacaoUnica() == identificacaoApagado){
+                    inimigosNoTerreno.remove(i);
+                }
+             }
+             for(int i=0; i<filhos.size(); i++){
+                if(filhos.get(i).getIdentificacaoUnica() == identificacaoApagado){
+                    filhos.remove(i);
+                }
+             }
          }
      }
 
