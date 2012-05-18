@@ -184,7 +184,7 @@ public class ControladorGuiBarraInferior
             if(tileEdificavelSelecionada == null
                     || tileEdificavelSelecionada.getIdentificacaoUnica() != tileEdificavel.getIdentificacaoUnica()){
                 if(tileEdificavel.contem(cameraMouseX, cameraMouseY)){
-                    tileEdificavel.mudarCor(new Color(Color.DKGREY));
+                    tileEdificavel.mudarCor(new Color(Color.GREY));
                 } else {
                     tileEdificavel.mudarCor(new Color(Color.WHITE));
                 }

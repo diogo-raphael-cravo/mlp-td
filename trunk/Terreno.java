@@ -91,6 +91,21 @@ public class Terreno extends Desenho{
         zRotacaoInimigos = 0;
 
         yRotacaoTorres = 0;
+
+        /**
+         * Criação do plano de fundo.
+         */
+        Desenho fundo = new Desenho(0, 0, comprimentoCadaTile, larguraCadaTile);
+        fundo.redimensionar(comprimento, largura, altura);
+        fundo.definirTextura(Texturas.GRAMA);
+        adicionarFilho(new Desenho(fundo), posX-comprimento/2, posY-largura/2);
+        adicionarFilho(new Desenho(fundo), posX+comprimento/2, posY-largura/2);
+        adicionarFilho(new Desenho(fundo), posX+3*comprimento/2, posY-largura/2);
+        adicionarFilho(new Desenho(fundo), posX-comprimento/2, posY+largura/2);
+        adicionarFilho(new Desenho(fundo), posX-comprimento/2, posY+3*largura/2);
+        adicionarFilho(new Desenho(fundo), posX+comprimento/2, posY+3*largura/2);
+        adicionarFilho(new Desenho(fundo), posX+3*comprimento/2, posY+3*largura/2);
+        adicionarFilho(new Desenho(fundo), posX+3*comprimento/2, posY+largura/2);
      }
 
      /**
