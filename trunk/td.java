@@ -32,7 +32,8 @@ public class td {
    */
   float xMouse;
   float yMouse;
-  
+
+  Luz luz;
   BarraCarregamento carregamentoJogo;
   Jogo jogo;
   ControladorJogo controladorJogo;
@@ -131,29 +132,6 @@ public class td {
     Display.destroy();
   }
 
-  //----------- Variables added for Lighting Test -----------//
-
-        private FloatBuffer matSpecular;
-        private FloatBuffer lightPosition;
-        private FloatBuffer whiteLight;
-        private FloatBuffer lModelAmbient;
-
-        //----------- END: Variables added for Lighting Test -----------//
-
-  private void initLightArrays() {
-                matSpecular = BufferUtils.createFloatBuffer(4);
-                matSpecular.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
-
-                lightPosition = BufferUtils.createFloatBuffer(4);
-                lightPosition.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
-
-                whiteLight = BufferUtils.createFloatBuffer(4);
-                whiteLight.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
-
-                lModelAmbient = BufferUtils.createFloatBuffer(4);
-                lModelAmbient.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
-        }
-
   public void initGL() {
     xMouse = Mouse.getX();
     yMouse = Mouse.getY();
@@ -162,28 +140,25 @@ public class td {
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glDisable(GL_DEPTH_TEST);
 
+    //Dica encontrada em http://forum.codecall.net/topic/66017-simple-lwjgl-lighting/
+    luz = new Luz();
+    luz.rotacionar(45f, -45f, 0f);
+                
+    glShadeModel(GL_SMOOTH);
+    glMaterial(GL_FRONT, GL_SPECULAR, luz.getEspecular()); // sets specular material color
+    glMaterialf(GL_FRONT, GL_SHININESS, 50.0f); // sets shininess
 
-    //----------- Variables & method calls added for Lighting Test -----------//
+    glLight(GL_LIGHT0, GL_POSITION, luz.getPosicao());       // sets light position
+    glLight(GL_LIGHT0, GL_SPECULAR, luz.getBranco());        // sets specular light to white
+    glLight(GL_LIGHT0, GL_DIFFUSE, luz.getBranco());         // sets diffuse light to white
+    glLightModel(GL_LIGHT_MODEL_AMBIENT, luz.getAmbiente()); // global ambient light
 
-                initLightArrays();
-                glShadeModel(GL_SMOOTH);
-                glMaterial(GL_FRONT, GL_SPECULAR, matSpecular);                         // sets specular material color
-                glMaterialf(GL_FRONT, GL_SHININESS, 50.0f);                                     // sets shininess
+    glEnable(GL_LIGHTING);                                                  
+    glEnable(GL_LIGHT0);                                                    
 
-                glLight(GL_LIGHT0, GL_POSITION, lightPosition);                         // sets light position
-                glLight(GL_LIGHT0, GL_SPECULAR, whiteLight);                            // sets specular light to white
-                glLight(GL_LIGHT0, GL_DIFFUSE, whiteLight);                                     // sets diffuse light to white
-                glLightModel(GL_LIGHT_MODEL_AMBIENT, lModelAmbient);            // global ambient light
+    glEnable(GL_COLOR_MATERIAL);  // enables opengl to use glColor3f to define material color
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE); // tell opengl glColor3f effects the ambient and diffuse properties of material
 
-                glEnable(GL_LIGHTING);                                                                          // enables lighting
-                glEnable(GL_LIGHT0);                                                                            // enables light0
-
-                glEnable(GL_COLOR_MATERIAL);                                                            // enables opengl to use glColor3f to define material color
-
-                glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);                      // tell opengl glColor3f effects the ambient and diffuse properties of material
-
-                //----------- END: Variables & method calls added for Lighting Test -----------//
-    
     GL11.glEnable(GL11.GL_BLEND);
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -228,18 +203,24 @@ public class td {
         Camera.moverCameras(jogo.getTerreno().getPosX(), jogo.getTerreno().getPosY());
     } else if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
         Camera.rotacionarCameras(-1, 0, 0);
+        luz.rotacionar(1, 0, 0);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_E)){
         Camera.rotacionarCameras(1, 0, 0);
+        luz.rotacionar(-1, 0, 0);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_A)){
         Camera.rotacionarCameras(0, -1, 0);
+        luz.rotacionar(0, -1, 0);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_D)){
         Camera.rotacionarCameras(0, 1, 0);
+        luz.rotacionar(0, 1, 0);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
         Camera.rotacionarCameras(0, 0, -1);
+        //luz.rotacionar(0, 0, -1);
         jogo.getTerreno().rotacionarInimigosEmY(-1);
         jogo.getTerreno().rotacionarTorresEmY(-1);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_C)){
         Camera.rotacionarCameras(0, 0, 1);
+        //luz.rotacionar(0, 0, 1);
         jogo.getTerreno().rotacionarInimigosEmY(1);
         jogo.getTerreno().rotacionarTorresEmY(1);
     }
@@ -247,8 +228,9 @@ public class td {
 
   public void processMouse() {
       int BOTAO_ESQUERDO_MOUSE = 0;
+      boolean mouseMudouSuaPosicao = (xMouse != Mouse.getX() || yMouse != Mouse.getY());
 
-      if(xMouse != Mouse.getX() || yMouse != Mouse.getY()){
+      if(mouseMudouSuaPosicao){
           xMouse = Mouse.getX();
           yMouse = Mouse.getY();
           controladorJogo.mouseMoveu();
@@ -266,19 +248,7 @@ public class td {
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glPushMatrix();
-                glLoadIdentity();
-
-                //Sets the position of the light in the world
-                //glTranslatef(this->transx, this->transy, this->transz);
-
-                //Do translation around the origin
-                glRotatef(45,1.0f,0.0f,0.0f);
-                glRotatef(0f,0.0f,1.0f,0.0f);
-                glRotatef(0f,0.0f,0.0f,1.0f);
-                glLight(GL_LIGHT0, GL_POSITION, lightPosition);
-
-    glPopMatrix();
+    luz.desenhar();
 
     if(Tela.HEIGHT - 5 < Mouse.getY()){
         if(Mouse.getX() < 5){
