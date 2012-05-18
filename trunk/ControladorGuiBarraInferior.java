@@ -124,6 +124,7 @@ public class ControladorGuiBarraInferior
         for(TileEdificavel tileEdificavel : todasTilesEdificaveisCriadas){
             if(tileEdificavel.contem(mouseX, mouseY)){
                 tileEdificavelSelecionada = tileEdificavel;
+                tileEdificavelSelecionada.mudarCor(new Color(Color.WHITE));
                 tileEdificavelSelecionada.tornarTransparente();
                 gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
                 gui.getGuiEdicaoTiles().mostrar();
@@ -175,5 +176,21 @@ public class ControladorGuiBarraInferior
         } else {
             gui.getGuiEdicaoTiles().getBtRemoverTorre().soltar();
         }
+
+        float cameraMouseX = Camera.xTelaParaGlobal(Mouse.getX());
+        float cameraMouseY = Camera.yTelaParaGlobal(Mouse.getY());
+        Vector<TileEdificavel> todasTilesEdificaveisCriadas = TileEdificavel.getTodasTilesEdificaveisCriadas();
+        for(TileEdificavel tileEdificavel : todasTilesEdificaveisCriadas){
+            if(tileEdificavelSelecionada == null
+                    || tileEdificavelSelecionada.getIdentificacaoUnica() != tileEdificavel.getIdentificacaoUnica()){
+                if(tileEdificavel.contem(cameraMouseX, cameraMouseY)){
+                    tileEdificavel.mudarCor(new Color(Color.DKGREY));
+                } else {
+                    tileEdificavel.mudarCor(new Color(Color.WHITE));
+                }
+            }
+        }
+
+        
     }
 }
