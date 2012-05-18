@@ -45,6 +45,7 @@ public class Terreno extends Desenho{
      * Os inimigos que estão no terreno.
      */
     Vector<Inimigo> inimigosNoTerreno;
+    Vector<Inimigo> inimigosQueSairam;
 
     /**
      * Angulo de rotacao dos inimigos neste terreno.
@@ -83,6 +84,7 @@ public class Terreno extends Desenho{
         adicionarTilesPassadouroSegundoCaminho(caminho);
 
         inimigosNoTerreno = new Vector<Inimigo>();
+        inimigosQueSairam = new Vector<Inimigo>();
 
         xRotacaoInimigos = 90;
         yRotacaoInimigos = 0;
@@ -108,6 +110,17 @@ public class Terreno extends Desenho{
      }
 
      /**
+      * @return Booleano indicando se todos os inimigos já morreram ou já passaram pelo terreno.
+      */
+     public boolean todosInimigosMorreramOuSairam(){
+         if(inimigosQueSairam.size() == inimigosNoTerreno.size()){
+             return true;
+         } else {
+             return false;
+         }
+     }
+
+     /**
       * Move todos os inimigos que estão neste terreno.
       * Decide qual o melhor caminho a utilizar para cada inimigo.
       * Na prática, o melhor é o menor caminho que o inimigo pode usar.
@@ -130,7 +143,7 @@ public class Terreno extends Desenho{
          for(Long identificacaoApagado : apagados){
              for(int i=0; i<inimigosNoTerreno.size(); i++){
                 if(inimigosNoTerreno.get(i).getIdentificacaoUnica() == identificacaoApagado){
-                    inimigosNoTerreno.remove(i);
+                    inimigosQueSairam.add(inimigosNoTerreno.get(i));
                 }
              }
              for(int i=0; i<filhos.size(); i++){
