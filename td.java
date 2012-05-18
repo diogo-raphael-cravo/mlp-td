@@ -221,9 +221,12 @@ public class td {
         Camera.rotacionarCameras(0, 0, 1);
         jogo.getTerreno().rotacionarInimigosEmY(1);
         jogo.getTerreno().rotacionarTorresEmY(1);
-    } else if(Keyboard.isKeyDown(Keyboard.KEY_ADD)){
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_ADD)
+            || (Keyboard.isKeyDown(Keyboard.KEY_EQUALS)
+                && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))){
         Camera.zoom(-5.0f);
-    } else if(Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT)){
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT)
+            || Keyboard.isKeyDown(Keyboard.KEY_MINUS)){
         Camera.zoom(5.0f);
     }
   }
