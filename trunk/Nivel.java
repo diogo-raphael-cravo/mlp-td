@@ -26,6 +26,11 @@ public class Nivel {
      */
     private int inimigosNascidos;
 
+    /**
+     * Guarda o momento, em milissegundos, do início do nível (criação do primeiro inimigo).
+     */
+    private long tempoInicioMilissegundos;
+
     public Nivel(Inimigo _modeloInimigo, int _numeroInimigos){
         modeloInimigo = new Inimigo(_modeloInimigo);
         numeroInimigos = _numeroInimigos;
@@ -41,12 +46,22 @@ public class Nivel {
     public int getNumeroInimigosNascidos(){
         return inimigosNascidos;
     }
+    public long getTempoInicioMilissegundos(){
+        return tempoInicioMilissegundos;
+    }
+    public long getTempoDesdeInicioMilissegundos(){
+        return System.nanoTime()/1000000 - tempoInicioMilissegundos;
+    }
 
     /**
      * Faz com que nasça o próximo inimigo deste nível no terreno dado.
      * @param _terreno O terreno em que o inimigo nascerá.
      */
     public void criarInimigo(Terreno _terreno){
+        if(inimigosNascidos == 0){
+            tempoInicioMilissegundos = System.nanoTime()/1000000;
+        }
+
         if(inimigosNascidos < numeroInimigos){
             _terreno.adicionarInimigo(modeloInimigo);
             inimigosNascidos++;

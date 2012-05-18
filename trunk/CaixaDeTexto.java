@@ -5,6 +5,7 @@
 
 package mlptd;
 
+import org.lwjgl.util.Color;
 import java.awt.Font;
 import java.util.Vector;
 import org.newdawn.slick.TrueTypeFont;
@@ -38,6 +39,7 @@ public class CaixaDeTexto extends Gui {
      */
     public CaixaDeTexto(float _comprimento, float _largura){
         super(_comprimento, _largura);
+        mudarCor(new Color(Color.WHITE));
         linhasDoConteudo = new Vector<String>();
         fonte = new Font("Lucida Console", Font.BOLD, 15);
         fonteParaImpressao = new TrueTypeFont(fonte, false);
