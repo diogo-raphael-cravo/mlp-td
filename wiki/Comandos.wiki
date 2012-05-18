@@ -17,6 +17,8 @@
 || d || rotacionar +1 grau em torno do eixo y (com limite de grau 45) ||
 || z || rotacionar -1 grau em torno do eixo z (sem limite) ||
 || c || rotacionar +1 grau em torno do eixo z (sem limite) ||
+|| + (numpad ou teclado) || zoom in ||
+|| - (numpad ou teclado) || zoom out ||
 
 ===Mouse===
 
