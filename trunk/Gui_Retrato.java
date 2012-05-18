@@ -58,6 +58,7 @@ public class Gui_Retrato extends Desenho {
             desenhoExibido.redimensionar(desenhoExibido.getComprimento(), largura-margemY, desenhoExibido.getAltura());
         }
         desenhoExibido.rotacionar(60, 0, 2);
+        
         adicionarFilho(desenhoExibido, xCentro, yCentro-20); //Constante para compensar rotação.
 
         //System.out.println("parametro>"+_desenho.toString());
@@ -86,9 +87,15 @@ public class Gui_Retrato extends Desenho {
         if(largura-margemY < _desenho.largura){
             tileEdificavelExibida.redimensionar(tileEdificavelExibida.getComprimento(), largura-margemY, tileEdificavelExibida.getAltura());
         }
+        if(tileEdificavelExibida.ocupadaPorTorre()){
+            System.out.println("ANTES"+tileEdificavelExibida.getTorre().toString());
+            tileEdificavelExibida.getTorre().rotacionar(-90, 0, 0);
+            System.out.println("DEPOIS"+tileEdificavelExibida.getTorre().toString());
+        }
         tileEdificavelExibida.rotacionar(60, 0, 2);
+        System.out.println("TILE"+tileEdificavelExibida.toString());
         adicionarFilho(tileEdificavelExibida, xCentro, yCentro);
-
+        
         //System.out.println("parametro>"+_desenho.toString());
         //System.out.println("criado>"+tileEdificavelExibida.toString());
     }

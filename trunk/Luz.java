@@ -113,7 +113,5 @@ public class Luz {
         } else if(rotacaoY < -90){
             rotacaoY = -90;
         }
-
-        System.out.println("y="+rotacaoY);
     }
 }

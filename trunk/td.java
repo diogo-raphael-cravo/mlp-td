@@ -215,12 +215,10 @@ public class td {
         luz.rotacionar(0, 1, 0);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
         Camera.rotacionarCameras(0, 0, -1);
-        //luz.rotacionar(0, 0, -1);
         jogo.getTerreno().rotacionarInimigosEmY(-1);
         jogo.getTerreno().rotacionarTorresEmY(-1);
     } else if(Keyboard.isKeyDown(Keyboard.KEY_C)){
         Camera.rotacionarCameras(0, 0, 1);
-        //luz.rotacionar(0, 0, 1);
         jogo.getTerreno().rotacionarInimigosEmY(1);
         jogo.getTerreno().rotacionarTorresEmY(1);
     }
