@@ -193,7 +193,7 @@ public class Desenho extends Object{
         float xGlobal = posX;
         Desenho ancestral = getPai();
         while(ancestral != null){
-            xGlobal += ancestral.getPosX();
+            xGlobal += ancestral.getPosX()*ancestral.getFatorEscalaX();
             ancestral = ancestral.getPai();
         }
         return xGlobal;
@@ -202,7 +202,7 @@ public class Desenho extends Object{
         float yGlobal = posY;
         Desenho ancestral = getPai();
         while(ancestral != null){
-            yGlobal += ancestral.getPosY();
+            yGlobal += ancestral.getPosY()*ancestral.getFatorEscalaY();
             ancestral = ancestral.getPai();
         }
         return yGlobal;
@@ -513,8 +513,9 @@ public class Desenho extends Object{
             float larguraFilho = desenhoFilho.largura*desenhoFilho.fatorEscalaY;
             float alturaFilho = desenhoFilho.altura*desenhoFilho.fatorEscalaZ;
 
-            desenhoFilho.mover(fatorEscalaX*xFilho, fatorEscalaY*yFilho);
-            desenhoFilho.deslocar(posX, posY);
+            //desenhoFilho.mover(fatorEscalaX*xFilho, fatorEscalaY*yFilho);
+            desenhoFilho.mover(xFilho, yFilho);
+            desenhoFilho.deslocar(fatorEscalaX*posX, fatorEscalaY*posY);
             desenhoFilho.rotacionar(rotacaoX, rotacaoY, rotacaoZ);
             desenhoFilho.redimensionar(fatorEscalaX*desenhoFilho.fatorEscalaX*desenhoFilho.comprimento, 
                     fatorEscalaY*desenhoFilho.fatorEscalaY*desenhoFilho.largura, 
@@ -522,7 +523,7 @@ public class Desenho extends Object{
             desenhoFilho.desenhar();
             desenhoFilho.redimensionar(comprimentoFilho, larguraFilho, alturaFilho);
             desenhoFilho.rotacionar(-rotacaoX, -rotacaoY, -rotacaoZ);
-            desenhoFilho.deslocar(posX, posY);
+            desenhoFilho.deslocar(-fatorEscalaX*posX, -fatorEscalaY*posY);
             desenhoFilho.mover(xFilho, yFilho);
         }
     }

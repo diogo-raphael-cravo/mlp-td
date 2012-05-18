@@ -38,6 +38,7 @@ public class Gui_EdicaoTiles extends Gui{
         btRemoverTorre.definirTextura(Texturas.OURO);
         adicionarFilho(btRemoverTorre, 300, 150);
         btRemoverTorre.redimensionar(50, 50, 0);
+
         
         float comprimentoAtual = comprimento;
         float larguraAtual = largura;
@@ -45,6 +46,7 @@ public class Gui_EdicaoTiles extends Gui{
         largura = 250;
         definirTextura(Texturas.MADEIRA);
         redimensionar(fatorEscalaX*comprimentoAtual, fatorEscalaY*larguraAtual, altura);
+
         btAdicionarTorreMadeira.redimensionar(50*(1/fatorEscalaX), 50*(1/fatorEscalaY), 0);
         btAdicionarTorreCanhao.redimensionar(50*(1/fatorEscalaX), 50*(1/fatorEscalaY), 0);
         btRemoverTorre.redimensionar(50*(1/fatorEscalaX), 50*(1/fatorEscalaY), 0);
