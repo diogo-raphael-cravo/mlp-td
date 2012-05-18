@@ -89,6 +89,9 @@ public class Camera {
     public float getY(){
         return posY;
     }
+    public float getZ(){
+        return posZ;
+    }
     public float getRotacaoX(){
         return rotacaoX;
     }
@@ -163,6 +166,16 @@ public class Camera {
     }
 
     /**
+     * Modifica o zoom.
+     * @param _zoom Se um número positivo, é zoom in.
+     *              Se um número negativo, é zoom out.
+     */
+    public static void zoom(float _zoom){
+        ortografica.posZ += _zoom;
+        perspectiva.posZ += _zoom;
+    }
+
+    /**
      * Escolha da camera a ser utilizada.
      */
     public static void setCamera(CAMERA _cameraEscolhida){
@@ -177,7 +190,7 @@ public class Camera {
             glLoadIdentity();
             glTranslatef(-perspectiva.posX-400,
                          -perspectiva.posY-400,
-                         -1000);
+                         -1000-perspectiva.posZ);
 
             glRotatef(perspectiva.rotacaoX,1.0f,0.0f,0.0f);
             glTranslatef(perspectiva.deslocamentoY, perspectiva.deslocamentoY, perspectiva.deslocamentoZ);
