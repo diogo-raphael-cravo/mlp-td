@@ -138,8 +138,8 @@ public class td {
       
     //2D Initialization
     glClearColor(0.0f,0.0f,0.0f,0.0f);
-    glDisable(GL_DEPTH_TEST);
-
+    glDisable(GL_DEPTH_TEST);                        // Enables Depth Testing
+    
     //Dica encontrada em http://forum.codecall.net/topic/66017-simple-lwjgl-lighting/
     luz = new Luz();
     luz.rotacionar(45f, -45f, 0f);
@@ -159,9 +159,9 @@ public class td {
     glEnable(GL_COLOR_MATERIAL);  // enables opengl to use glColor3f to define material color
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE); // tell opengl glColor3f effects the ambient and diffuse properties of material
 
-    GL11.glEnable(GL11.GL_BLEND);
-    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-    GL11.glEnable(GL11.GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_TEXTURE_2D);
 
     Texturas.inicializar(); //Tela.inicializar() utiliza texturas.
     Texto.inicializar(); //Tela.inicializar() utiliza textos.
@@ -221,6 +221,10 @@ public class td {
         Camera.rotacionarCameras(0, 0, 1);
         jogo.getTerreno().rotacionarInimigosEmY(1);
         jogo.getTerreno().rotacionarTorresEmY(1);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_ADD)){
+        Camera.zoom(-5.0f);
+    } else if(Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT)){
+        Camera.zoom(5.0f);
     }
   }
 

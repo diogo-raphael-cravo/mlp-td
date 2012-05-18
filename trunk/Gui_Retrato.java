@@ -88,12 +88,9 @@ public class Gui_Retrato extends Desenho {
             tileEdificavelExibida.redimensionar(tileEdificavelExibida.getComprimento(), largura-margemY, tileEdificavelExibida.getAltura());
         }
         if(tileEdificavelExibida.ocupadaPorTorre()){
-            System.out.println("ANTES"+tileEdificavelExibida.getTorre().toString());
             tileEdificavelExibida.getTorre().rotacionar(-90, 0, 0);
-            System.out.println("DEPOIS"+tileEdificavelExibida.getTorre().toString());
         }
         tileEdificavelExibida.rotacionar(60, 0, 2);
-        System.out.println("TILE"+tileEdificavelExibida.toString());
         adicionarFilho(tileEdificavelExibida, xCentro, yCentro);
         
         //System.out.println("parametro>"+_desenho.toString());
