@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
 /**
  * Uma torre, que pode atirar projéteis em inimigos.
@@ -20,6 +20,11 @@ public class Torre extends Desenho {
      * alcance, textura, tamanho...
      */
     private TIPO_TORRE tipo;
+    
+    /**
+     * Modelo de projétil desta torre.
+     */
+    private Projetil modeloProjetil;
     
     /**
      * @param _posX, _posY A posição do ponto superior esquerdo na tela.
@@ -55,13 +60,23 @@ public class Torre extends Desenho {
                     comprimento = 100;
                     largura = 200;
                     definirTextura(Texturas.TORRE);
+                    modeloProjetil = new Projetil(Projetil.TIPO_PROJETIL.FLECHA);
                 break;
             case CANHAO: 
                     comprimento = 480;
                     largura = 200;
                     definirTextura(Texturas.CANHAO);
+                    modeloProjetil = new Projetil(Projetil.TIPO_PROJETIL.BALA_DE_CANHAO);
                 break;
         }
         redimensionar(fatorEscalaX*comprimentoAtual, fatorEscalaY*larguraAtual, altura);
     }
+    
+    /**
+     * @return Cópia do projétil desta torre.
+     */
+    public Projetil getProjetil(){
+        return new Projetil(modeloProjetil);
+    }
+    
 }

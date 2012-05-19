@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
 /**
  * Marca o tempo, gerando dados de frame rate e tempo desde a última marcação.
