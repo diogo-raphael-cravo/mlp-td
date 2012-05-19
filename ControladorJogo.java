@@ -1,4 +1,4 @@
-package mlptd;
+package mlp.td;
 
 import java.util.Vector;
 import org.lwjgl.input.Mouse;

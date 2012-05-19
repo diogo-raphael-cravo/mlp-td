@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,6 +37,8 @@ public class Texturas {
      public static Texture OURO;
      public static Texture CORACAO;
      public static Texture RELOGIO;
+     public static Texture FLECHA;
+     public static Texture BALA_DE_CANHAO;
      public static Texture[] SLIMEKING;
 
      public static void inicializar(){
@@ -75,6 +77,12 @@ public class Texturas {
          } catch (Exception ex) {}
          try {
             RELOGIO = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_RELOGIO));
+         } catch (Exception ex) {}
+         try {
+            FLECHA = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_FLECHA));
+         } catch (Exception ex) {}
+         try {
+            BALA_DE_CANHAO = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(Arquivos.ARQUIVO_TEXTURA_BALA_DE_CANHAO));
          } catch (Exception ex) {}
 
          SLIMEKING = new Texture[9];

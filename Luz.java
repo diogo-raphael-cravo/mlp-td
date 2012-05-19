@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mlptd;
+package mlp.td;
 
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
