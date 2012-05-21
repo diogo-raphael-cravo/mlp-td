@@ -1,9 +1,12 @@
-package mlp.td;
+package mlptd;
+
+
 
 import static org.lwjgl.opengl.GL11.*;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.Vector;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -171,6 +174,7 @@ public class td {
 
     temporizadorMouse = new Temporizador();
     temporizadorMouse.marcarAgora();
+    
   }
 
   public void processKeyboard() {

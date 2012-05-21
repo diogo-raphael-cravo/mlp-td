@@ -1,8 +1,10 @@
+package mlptd;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mlp.td;
+
 
 /**
  * Um projétil, que pode ser atirado por uma torre.
@@ -15,6 +17,11 @@ public class Projetil extends Desenho {
      */
     public static enum TIPO_PROJETIL{FLECHA, BALA_DE_CANHAO};
     private TIPO_PROJETIL tipo;
+
+    /**
+     * O inimigo que está sendo perseguido por este projétil, caso haja.
+     */
+    private Inimigo perseguido;
     
     /**
      * O comprimento e altura não são permitidos, pois todo projétil é sempre
@@ -49,9 +56,41 @@ public class Projetil extends Desenho {
             case BALA_DE_CANHAO: redimensionar(10, 10, 0);
                 break;
         }
+        perseguido = null;
     }
     public Projetil(Projetil _projetil){
         this(_projetil.tipo);
     }
-    
+
+    /**
+     * Manda este projétil perseguir o inimigo dado.
+     * ATENÇÃO: esta função só guarda o inimigo perse-
+     * guido, mas não faz a perseguição!
+     * @param _perseguido Inimigo que deve ser perse-
+     *      guido.
+     */
+    public void setPerseguido(Inimigo _perseguido){
+        perseguido = _perseguido;
+    }
+
+    /**
+     * @return Booleano indicando se este projétil está
+     * perseguindo algum inimigo.
+     */
+     public boolean possuiInimigoPerseguido(){
+         if(perseguido != null){
+             return true;
+         } else {
+             return false;
+         }
+     }
+
+     /**
+      * @return Caso haja, retorna o inimigo perseguido.
+      *         Caso contrário, retorna null.
+      */
+     public Inimigo getPerseguido(){
+         return perseguido;
+     }
+     
 }

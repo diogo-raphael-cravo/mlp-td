@@ -1,4 +1,6 @@
-package mlp.td;
+package mlptd;
+
+
 
 
 import java.util.logging.Logger;
@@ -555,6 +557,7 @@ public class Desenho extends Object{
     @Override
     public String toString(){
         StringBuilder string = new StringBuilder("Desenho {\n");
+        string.append("\t identificacaoUnica = ").append(identificacaoUnica).append("\n");
         string.append("\t posX = ").append(posX).append("\n");
         string.append("\t posY = ").append(posY).append("\n");
         string.append("\t rotacaoX = ").append(rotacaoX).append("\n");
@@ -590,4 +593,5 @@ public class Desenho extends Object{
             todosDesenhosCriados.remove(indexDesteDesenho);
         }
     }
+
 }
