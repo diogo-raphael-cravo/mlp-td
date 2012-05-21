@@ -1,9 +1,11 @@
+package mlptd;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
-package mlp.td;
+
 
 /**
  * Representa um jogo de mlptd.
@@ -25,6 +27,11 @@ public class Jogo {
     private Terreno terreno;
 
     /**
+     * A batalha que está acontecendo neste jogo.
+     */
+    private Batalha batalha;
+
+    /**
      * Array com todos níveis deste jogo.
      * Os níveis começam no índice 0.
      * Desta forma, niveis[0] contém os dados do primeiro nível.
@@ -42,6 +49,7 @@ public class Jogo {
     private Temporizador temporizadorNascimentos;
 
     public Jogo(Terreno _terreno, Nivel[] _niveis){
+        batalha = new Batalha(_terreno);
         terreno = _terreno;
         niveis = _niveis;
         nivelAtual = -1;
@@ -72,11 +80,12 @@ public class Jogo {
             niveis[nivelAtual].criarInimigo(terreno);
             temporizadorNascimentos.marcarAgora();
         }
-        Tela.getTela().getGuiBarraSuperior().setQuantidadeOuro(nivelAtual);
-        Tela.getTela().getGuiBarraSuperior().setQuantidadeInimigos(nivelAtual);
-        Tela.getTela().getGuiBarraSuperior().setQuantidadeVidas(nivelAtual);
-        Tela.getTela().getGuiBarraSuperior().setTempo((int) (niveis[nivelAtual].getTempoDesdeInicioMilissegundos()/1000));
+        Tela.getGuiBarraSuperior().setQuantidadeOuro(nivelAtual);
+        Tela.getGuiBarraSuperior().setQuantidadeInimigos(nivelAtual);
+        Tela.getGuiBarraSuperior().setQuantidadeVidas(nivelAtual);
+        Tela.getGuiBarraSuperior().setTempo((int) (niveis[nivelAtual].getTempoDesdeInicioMilissegundos()/1000));
         terreno.moverInimigos();
+        batalha.atualizar();
     }
 
     /**

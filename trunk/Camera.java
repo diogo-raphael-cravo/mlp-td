@@ -1,9 +1,11 @@
+package mlptd;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
-package mlp.td;
+
 import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;

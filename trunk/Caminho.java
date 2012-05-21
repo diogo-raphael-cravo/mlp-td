@@ -1,9 +1,11 @@
+package mlptd;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
-package mlp.td;
+
 
 /**
  * Um caminho por onde os inimigos podem movimentar-se.

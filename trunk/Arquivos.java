@@ -1,9 +1,11 @@
+package mlptd;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
-package mlp.td;
+
 
 /**
  * Classe para acesso estático de nomes de arquivos.
@@ -12,8 +14,8 @@ package mlp.td;
  * @author diogo
  */
 public class Arquivos {
-    public static final String LINK_BASE = "C:\\Users\\admin\\Desktop\\mlp-td\\texturas\\";
-    public static String LINK_BASE_TEXTURA_SLIMEKING = LINK_BASE+"slimeking\\slimeking_";
+    public static final String LINK_BASE = "/home/diogo/Área de Trabalho/mlp-td/texturas/";
+    public static String LINK_BASE_TEXTURA_SLIMEKING = LINK_BASE+"slimeking/slimeking_";
     public static String ARQUIVO_TEXTURA_MURO = LINK_BASE+"muro2.png";
     public static String ARQUIVO_TEXTURA_CAVEIRA = LINK_BASE+"caveira4.png";
     public static String ARQUIVO_TEXTURA_CAVEIRA_INVERTIDA = LINK_BASE+"caveira42.png";
