@@ -106,9 +106,107 @@ public class Batalha {
       * passou-se desde a última chamada à função e da velocidade do
       * inimigo.
       * Quando um inimigo atinge o fim de um terreno, ele sai da batalha.
+      * Decide qual o melhor caminho a utilizar para cada inimigo.
+      * Na prática, o melhor é o menor caminho que o inimigo pode usar.
       */
      private void moverInimigos(){
-         
+         Tile tileInimigo;
+         Tile tileVizinhaTileInimigo;
+         Vector<Inimigo> inimigosQueSairamDoTerreno = new Vector<Inimigo>();
+         Vector<Inimigo> inimigosNoTerreno = terreno.getInimigos();
+         Vector<TilePassadouro> caminhoDeTiles = terreno.getTilesCaminho();
+
+         for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
+            moverInimigo(inimigoNoTerreno, terreno.getCaminho());
+
+            tileInimigo = terreno.getTileComPosicao(inimigoNoTerreno.getGlobalX(), inimigoNoTerreno.getGlobalY());
+            tileVizinhaTileInimigo = terreno.getTileVizinha(tileInimigo, terreno.getCaminho());
+            if(tileVizinhaTileInimigo == null){
+                inimigosQueSairamDoTerreno.add(inimigoNoTerreno);
+            }
+         }
+
+         for(Inimigo inimigoQueSaiuDoTerreno : inimigosQueSairamDoTerreno){
+             terreno.removerFilho(inimigoQueSaiuDoTerreno);
+         }
+     }
+
+     /**
+      * Move o inimigo sobre este terreno.
+      * Note que ele não precisa pertencer ao terreno, apesar de isto ser altamente recomendado.
+      * O algoritmo é o seguinte:
+      *   1) Identificar tile em que o inimigo está, baseado somente em sua posição
+      *   2) Identificar tile vizinha (no caminho) da encontrada.
+      *   3) Calcular distância em x e em y entre a posição do inimigo e a posição da tile vizinha encontrada.
+      *   4) Escalar a variação pelo tempo passado entre o último movimento e este, multiplicado
+      *      pela velocidade em pixels/segundo do inimigo. Se o movimento for em mais de uma direção,
+      *      calcular de tal forma que a norma do vetor movimento seja a velocidade em pixels/segundo
+      *      do inimigo.
+      *   5) Movimentar o inimigo.
+      *   6) Se o inimigo já atingiu a próxima tile, adicioná-lo a ela.
+      * @param _inimigo Inimigo que será movido sobre o terreno.
+      * @param _caminho Caminho a ser utilizado para encontrar a vizinha.
+      */
+     private void moverInimigo(Inimigo _inimigo, Caminho _caminho){
+        Inimigo inimigoNaoMovido = _inimigo;
+        TilePassadouro tileInimigo = (TilePassadouro) terreno.getTileComPosicao(inimigoNaoMovido.getGlobalX(), inimigoNaoMovido.getGlobalY());
+        TilePassadouro tileVizinhaTileInimigo = null;
+        float tempoPassadoDesdeUltimoMovimentoEmSegundos = Temporizador.diferencaUltimasDuasMarcacoesPrincipal()/((float) 1000.0);
+        float velocidadeInimigoEmPixelsPorSegundo = terreno.getComprimentoCadaTile()*
+                                                    inimigoNaoMovido.getVelocidadeTilesPorSegundo();
+        //Vetor direção final, que o inimigo deseja obter após passado 1 segundo.
+        float xDestinoInimigo = 0;
+        float yDestinoInimigo = 0;
+
+        //Vetor variação da posição do inimigo, a ponderação do destino (anterior) pelo tempo passado.
+        float xVariacaoInimigo = 0;
+        float yVariacaoInimigo = 0;
+
+        //Vetor direção do movimento que será feito.
+        int direcaoX = 1;
+        int direcaoY = 1;
+
+        if(tileInimigo != null){
+            tileVizinhaTileInimigo = (TilePassadouro) terreno.getTileVizinha(tileInimigo, _caminho);
+        }
+
+        if(tileVizinhaTileInimigo != null){
+            xDestinoInimigo = tileVizinhaTileInimigo.xGlobalCentroParaDesenho(inimigoNaoMovido);
+            yDestinoInimigo = tileVizinhaTileInimigo.yGlobalCentroParaDesenho(inimigoNaoMovido);
+
+            if(xDestinoInimigo <= inimigoNaoMovido.getGlobalX()){
+                direcaoX = -1;
+            } else {
+                direcaoX = 1;
+            }
+
+            if(yDestinoInimigo <= inimigoNaoMovido.getGlobalY()){
+                direcaoY = 1;
+            } else {
+                direcaoY = -1;
+            }
+
+            if(inimigoNaoMovido.getGlobalX() == xDestinoInimigo){
+                xVariacaoInimigo = 0;
+                if(inimigoNaoMovido.getGlobalY() != yDestinoInimigo){
+                    yVariacaoInimigo = - velocidadeInimigoEmPixelsPorSegundo;
+                }
+            } else if(inimigoNaoMovido.getGlobalY() == yDestinoInimigo){
+                xVariacaoInimigo = velocidadeInimigoEmPixelsPorSegundo;
+                yVariacaoInimigo = 0;
+            } else {
+                xVariacaoInimigo = (float) Math.sqrt(Math.pow((double) velocidadeInimigoEmPixelsPorSegundo, 2))/2;
+                yVariacaoInimigo = - (float) Math.sqrt(Math.pow((double) velocidadeInimigoEmPixelsPorSegundo, 2))/2;
+            }
+            xVariacaoInimigo *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
+            yVariacaoInimigo *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
+            xVariacaoInimigo *= direcaoX;
+            yVariacaoInimigo *= direcaoY;
+            inimigoNaoMovido.deslocar(xVariacaoInimigo, yVariacaoInimigo);
+            if(tileVizinhaTileInimigo.contem(inimigoNaoMovido)){
+                tileVizinhaTileInimigo.adicionarInimigo(inimigoNaoMovido);
+            }
+         }
      }
 
      /**

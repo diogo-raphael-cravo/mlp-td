@@ -47,7 +47,6 @@ public class Terreno extends Desenho{
      * Os inimigos que estão no terreno.
      */
     Vector<Inimigo> inimigosNoTerreno;
-    Vector<Inimigo> inimigosQueSairam;
 
     /**
      * Angulo de rotacao dos inimigos neste terreno.
@@ -86,7 +85,6 @@ public class Terreno extends Desenho{
         adicionarTilesPassadouroSegundoCaminho(caminho);
 
         inimigosNoTerreno = new Vector<Inimigo>();
-        inimigosQueSairam = new Vector<Inimigo>();
 
         xRotacaoInimigos = 90;
         yRotacaoInimigos = 0;
@@ -110,6 +108,34 @@ public class Terreno extends Desenho{
         adicionarFilho(new Desenho(fundo), posX+3*comprimento/2, posY+largura/2);
      }
 
+     public float getComprimentoCadaTile(){
+         return comprimentoCadaTile;
+     }
+     public float getLarguraCadaTile(){
+         return larguraCadaTile;
+     }
+
+     /**
+      * @return Cópia rasa do vector de inimigos que estão no terreno.
+      */
+     public Vector<Inimigo> getInimigos(){
+         return inimigosNoTerreno;
+     }
+
+     /**
+      * @return Vector com seqüência de tiles no caminho deste terreno.
+      */
+     public Vector<TilePassadouro> getTilesCaminho(){
+        Vector<TilePassadouro> tilesCaminho = new Vector<TilePassadouro>();
+        for(int posicao=0; posicao<caminho.getComprimento(); posicao++){
+            tilesCaminho.add((TilePassadouro) tiles[caminho.getColunaTile(posicao)][caminho.getLinhaTile(posicao)]);
+        }
+        return tilesCaminho;
+     }
+     public Caminho getCaminho(){
+         return caminho;
+     }
+
      /**
       * Adiciona um inimigo a este terreno, que correrá imediatamente
       * à partir da primeira tile do caminho.
@@ -126,136 +152,14 @@ public class Terreno extends Desenho{
           adicionarFilho(inimigoNovo, primeiraTileCaminho.getPosX(), primeiraTileCaminho.getPosY());
      }
 
-     /**
-      * @return Booleano indicando se todos os inimigos já morreram ou já passaram pelo terreno.
-      */
-     public boolean todosInimigosMorreramOuSairam(){
-         if(inimigosQueSairam.size() == inimigosNoTerreno.size()){
-             return true;
-         } else {
-             return false;
-         }
-     }
-
-     /**
-      * Move todos os inimigos que estão neste terreno.
-      * Decide qual o melhor caminho a utilizar para cada inimigo.
-      * Na prática, o melhor é o menor caminho que o inimigo pode usar.
-      */
-     public void moverInimigos(){
-         Tile tileInimigo;
-         Tile tileVizinhaTileInimigo;
-         Vector<Long> apagados = new Vector<Long>();
-
-         for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
-            moverInimigo(inimigoNoTerreno, caminho);
-
-            tileInimigo = getTileComPosicao(inimigoNoTerreno.getGlobalX(), inimigoNoTerreno.getGlobalY());
-            tileVizinhaTileInimigo = getTileVizinha(tileInimigo, caminho);
-            if(tileVizinhaTileInimigo == null){
-                apagados.add(inimigoNoTerreno.getIdentificacaoUnica());
-            }
-         }
-
-         for(Long identificacaoApagado : apagados){
-             for(int i=0; i<inimigosNoTerreno.size(); i++){
-                if(inimigosNoTerreno.get(i).getIdentificacaoUnica() == identificacaoApagado){
-                    inimigosQueSairam.add(inimigosNoTerreno.get(i));
-                }
-             }
-             for(int i=0; i<filhos.size(); i++){
-                if(filhos.get(i).getIdentificacaoUnica() == identificacaoApagado){
-                    filhos.remove(i);
-                }
-             }
-         }
-     }
-
-     /**
-      * Move o inimigo sobre este terreno.
-      * Note que ele não precisa pertencer ao terreno, apesar de isto ser altamente recomendado.
-      * O algoritmo é o seguinte:
-      *   1) Identificar tile em que o inimigo está, baseado somente em sua posição
-      *   2) Identificar tile vizinha (no caminho) da encontrada.
-      *   3) Calcular distância em x e em y entre a posição do inimigo e a posição da tile vizinha encontrada.
-      *   4) Escalar a variação pelo tempo passado entre o último movimento e este, multiplicado
-      *      pela velocidade em pixels/segundo do inimigo. Se o movimento for em mais de uma direção, 
-      *      calcular de tal forma que a norma do vetor movimento seja a velocidade em pixels/segundo
-      *      do inimigo.
-      *   5) Movimentar o inimigo.
-      *   6) Se o inimigo já atingiu a próxima tile, adicioná-lo a ela.
-      * @param _inimigo Inimigo que será movido sobre o terreno.
-      * @param _caminho Caminho a ser utilizado para encontrar a vizinha.
-      */
-     private void moverInimigo(Inimigo _inimigo, Caminho _caminho){
-        Inimigo inimigoNaoMovido = _inimigo;
-        Tile exemploTileTerreno = tiles[0][0];
-        TilePassadouro tileInimigo = (TilePassadouro) getTileComPosicao(inimigoNaoMovido.getGlobalX(), inimigoNaoMovido.getGlobalY());
-        TilePassadouro tileVizinhaTileInimigo = null;
-        float tempoPassadoDesdeUltimoMovimentoEmSegundos = Temporizador.diferencaUltimasDuasMarcacoesPrincipal()/((float) 1000.0);
-        float velocidadeInimigoEmPixelsPorSegundo = exemploTileTerreno.getComprimento()*
-                                                    inimigoNaoMovido.getVelocidadeTilesPorSegundo();
-        //Vetor direção final, que o inimigo deseja obter após passado 1 segundo.
-        float xDestinoInimigo = 0;
-        float yDestinoInimigo = 0;
-
-        //Vetor variação da posição do inimigo, a ponderação do destino (anterior) pelo tempo passado.
-        float xVariacaoInimigo = 0;
-        float yVariacaoInimigo = 0;
-
-        //Vetor direção do movimento que será feito.
-        int direcaoX = 1;
-        int direcaoY = 1;
-        
-        if(tileInimigo != null){
-            tileVizinhaTileInimigo = (TilePassadouro) getTileVizinha(tileInimigo, _caminho);
-        }
-
-        if(tileVizinhaTileInimigo != null){
-            xDestinoInimigo = tileVizinhaTileInimigo.xGlobalCentroParaDesenho(inimigoNaoMovido);
-            yDestinoInimigo = tileVizinhaTileInimigo.yGlobalCentroParaDesenho(inimigoNaoMovido);
-
-            if(xDestinoInimigo <= inimigoNaoMovido.getGlobalX()){
-                direcaoX = -1;
-            } else {
-                direcaoX = 1;
-            }
-
-            if(yDestinoInimigo <= inimigoNaoMovido.getGlobalY()){
-                direcaoY = 1;
-            } else {
-                direcaoY = -1;
-            }
-
-            if(inimigoNaoMovido.getGlobalX() == xDestinoInimigo){
-                xVariacaoInimigo = 0;
-                if(inimigoNaoMovido.getGlobalY() != yDestinoInimigo){
-                    yVariacaoInimigo = - velocidadeInimigoEmPixelsPorSegundo;
-                }
-            } else if(inimigoNaoMovido.getGlobalY() == yDestinoInimigo){
-                xVariacaoInimigo = velocidadeInimigoEmPixelsPorSegundo;
-                yVariacaoInimigo = 0;
-            } else {
-                xVariacaoInimigo = (float) Math.sqrt(Math.pow((double) velocidadeInimigoEmPixelsPorSegundo, 2))/2;
-                yVariacaoInimigo = - (float) Math.sqrt(Math.pow((double) velocidadeInimigoEmPixelsPorSegundo, 2))/2;
-            }
-            xVariacaoInimigo *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
-            yVariacaoInimigo *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
-            xVariacaoInimigo *= direcaoX;
-            yVariacaoInimigo *= direcaoY;
-            inimigoNaoMovido.deslocar(xVariacaoInimigo, yVariacaoInimigo);
-            if(tileVizinhaTileInimigo.contem(inimigoNaoMovido)){
-                tileVizinhaTileInimigo.adicionarInimigo(inimigoNaoMovido);
-            }
-         }
-     }
+     
 
      /**
       * @param _posX, _posY A posição a ser testada.
       * @return A tile deste terreno que contenha a posição de parâmetro.
       *         Se não houver, retornará null.
       */
-     private Tile getTileComPosicao(float _posX, float _posY){
+     public Tile getTileComPosicao(float _posX, float _posY){
          Tile tileQueContemPosicao = null;
          boolean encontrouTile = false;
          int linha=0;
@@ -308,7 +212,7 @@ public class Terreno extends Desenho{
       * @param _caminho O caminho que definirá quem é a vizinha.
       * @return A tile vizinha ou null, caso não haja tile vizinha.
       */
-     private Tile getTileVizinha(Tile _tile, Caminho _caminho){
+     public Tile getTileVizinha(Tile _tile, Caminho _caminho){
          Tile tileVizinha = null;
          Tile tileTestada;
          int posicaoTileVizinha = getPosicaoTileCaminho(_tile, _caminho) + 1;
