@@ -30,11 +30,12 @@ public class Gui_BarraSuperior extends Desenho {
      private Integer quantidadeVidas;
 
     /**
-     * Desenho que indica a quantidade de inimigos mortos.
+     * Desenho que indica o nível atual e o total de níveis.
      */
-     private Desenho iconeInimigos;
-     private CaixaDeTexto ctInimigos;
-     private Integer quantidadeInimigos;
+     private Desenho iconeNiveis;
+     private CaixaDeTexto ctNiveis;
+     private Integer nivelAtual;
+     private Integer totalNiveis;
 
     /**
      * Desenho que indica unidades de tempo.
@@ -50,7 +51,8 @@ public class Gui_BarraSuperior extends Desenho {
         definirTextura(Texturas.MURO);
 
         quantidadeOuro = 0;
-        quantidadeInimigos = 0;
+        nivelAtual = 0;
+        totalNiveis = 0;
         quantidadeVidas = 0;
         segundos = 0;
         minutos = 0;
@@ -60,10 +62,10 @@ public class Gui_BarraSuperior extends Desenho {
         iconeOuro.redimensionar(15, 15, 0);
         adicionarFilho(iconeOuro, 7.5f, 7.5f);
 
-        iconeInimigos = new Desenho(0, 0, 35, 40);
-        iconeInimigos.definirTextura(Texturas.CAVEIRA);
-        iconeInimigos.redimensionar(15, 15, 0);
-        adicionarFilho(iconeInimigos, 7.5f+comprimento/4, 7.5f);
+        iconeNiveis = new Desenho(0, 0, 35, 40);
+        iconeNiveis.definirTextura(Texturas.CAVEIRA);
+        iconeNiveis.redimensionar(15, 15, 0);
+        adicionarFilho(iconeNiveis, 7.5f+comprimento/4, 7.5f);
 
         iconeVidas = new Desenho(0, 0, 250, 250);
         iconeVidas.definirTextura(Texturas.CORACAO);
@@ -83,9 +85,9 @@ public class Gui_BarraSuperior extends Desenho {
         ctOuro.setTexto(quantidadeOuro.toString());
         adicionarFilho(ctOuro, 7.5f+20, 7.5f);
         
-        ctInimigos = new CaixaDeTexto(50, 0);
-        ctInimigos.setTexto(quantidadeInimigos.toString());
-        adicionarFilho(ctInimigos, 7.5f+comprimento/4+20, 7.5f);
+        ctNiveis = new CaixaDeTexto(50, 0);
+        ctNiveis.setTexto(nivelAtual.toString()+"/"+totalNiveis.toString());
+        adicionarFilho(ctNiveis, 7.5f+comprimento/4+20, 7.5f);
 
         ctVidas = new CaixaDeTexto(50, 0);
         ctVidas.setTexto(quantidadeVidas.toString());
@@ -100,9 +102,13 @@ public class Gui_BarraSuperior extends Desenho {
         quantidadeOuro = _ouro;
         ctOuro.setTexto(quantidadeOuro.toString());
     }
-    public void setQuantidadeInimigos(int _inimigos){
-        quantidadeInimigos = _inimigos;
-        ctInimigos.setTexto(quantidadeInimigos.toString());
+    public void setNivelAtual(int _nivelAtual){
+        nivelAtual = _nivelAtual;
+        ctNiveis.setTexto(nivelAtual.toString()+"/"+totalNiveis.toString());
+    }
+    public void setTotalNiveis(int _totalNiveis){
+        totalNiveis = _totalNiveis;
+        ctNiveis.setTexto(nivelAtual.toString()+"/"+totalNiveis.toString());
     }
     public void setQuantidadeVidas(int _vidas){
         quantidadeVidas = _vidas;

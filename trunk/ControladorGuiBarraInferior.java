@@ -17,144 +17,60 @@ import org.lwjgl.input.Mouse;
  */
 public class ControladorGuiBarraInferior
     implements MouseListener{
+    
     /**
      * Gui controlada por este controlador.
      */
     private Gui_BarraInferior gui;
 
     /**
-     * O desenho que foi selecionado pelo mouse.
+     * Controlador do terreno que esta gui possibilita editar.
      */
-     Desenho desenhoSelecionado;
-     Filme filmeSelecionado;
-     TileEdificavel tileEdificavelSelecionada;
+     private ControladorTerreno controladorTerrenoEditado;
 
     /**
      * @param _gui A gui controlada por este controlador.
      */
     public ControladorGuiBarraInferior(Gui_BarraInferior _gui){
         gui = _gui;
-        desenhoSelecionado = null;
-        filmeSelecionado = null;
-        tileEdificavelSelecionada = null;
+        controladorTerrenoEditado = null;
+    }
+
+    /**
+     * @param _controladorTerreno Controlador do terreno que é editado por esta gui.
+     */
+    public void definirControladorTerreno(ControladorTerreno _controladorTerreno){
+        controladorTerrenoEditado = _controladorTerreno;
     }
 
     public void houveMouseDown() {
         float mouseX = Mouse.getX();
         float mouseY = Mouse.getY();
-        
-        if(gui.contem(mouseX, mouseY)){
-            if(gui.getGuiEdicaoTiles().getBtAdicionarTorreMadeira().contem(mouseX, mouseY)
-                    && tileEdificavelSelecionada != null
-                    && !tileEdificavelSelecionada.ocupadaPorTorre()){
-                Torre torreAdicionada = new Torre(0, 0, 100, 200, Torre.TIPO_TORRE.MADEIRA);
-                torreAdicionada.redimensionar(50, 100, 0);
-                tileEdificavelSelecionada.construirTorre(torreAdicionada);
-                gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
-                gui.getGuiEdicaoTiles().mostrar();
-            } else if(gui.getGuiEdicaoTiles().getBtAdicionarTorreCanhao().contem(mouseX, mouseY)
-                    && tileEdificavelSelecionada != null
-                    && !tileEdificavelSelecionada.ocupadaPorTorre()){
-                Torre torreAdicionada = new Torre(0, 0, 100, 200, Torre.TIPO_TORRE.CANHAO);
-                torreAdicionada.redimensionar(50, 100, 0);
-                tileEdificavelSelecionada.construirTorre(torreAdicionada);
-                gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
-                gui.getGuiEdicaoTiles().mostrar();
-            } else if(gui.getGuiEdicaoTiles().getBtRemoverTorre().contem(mouseX, mouseY)
-                    && tileEdificavelSelecionada != null){
-                tileEdificavelSelecionada.destruirTorre();
-                gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
-                gui.getGuiEdicaoTiles().mostrar();
+
+        if(controladorTerrenoEditado != null){
+            if(gui.contem(mouseX, mouseY)){
+                if(gui.getGuiEdicaoTiles().getBtAdicionarTorreMadeira().contem(mouseX, mouseY)
+                        && controladorTerrenoEditado.tileEdificavelSelecionadaEstahLivre()){
+                    controladorTerrenoEditado.construirTorreNaTileSelecionada(Torre.TIPO_TORRE.MADEIRA);
+                    gui.getGuiRetrato().exibir(controladorTerrenoEditado.getCopiaTileEdificavelSelecionada());
+                    gui.getGuiEdicaoTiles().mostrar();
+                } else if(gui.getGuiEdicaoTiles().getBtAdicionarTorreCanhao().contem(mouseX, mouseY)
+                        && controladorTerrenoEditado.tileEdificavelSelecionadaEstahLivre()){
+                    controladorTerrenoEditado.construirTorreNaTileSelecionada(Torre.TIPO_TORRE.CANHAO);
+                    gui.getGuiRetrato().exibir(controladorTerrenoEditado.getCopiaTileEdificavelSelecionada());
+                    gui.getGuiEdicaoTiles().mostrar();
+                } else if(gui.getGuiEdicaoTiles().getBtRemoverTorre().contem(mouseX, mouseY)
+                        && controladorTerrenoEditado.haTileEdificavelSelecionada()){
+                    controladorTerrenoEditado.destruirTorreTileSelecionada();
+                    gui.getGuiRetrato().exibir(controladorTerrenoEditado.getCopiaTileEdificavelSelecionada());
+                    gui.getGuiEdicaoTiles().mostrar();
+                } else {
+                    controladorTerrenoEditado.desfazerSelecoes();
+                }
             } else {
-                desfazerSelecoes();
+                controladorTerrenoEditado.desfazerSelecoes();
+                controladorTerrenoEditado.tentarSelecaoDesenho();
             }
-        } else {
-            desfazerSelecoes();
-            tentarSelecaoDesenho();
-        }
-
-        
-    }
-
-    /**
-     * Em um mouseDown, lida com a seleção de desenho.
-     */
-    private void tentarSelecaoDesenho(){
-        /**
-         * ATENÇÃO: elementos que foram rotacionados devem ser testados
-         *      em coordenadas rotacionadas!
-         */
-        /**
-         * Mouse.getX() e Mouse.getY() sempre retornam valores
-         * entre (0,0) e (Tela.WIDTH,Tela.HEIGHT).
-         */
-        float mouseX = Camera.xTelaParaGlobal(Mouse.getX());
-        float mouseY = Camera.yTelaParaGlobal(Mouse.getY());
-        //System.out.println("Global>"+mouseX+","+mouseY);
-        float xMouseRotacionado = mouseX;//Camera.xGlobalParaCamera(mouseX, mouseY);
-        float yMouseRotacionado = mouseY+200;//-constante*angulo//Camera.yGlobalParaCamera(mouseX, mouseY);
-        //System.out.println("CameraGlobal>"+xMouseRotacionado+","+yMouseRotacionado);
-        Vector<Desenho> todosDesenhosCriados = Desenho.getTodosDesenhosCriados();
-        for(Desenho desenho : todosDesenhosCriados){
-            //rotacionar no plano xy
-            //xMouseRotacionado = (float) (hipotenusaMouseRotacionado*Math.cos(desenho.getRotacaoZ()));
-            //yMouseRotacionado = (float) (hipotenusaMouseRotacionado*Math.cos(desenho.getRotacaoZ()));
-            //rotacionar no plano xz
-            //xMouseRotacionado = (float) (hipotenusaMouseRotacionado*Math.cos(desenho.getRotacaoY()));
-            //rotacionar no plano yz
-            //yMouseRotacionado = (float) (hipotenusaMouseRotacionado*Math.cos(desenho.getRotacaoX()));
-
-            //System.out.println("("+xMouseRotacionado+","+yMouseRotacionado+")");
-            //System.out.println("Comparando com ("+desenho.getGlobalX()+","+desenho.getGlobalY()+")");
-            if(desenho.contem(xMouseRotacionado, yMouseRotacionado)){
-                desenhoSelecionado = desenho;
-                desenhoSelecionado.tornarTransparente();
-                gui.getGuiRetrato().exibir(desenhoSelecionado);
-                gui.getGuiEdicaoTiles().mostrar();
-            }
-        }
-        Vector<Filme> todosFilmesCriados = Filme.getTodosFilmesCriados();
-        for(Filme filme : todosFilmesCriados){
-            if(filme.contem(mouseX, mouseY)){
-                filmeSelecionado = filme;
-                filmeSelecionado.tornarTransparente();
-                gui.getGuiRetrato().exibir(filmeSelecionado);
-                gui.getGuiEdicaoTiles().mostrar();
-            }
-        }
-        Vector<TileEdificavel> todasTilesEdificaveisCriadas = TileEdificavel.getTodasTilesEdificaveisCriadas();
-        for(TileEdificavel tileEdificavel : todasTilesEdificaveisCriadas){
-            if(tileEdificavel.contem(mouseX, mouseY)){
-                tileEdificavelSelecionada = tileEdificavel;
-                tileEdificavelSelecionada.mudarCor(new Color(Color.WHITE));
-                tileEdificavelSelecionada.tornarTransparente();
-                gui.getGuiRetrato().exibir(tileEdificavelSelecionada);
-                gui.getGuiEdicaoTiles().mostrar();
-            }
-        }
-    }
-
-    /**
-     * Desfaz a seleção de todos os objetos selecionados.
-     */
-    private void desfazerSelecoes(){
-        if(desenhoSelecionado != null){
-            desenhoSelecionado.restaurarTransparencia();
-            desenhoSelecionado = null;
-            gui.getGuiRetrato().retirarDesenhoExibido();
-            gui.getGuiEdicaoTiles().esconder();
-        }
-        if(filmeSelecionado != null){
-            filmeSelecionado.restaurarTransparencia();
-            filmeSelecionado = null;
-            gui.getGuiRetrato().retirarDesenhoExibido();
-            gui.getGuiEdicaoTiles().esconder();
-        }
-        if(tileEdificavelSelecionada != null){
-            tileEdificavelSelecionada.restaurarTransparencia();
-            tileEdificavelSelecionada = null;
-            gui.getGuiRetrato().retirarDesenhoExibido();
-            gui.getGuiEdicaoTiles().esconder();
         }
     }
 
@@ -177,22 +93,6 @@ public class ControladorGuiBarraInferior
             gui.getGuiEdicaoTiles().getBtRemoverTorre().pressionar();
         } else {
             gui.getGuiEdicaoTiles().getBtRemoverTorre().soltar();
-        }
-
-        float cameraMouseX = Camera.xTelaParaGlobal(Mouse.getX());
-        float cameraMouseY = Camera.yTelaParaGlobal(Mouse.getY());
-        Vector<TileEdificavel> todasTilesEdificaveisCriadas = TileEdificavel.getTodasTilesEdificaveisCriadas();
-        for(TileEdificavel tileEdificavel : todasTilesEdificaveisCriadas){
-            if(tileEdificavelSelecionada == null
-                    || tileEdificavelSelecionada.getIdentificacaoUnica() != tileEdificavel.getIdentificacaoUnica()){
-                if(tileEdificavel.contem(cameraMouseX, cameraMouseY)){
-                    tileEdificavel.mudarCor(new Color(Color.GREY));
-                } else {
-                    tileEdificavel.mudarCor(new Color(Color.WHITE));
-                }
-            }
-        }
-
-        
+        }        
     }
 }

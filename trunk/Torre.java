@@ -27,6 +27,16 @@ public class Torre extends Desenho {
      * Modelo de projétil desta torre.
      */
     private Projetil modeloProjetil;
+
+    /**
+     * Intervalo de tempo entre dois disparos de projéteis desta torre.
+     */
+    private long intervaloDisparados;
+
+    /**
+     * Hora, em milissegundos, em que foi feito o último disparo.
+     */
+    private long horaUltimoDisparo;
     
     /**
      * @param _posX, _posY A posição do ponto superior esquerdo na tela.
@@ -37,14 +47,19 @@ public class Torre extends Desenho {
     public Torre(float _posX, float _posY, float _comprimento, float _largura, TIPO_TORRE _tipo){
         super(_posX, _posY, _comprimento, _largura);
         setTipo(_tipo);
+        horaUltimoDisparo = 0;
     }
     public Torre(Torre _torre) {
         super(_torre);
         setTipo(_torre.getTipo());
+        horaUltimoDisparo = 0;
     }
     
     public TIPO_TORRE getTipo(){
         return tipo;
+    }
+    public long getIntervaloDisparos(){
+        return intervaloDisparados;
     }
     
     /**
@@ -61,12 +76,14 @@ public class Torre extends Desenho {
             case MADEIRA: 
                     comprimento = 100;
                     largura = 200;
+                    intervaloDisparados = 1000;
                     definirTextura(Texturas.TORRE);
                     modeloProjetil = new Projetil(Projetil.TIPO_PROJETIL.FLECHA);
                 break;
             case CANHAO: 
                     comprimento = 480;
                     largura = 200;
+                    intervaloDisparados = 10000;
                     definirTextura(Texturas.CANHAO);
                     modeloProjetil = new Projetil(Projetil.TIPO_PROJETIL.BALA_DE_CANHAO);
                 break;
@@ -77,8 +94,30 @@ public class Torre extends Desenho {
     /**
      * @return Cópia do projétil desta torre.
      */
-    public Projetil getProjetil(){
+    public Projetil getCopiaProjetil(){
         return new Projetil(modeloProjetil);
+    }
+
+    /**
+     * Na prática, apenas marca a hora em que foi feito o último disparo.
+     * Habilita o uso de estahProntaParaDisparar().
+     */
+    public void disparar(){
+        horaUltimoDisparo = Temporizador.getHoraAtualMilissegundos();
+    }
+
+    /**
+     * @return Booleano indicando se esta torre já está pronta para um novo disparo.
+     */
+    public boolean estahProntaParaDisparar(){
+        long horaAtual = Temporizador.getHoraAtualMilissegundos();
+        long tempoDesdeUltimoDisparo = horaAtual - horaUltimoDisparo;
+        if(horaUltimoDisparo == 0
+                || intervaloDisparados <= tempoDesdeUltimoDisparo){
+            return true;
+        } else {
+            return false;
+        }
     }
     
 }

@@ -18,12 +18,6 @@ public class TileEdificavel extends Tile{
      * Torre edificada nesta tile.
      */
     private Torre torre;
-
-    /**
-     * Array que contém todos os filmes criados.
-     * Utilizado para aplicação de eventos.
-     */
-    private static Vector<TileEdificavel> todasTilesEdificaveisCriadas;
     
     /**
      * @param _posX, _posY A posição do ponto superior esquerdo na tela.
@@ -34,9 +28,6 @@ public class TileEdificavel extends Tile{
         super(_posX, _posY, _comprimento, _largura);
         definirTextura(Arquivos.ARQUIVO_TEXTURA_GRAMA);
         torre = null;
-        if(todasTilesEdificaveisCriadas == null){
-            todasTilesEdificaveisCriadas = new Vector<TileEdificavel>();
-        }
     }
     public TileEdificavel(TileEdificavel _tile){
         super(_tile);
@@ -48,26 +39,8 @@ public class TileEdificavel extends Tile{
         } else {
             torre = null;
         }
-        if(todasTilesEdificaveisCriadas == null){
-            todasTilesEdificaveisCriadas = new Vector<TileEdificavel>();
-        }
     }
-
-    /**
-     * Registra os eventos de mouse.
-     * Uma TileEdificavel só obedecerá a eventos quando esta função for invocada nele.
-     */
-    public void inicializarEventos(){
-        todasTilesEdificaveisCriadas.add(this);
-    }
-
-    /**
-     * @return Array com todos os tiles edificáveis já criados. Útil para aplicação de eventos.
-     */
-    public static Vector<TileEdificavel> getTodasTilesEdificaveisCriadas(){
-        return todasTilesEdificaveisCriadas;
-    }
-
+    
     /**
      * Constrói uma torre nesta tile.
      * @param _torre A torre que deve ser construída.
@@ -76,7 +49,7 @@ public class TileEdificavel extends Tile{
         torre = new Torre(_torre);
         torre.rotacionar(90, 0, 0);
         adicionarFilho(torre, 10, 10);
-        adicionarFilho(torre.getProjetil(), 10, 10);
+        adicionarFilho(torre.getCopiaProjetil(), 10, 10);
     }
     
     /**
@@ -111,23 +84,5 @@ public class TileEdificavel extends Tile{
         return estah_ocupadaPorTorre;
     }
 
-    /**
-     * Destrói este tile edificável, retirando-o da lista de tiles edificáveis existentes.
-     */
-    public void destruir() {
-        int index=0;
-        int indexDesteDesenho=0;
-        boolean desenhoEncontrado = false;
-        for(Desenho desenhoCriado : todasTilesEdificaveisCriadas){
-            if(desenhoCriado.getIdentificacaoUnica() == getIdentificacaoUnica()){
-                indexDesteDesenho = index;
-                desenhoEncontrado = true;
-            }
-            index++;
-        }
-        if(desenhoEncontrado){
-            todasTilesEdificaveisCriadas.remove(indexDesteDesenho);
-        }
-    }
 
 }

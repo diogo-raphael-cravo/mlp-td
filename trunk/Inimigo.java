@@ -42,6 +42,11 @@ public class Inimigo extends Filme {
     private float velocidadeTilesSegundo;
 
     /**
+     * Caminho que este inimigo segue.
+     */
+    private Caminho caminhoQueSegue;
+
+    /**
      * @param _posX, _posY A posição do ponto superior esquerdo na tela.
      * @param _comprimento, _largura Comprimento e largura.
      */
@@ -57,6 +62,7 @@ public class Inimigo extends Filme {
          barraVida = new BarraCarregamento(0, 0, 100, 20);
          barraVida.carregarCom(BarraCarregamento.VALOR_MAXIMO);
          adicionarFilho(barraVida, 0, 0);
+         caminhoQueSegue = null;
     }
     public Inimigo(Inimigo _inimigo){
          super(_inimigo);
@@ -80,6 +86,8 @@ public class Inimigo extends Filme {
          barraVida = new BarraCarregamento(0, 0, comprimentoQuadro, larguraQuadro/10);
          barraVida.carregarCom(BarraCarregamento.VALOR_MAXIMO*_inimigo.getVida()/_inimigo.getVidaMaxima());
          adicionarFilho(barraVida, 0, larguraQuadro);
+
+         caminhoQueSegue = _inimigo.getCaminhoQueSegue();
     }
 
     public float getVidaMaxima(){
@@ -88,12 +96,24 @@ public class Inimigo extends Filme {
     public float getVida(){
         return vida;
     }
+    public Caminho getCaminhoQueSegue(){
+        return caminhoQueSegue;
+    }
     
     /**
      * @return Velocidade do inimigo em Tiles por segundo.
      */
      public float getVelocidadeTilesPorSegundo(){
          return velocidadeTilesSegundo;
+     }
+
+     /**
+      * Define o caminho pelo qual este inimigo deve andar.
+      * O caminho deve ser válido no terreno em que o inimigo está andando.
+      * @param _caminhoQueSegue Caminho que o inimigo seguirá.
+      */
+     public void definirCaminhoQueSeguira(Caminho _caminhoQueSeguira){
+        caminhoQueSegue = _caminhoQueSeguira;
      }
 
 }
