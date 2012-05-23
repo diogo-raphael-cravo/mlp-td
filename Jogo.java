@@ -51,6 +51,7 @@ public class Jogo {
     public Jogo(Terreno _terreno, Nivel[] _niveis){
         batalha = new Batalha(_terreno);
         terreno = _terreno;
+        terreno.definirControlador(new ControladorTerreno(terreno, batalha));
         niveis = _niveis;
         nivelAtual = -1;
         temporizadorNascimentos = new Temporizador();
@@ -65,7 +66,7 @@ public class Jogo {
         boolean alcancouFimNiveis = (nivelAtual == niveis.length);
         if(!alcancouFimNiveis){
             temporizadorNascimentos = new Temporizador();
-            niveis[nivelAtual].criarInimigo(terreno);
+            niveis[nivelAtual].criarInimigo(terreno, batalha);
             temporizadorNascimentos.marcarAgora();
         }
     }
@@ -77,11 +78,12 @@ public class Jogo {
         if(INTERVALO_NASCIMENTO_INIMIGOS_MILISSEGUNDOS
                 <= temporizadorNascimentos.tempoDesdeUltimaMarcacao()
            && niveis[nivelAtual].getNumeroInimigosNascidos() < niveis[nivelAtual].getNumeroInimigos()){
-            niveis[nivelAtual].criarInimigo(terreno);
+            niveis[nivelAtual].criarInimigo(terreno, batalha);
             temporizadorNascimentos.marcarAgora();
         }
         Tela.getGuiBarraSuperior().setQuantidadeOuro(nivelAtual);
-        Tela.getGuiBarraSuperior().setQuantidadeInimigos(nivelAtual);
+        Tela.getGuiBarraSuperior().setNivelAtual(nivelAtual+1);
+        Tela.getGuiBarraSuperior().setTotalNiveis(niveis.length);
         Tela.getGuiBarraSuperior().setQuantidadeVidas(nivelAtual);
         Tela.getGuiBarraSuperior().setTempo((int) (niveis[nivelAtual].getTempoDesdeInicioMilissegundos()/1000));
         batalha.atualizar();

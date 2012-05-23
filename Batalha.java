@@ -83,7 +83,6 @@ public class Batalha {
          moverProjeteis();
          colidirProjeteisComInimigos();
          moverInimigos();
-         limparInimigos();
      }
 
      /**
@@ -91,7 +90,17 @@ public class Batalha {
       * de disparo das torres e o tempo atual.
       */
      private void criarProjeteis(){
-         
+         for(Torre torreNaBatalha : torres){
+            if(torreNaBatalha.estahProntaParaDisparar()){
+                Projetil projetilQueSerahDisparado = torreNaBatalha.getCopiaProjetil();
+                terreno.adicionarFilho(projetilQueSerahDisparado,
+                        projetilQueSerahDisparado.getPosX(),
+                        projetilQueSerahDisparado.getPosY());
+                torreNaBatalha.disparar();
+                projetilQueSerahDisparado.setPerseguido(inimigos.elementAt(0));
+                projeteis.add(projetilQueSerahDisparado);
+            }
+         }
      }
 
      /**
@@ -117,7 +126,7 @@ public class Batalha {
          Vector<TilePassadouro> caminhoDeTiles = terreno.getTilesCaminho();
 
          for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
-            moverInimigo(inimigoNoTerreno, terreno.getCaminho());
+            mover(inimigoNoTerreno);
 
             tileInimigo = terreno.getTileComPosicao(inimigoNoTerreno.getGlobalX(), inimigoNoTerreno.getGlobalY());
             tileVizinhaTileInimigo = terreno.getTileVizinha(tileInimigo, terreno.getCaminho());
@@ -145,9 +154,8 @@ public class Batalha {
       *   5) Movimentar o inimigo.
       *   6) Se o inimigo já atingiu a próxima tile, adicioná-lo a ela.
       * @param _inimigo Inimigo que será movido sobre o terreno.
-      * @param _caminho Caminho a ser utilizado para encontrar a vizinha.
       */
-     private void moverInimigo(Inimigo _inimigo, Caminho _caminho){
+     private void mover(Inimigo _inimigo){
         Inimigo inimigoNaoMovido = _inimigo;
         TilePassadouro tileInimigo = (TilePassadouro) terreno.getTileComPosicao(inimigoNaoMovido.getGlobalX(), inimigoNaoMovido.getGlobalY());
         TilePassadouro tileVizinhaTileInimigo = null;
@@ -167,7 +175,7 @@ public class Batalha {
         int direcaoY = 1;
 
         if(tileInimigo != null){
-            tileVizinhaTileInimigo = (TilePassadouro) terreno.getTileVizinha(tileInimigo, _caminho);
+            tileVizinhaTileInimigo = (TilePassadouro) terreno.getTileVizinha(tileInimigo, _inimigo.getCaminhoQueSegue());
         }
 
         if(tileVizinhaTileInimigo != null){
@@ -220,7 +228,68 @@ public class Batalha {
       * Os projéteis sempre se movem seguindo os inimigos, não em linha reta.
       */
      private void moverProjeteis(){
-         
+         for(Projetil projetil : projeteis){
+            mover(projetil);
+         }
+     }
+
+     /**
+      * Move um projétil em direção ao inimigo que persegue.
+      * O algoritmo é o seguinte:
+      *   1) Calcular distância em x e em y entre a posição do projétil e a posição do inimigo que ele persegue.
+      *   2) Escalar a variação pelo tempo passado entre o último movimento e este, multiplicado
+      *      pela velocidade em pixels/segundo do projétil. Se o movimento for em mais de uma direção,
+      *      calcular de tal forma que a norma do vetor movimento seja a velocidade em pixels/segundo
+      *      do projétil.
+      *   3) Movimentar o projétil.
+      * @param _projetil Projétil que será movido em direção a um inimigo (especificado no próprio projétil).
+      */
+     private void mover(Projetil _projetil){
+         float tempoPassadoDesdeUltimoMovimentoEmSegundos = Temporizador.diferencaUltimasDuasMarcacoesPrincipal()/((float) 1000.0);
+         float velocidadeEmPixelsPorSegundo = terreno.getComprimentoCadaTile()*
+                                                    _projetil.getVelocidadeTilesPorSegundo();
+
+         //Vetor direção final, que deseja-se obter após passado 1 segundo.
+         float xDestino = _projetil.getPerseguido().getPosX();
+         float yDestino = _projetil.getPerseguido().getPosY();
+
+         //Vetor variação da posição, a ponderação do destino (anterior) pelo tempo passado.
+         float xVariacao = 0;
+         float yVariacao = 0;
+
+         //Vetor direção do movimento que será feito.
+         int direcaoX = 1;
+         int direcaoY = 1;
+
+         if(xDestino <= _projetil.getGlobalX()){
+             direcaoX = -1;
+         } else {
+             direcaoX = 1;
+         }
+
+         if(xDestino <= _projetil.getGlobalY()){
+             direcaoY = 1;
+         } else {
+             direcaoY = -1;
+         }
+
+         if(_projetil.getGlobalX() == xDestino){
+             xVariacao = 0;
+             if(_projetil.getGlobalY() != yDestino){
+                yVariacao = - velocidadeEmPixelsPorSegundo;
+             }
+         } else if(_projetil.getGlobalY() == yDestino){
+             xVariacao = velocidadeEmPixelsPorSegundo;
+             yVariacao = 0;
+         } else {
+             xVariacao = (float) Math.sqrt(Math.pow((double) velocidadeEmPixelsPorSegundo, 2))/2;
+             yVariacao = - (float) Math.sqrt(Math.pow((double) velocidadeEmPixelsPorSegundo, 2))/2;
+         }
+         xVariacao *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
+         yVariacao *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
+         xVariacao *= direcaoX;
+         yVariacao *= direcaoY;
+         _projetil.deslocar(xVariacao, yVariacao);
      }
 
      /**
@@ -233,14 +302,6 @@ public class Batalha {
          
      }
 
-     /**
-      * Confere o estado dos inimigos. Os que estiverem mortos ou fora do
-      * terreno são retirados da batalha. Projéteis que estiverem perseguindo
-      * um inimigo que saiu do terreno são destruídos.
-      */
-     private void limparInimigos(){
-         
-     }
 
      
          

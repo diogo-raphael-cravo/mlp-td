@@ -61,6 +61,11 @@ public class Terreno extends Desenho{
     private float yRotacaoTorres;
 
     /**
+     * Controlador de eventos deste terreno.
+     */
+     private ControladorTerreno controlador;
+
+    /**
      * O terreno é criado com um número especificado de tiles de forma que ocupe as dimensões que lhe são especificadas.
      * @param _posicao Posição do terreno.
      * @param _dimensoesTela Comprimento e largura do terreno em unidades de tela.
@@ -92,20 +97,22 @@ public class Terreno extends Desenho{
 
         yRotacaoTorres = 0;
 
+        controlador = null;
+
         /**
          * Criação do plano de fundo.
          */
         Desenho fundo = new Desenho(0, 0, comprimentoCadaTile, larguraCadaTile);
         fundo.redimensionar(comprimento, largura, altura);
         fundo.definirTextura(Texturas.GRAMA);
-        adicionarFilho(new Desenho(fundo), posX-comprimento/2, posY-largura/2);
-        adicionarFilho(new Desenho(fundo), posX+comprimento/2, posY-largura/2);
-        adicionarFilho(new Desenho(fundo), posX+3*comprimento/2, posY-largura/2);
-        adicionarFilho(new Desenho(fundo), posX-comprimento/2, posY+largura/2);
-        adicionarFilho(new Desenho(fundo), posX-comprimento/2, posY+3*largura/2);
-        adicionarFilho(new Desenho(fundo), posX+comprimento/2, posY+3*largura/2);
-        adicionarFilho(new Desenho(fundo), posX+3*comprimento/2, posY+3*largura/2);
-        adicionarFilho(new Desenho(fundo), posX+3*comprimento/2, posY+largura/2);
+        adicionarFilho(new Desenho(fundo), getPosX()-comprimento/2, posY-largura/2);
+        adicionarFilho(new Desenho(fundo), getPosX()+comprimento/2, posY-largura/2);
+        adicionarFilho(new Desenho(fundo), getPosX()+3*comprimento/2, posY-largura/2);
+        adicionarFilho(new Desenho(fundo), getPosX()-comprimento/2, posY+largura/2);
+        adicionarFilho(new Desenho(fundo), getPosX()-comprimento/2, posY+3*largura/2);
+        adicionarFilho(new Desenho(fundo), getPosX()+comprimento/2, posY+3*largura/2);
+        adicionarFilho(new Desenho(fundo), getPosX()+3*comprimento/2, posY+3*largura/2);
+        adicionarFilho(new Desenho(fundo), getPosX()+3*comprimento/2, posY+largura/2);
      }
 
      public float getComprimentoCadaTile(){
@@ -113,6 +120,16 @@ public class Terreno extends Desenho{
      }
      public float getLarguraCadaTile(){
          return larguraCadaTile;
+     }
+     public ControladorTerreno getControlador(){
+         return controlador;
+     }
+
+     /**
+      * @param Controlador de eventos para este terreno.
+      */
+     public void definirControlador(ControladorTerreno _controlador){
+         controlador = _controlador;
      }
 
      /**
@@ -143,13 +160,13 @@ public class Terreno extends Desenho{
       */
      public void adicionarInimigo(Inimigo _inimigoModelo){
           TilePassadouro primeiraTileCaminho = (TilePassadouro) tiles[caminho.getColunaTile(0)][caminho.getLinhaTile(0)];
-          Inimigo inimigoNovo = new Inimigo(_inimigoModelo);
-          inimigoNovo.mover(getPosX(), getPosY());
-          primeiraTileCaminho.adicionarInimigo(inimigoNovo);
-          inimigosNoTerreno.add(inimigoNovo);
-          inimigoNovo.inicializarEventos();
-          inimigoNovo.rotacionar(xRotacaoInimigos, -yRotacaoInimigos, zRotacaoInimigos);
-          adicionarFilho(inimigoNovo, primeiraTileCaminho.getPosX(), primeiraTileCaminho.getPosY());
+          _inimigoModelo.mover(getPosX(), getPosY());
+          _inimigoModelo.definirCaminhoQueSeguira(caminho);
+          primeiraTileCaminho.adicionarInimigo(_inimigoModelo);
+          inimigosNoTerreno.add(_inimigoModelo);
+          _inimigoModelo.inicializarEventos();
+          _inimigoModelo.rotacionar(xRotacaoInimigos, -yRotacaoInimigos, zRotacaoInimigos);
+          adicionarFilho(_inimigoModelo, primeiraTileCaminho.getPosX(), primeiraTileCaminho.getPosY());
      }
 
      
@@ -362,6 +379,21 @@ public class Terreno extends Desenho{
                 }
             }
         }
+     }
+
+     /**
+      * @return Vetor com todas as tiles edificáveis do terreno, e somente elas.
+      */
+     public Vector<TileEdificavel> getTilesEdificaveis(){
+         Vector<TileEdificavel> tilesEdificaveis = new Vector<TileEdificavel>();
+         for(int coluna=0; coluna<tilesPorLinha; coluna++){
+             for(int linha=0; linha<tilesPorColuna; linha++){
+                 if(!caminho.contem(coluna, linha)){
+                    tilesEdificaveis.add((TileEdificavel) tiles[coluna][linha]);
+                 }
+             }
+         }
+         return tilesEdificaveis;
      }
 
 }

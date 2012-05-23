@@ -57,15 +57,21 @@ public class Nivel {
 
     /**
      * Faz com que nasça o próximo inimigo deste nível no terreno dado.
+     * A razão de existência desta função é que esta classe contabiliza o número
+     * de inimigos deste nível que já nasceram, garantindo que nunca nasçam mais
+     * inimigos do que o nível suporta.
      * @param _terreno O terreno em que o inimigo nascerá.
+     * @param _batalha A batalha em que o inimigo estará.
      */
-    public void criarInimigo(Terreno _terreno){
+    public void criarInimigo(Terreno _terreno, Batalha _batalha){
         if(inimigosNascidos == 0){
             tempoInicioMilissegundos = System.nanoTime()/1000000;
         }
 
         if(inimigosNascidos < numeroInimigos){
-            _terreno.adicionarInimigo(modeloInimigo);
+            Inimigo inimigoNovo = new Inimigo(modeloInimigo);
+            _terreno.adicionarInimigo(inimigoNovo);
+            _batalha.adicionarInimigo(inimigoNovo);
             inimigosNascidos++;
         }
     }

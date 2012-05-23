@@ -86,17 +86,23 @@ public class Temporizador {
       * @return Frame rate aproximado, com base nas 5 últimas marcações.
       */
      public static long frameRate(){
-         long mediaMarcacoes = 0;
-         mediaMarcacoes += temporizador.marcacoes[0];
-         mediaMarcacoes += temporizador.marcacoes[1];
-         mediaMarcacoes += temporizador.marcacoes[2];
-         mediaMarcacoes += temporizador.marcacoes[3];
-         mediaMarcacoes += temporizador.marcacoes[4];
-         mediaMarcacoes = mediaMarcacoes/5;
-         int frameRateCalculado = (int) ((int) 1000 / mediaMarcacoes);
+         long mediaDiferencasMarcacoes = 0;
+         mediaDiferencasMarcacoes += temporizador.marcacoes[1] - temporizador.marcacoes[0];
+         mediaDiferencasMarcacoes += temporizador.marcacoes[2] - temporizador.marcacoes[1];
+         mediaDiferencasMarcacoes += temporizador.marcacoes[3] - temporizador.marcacoes[2];
+         mediaDiferencasMarcacoes += temporizador.marcacoes[4] - temporizador.marcacoes[3];
+         mediaDiferencasMarcacoes = mediaDiferencasMarcacoes/4;
+         int frameRateCalculado = (int) ((int) 1000 / mediaDiferencasMarcacoes);
          if(frameRateCalculado == 0){
              frameRateCalculado = Integer.MAX_VALUE;
          }
          return frameRateCalculado;
+     }
+
+     /**
+      * @return Hora atual em milissegundos.
+      */
+     public static long getHoraAtualMilissegundos(){
+         return System.nanoTime()/1000000;
      }
 }

@@ -54,8 +54,9 @@ public class CaixaDeTexto extends Gui {
     public void setTexto(String _texto){
         if(1 < _texto.length()){
             linhasDoConteudo = Texto.quebrarEmLinhas(_texto);
-        } else {
-            linhasDoConteudo.add(_texto);
+        } else { //+" " porque a biblioteca deixa um fundo cinza quando só tem 1 caractere.
+            String stringQueTiraFundoCinza = _texto+" ";
+            linhasDoConteudo = Texto.quebrarEmLinhas(stringQueTiraFundoCinza);
         }
     }
 

@@ -22,7 +22,17 @@ public class Projetil extends Desenho {
      * O inimigo que está sendo perseguido por este projétil, caso haja.
      */
     private Inimigo perseguido;
-    
+
+    /**
+     * Velocidade do projétil em Tiles por segundo.
+     * Uma tile é medida pelo seu comprimento.
+     * Assim, este é o número de tiles que o projétil pode
+     * cruzar por segundo em rota horizontal.
+     * Caso a rota possua componente no eixo y, o número de
+     * tiles realmente passadas por segundo será um pouco menor.
+     */
+    private float velocidadeTilesSegundo;
+
     /**
      * O comprimento e altura não são permitidos, pois todo projétil é sempre
      * criado como o comprimento e altura ideais para sua textura. Para mudar
@@ -57,10 +67,18 @@ public class Projetil extends Desenho {
                 break;
         }
         perseguido = null;
+        velocidadeTilesSegundo = 5;
     }
     public Projetil(Projetil _projetil){
         this(_projetil.tipo);
     }
+
+    /**
+     * @return Velocidade do projétil em Tiles por segundo.
+     */
+     public float getVelocidadeTilesPorSegundo(){
+         return velocidadeTilesSegundo;
+     }
 
     /**
      * Manda este projétil perseguir o inimigo dado.
