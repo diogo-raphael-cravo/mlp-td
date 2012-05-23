@@ -84,7 +84,6 @@ public class Jogo {
         Tela.getGuiBarraSuperior().setQuantidadeInimigos(nivelAtual);
         Tela.getGuiBarraSuperior().setQuantidadeVidas(nivelAtual);
         Tela.getGuiBarraSuperior().setTempo((int) (niveis[nivelAtual].getTempoDesdeInicioMilissegundos()/1000));
-        terreno.moverInimigos();
         batalha.atualizar();
     }
 
