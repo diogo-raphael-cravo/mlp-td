@@ -92,12 +92,26 @@ public class Batalha {
      private void criarProjeteis(){
          for(Torre torreNaBatalha : torres){
             if(torreNaBatalha.estahProntaParaDisparar()){
-                Projetil projetilQueSerahDisparado = torreNaBatalha.disparar();
-                terreno.adicionarFilho(projetilQueSerahDisparado,
-                        projetilQueSerahDisparado.getPosX(),
-                        projetilQueSerahDisparado.getPosY());
-                projetilQueSerahDisparado.setPerseguido(inimigos.elementAt(0));
-                projeteis.add(projetilQueSerahDisparado);
+                int inimigoAtual = 0;
+                boolean encontrouAlvo = false;
+                Inimigo inimigoAlvo = null;
+                
+                while(!encontrouAlvo && inimigoAtual<inimigos.size()){
+                    if(torreNaBatalha.estahNoAlcance(inimigos.elementAt(inimigoAtual))){
+                        encontrouAlvo = true;
+                        inimigoAlvo = inimigos.elementAt(inimigoAtual);
+                    }
+                    inimigoAtual++;
+                }
+
+                if(encontrouAlvo){
+                    Projetil projetilQueSerahDisparado = torreNaBatalha.disparar();
+                    terreno.adicionarFilho(projetilQueSerahDisparado,
+                            projetilQueSerahDisparado.getPosX(),
+                            projetilQueSerahDisparado.getPosY());
+                    projetilQueSerahDisparado.setPerseguido(inimigoAlvo);
+                    projeteis.add(projetilQueSerahDisparado);
+                }
             }
          }
      }
