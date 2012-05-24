@@ -37,6 +37,12 @@ public class Torre extends Desenho {
      * Hora, em milissegundos, em que foi feito o último disparo.
      */
     private long horaUltimoDisparo;
+
+    /**
+     * O alcance de toda torre é um círculo em torno de seu ponto (0,0).
+     * Este alcance é o raio do alcance da torre.
+     */
+    private float raioAlcance;
     
     /**
      * @param _posX, _posY A posição do ponto superior esquerdo na tela.
@@ -79,6 +85,11 @@ public class Torre extends Desenho {
                     intervaloDisparados = 1000;
                     definirTextura(Texturas.TORRE);
                     modeloProjetil = new Projetil(Projetil.TIPO_PROJETIL.FLECHA);
+                    if(getPai() != null){ //está sempre entrando no else.
+                        raioAlcance = getPai().getComprimento() * 2;
+                    } else {
+                        raioAlcance = 150;
+                    }
                 break;
             case CANHAO: 
                     comprimento = 480;
@@ -86,6 +97,11 @@ public class Torre extends Desenho {
                     intervaloDisparados = 10000;
                     definirTextura(Texturas.CANHAO);
                     modeloProjetil = new Projetil(Projetil.TIPO_PROJETIL.BALA_DE_CANHAO);
+                    if(getPai() != null){ //está sempre entrando no else.
+                        raioAlcance = getPai().getComprimento() * 10;
+                    } else {
+                        raioAlcance = 1000;
+                    }
                 break;
         }
         redimensionar(fatorEscalaX*comprimentoAtual, fatorEscalaY*larguraAtual, altura);
@@ -104,6 +120,48 @@ public class Torre extends Desenho {
     }
 
     /**
+     * @param _inimigo Inimigo cuja posição será testada.
+     * @return Booleano indicando se _inimigos está na região de alcance desta
+     *      torre, isto é, se ele pode ser atingido por um projétil.
+     */
+    public boolean estahNoAlcance(Inimigo _inimigo){
+        boolean estah = false;
+        float xCentroCirculo = getPai().getPosX() + getPosX();
+        float yCentroCirculo = getPai().getPosY() + getPosY();
+        float xSudoesteInimigo = _inimigo.getPosX();
+        float ySudoesteInimigo = _inimigo.getPosY();
+        float xSudesteInimigo = _inimigo.getPosX() + _inimigo.getComprimento();
+        float ySudesteInimigo = _inimigo.getPosY();
+        float xNoroesteInimigo = _inimigo.getPosX();
+        float yNoroesteInimigo = _inimigo.getPosY() + _inimigo.getLargura();
+        float xNordesteInimigo = _inimigo.getPosX() + _inimigo.getComprimento();
+        float yNordesteInimigo = _inimigo.getPosY() + _inimigo.getLargura();
+
+        float distanciaNoroesteDoInimigoAoCentroDoAlcance = 
+                (float) Math.hypot(xNoroesteInimigo-xCentroCirculo, yNoroesteInimigo-yCentroCirculo);
+        float distanciaNordesteDoInimigoAoCentroDoAlcance = 
+                (float) Math.hypot(xNordesteInimigo-xCentroCirculo, yNordesteInimigo-yCentroCirculo);
+        float distanciaSudoesteDoInimigoAoCentroDoAlcance = 
+                (float) Math.hypot(xSudoesteInimigo-xCentroCirculo, ySudoesteInimigo-yCentroCirculo);
+        float distanciaSudesteDoInimigoAoCentroDoAlcance = 
+                (float) Math.hypot(xSudesteInimigo-xCentroCirculo, ySudesteInimigo-yCentroCirculo);
+
+        System.out.println(distanciaNoroesteDoInimigoAoCentroDoAlcance+","
+                +distanciaNordesteDoInimigoAoCentroDoAlcance+","
+                +distanciaSudoesteDoInimigoAoCentroDoAlcance+","
+                +distanciaSudesteDoInimigoAoCentroDoAlcance+",");
+
+        if(distanciaNoroesteDoInimigoAoCentroDoAlcance <= raioAlcance
+                || distanciaNordesteDoInimigoAoCentroDoAlcance <= raioAlcance
+                || distanciaSudoesteDoInimigoAoCentroDoAlcance <= raioAlcance
+                || distanciaSudesteDoInimigoAoCentroDoAlcance <= raioAlcance){
+            estah = true;
+        }
+
+        return estah;
+    }
+
+    /**
      * @return Booleano indicando se esta torre já está pronta para um novo disparo.
      */
     public boolean estahProntaParaDisparar(){
@@ -118,3 +176,4 @@ public class Torre extends Desenho {
     }
     
 }
+
