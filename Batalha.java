@@ -92,11 +92,10 @@ public class Batalha {
      private void criarProjeteis(){
          for(Torre torreNaBatalha : torres){
             if(torreNaBatalha.estahProntaParaDisparar()){
-                Projetil projetilQueSerahDisparado = torreNaBatalha.getCopiaProjetil();
+                Projetil projetilQueSerahDisparado = torreNaBatalha.disparar();
                 terreno.adicionarFilho(projetilQueSerahDisparado,
                         projetilQueSerahDisparado.getPosX(),
                         projetilQueSerahDisparado.getPosY());
-                torreNaBatalha.disparar();
                 projetilQueSerahDisparado.setPerseguido(inimigos.elementAt(0));
                 projeteis.add(projetilQueSerahDisparado);
             }
@@ -250,8 +249,8 @@ public class Batalha {
                                                     _projetil.getVelocidadeTilesPorSegundo();
 
          //Vetor direção final, que deseja-se obter após passado 1 segundo.
-         float xDestino = _projetil.getPerseguido().getPosX();
-         float yDestino = _projetil.getPerseguido().getPosY();
+         float xDestino = _projetil.getPerseguido().getGlobalX();
+         float yDestino = _projetil.getPerseguido().getGlobalY();
 
          //Vetor variação da posição, a ponderação do destino (anterior) pelo tempo passado.
          float xVariacao = 0;
@@ -267,7 +266,7 @@ public class Batalha {
              direcaoX = 1;
          }
 
-         if(xDestino <= _projetil.getGlobalY()){
+         if(yDestino <= _projetil.getGlobalY()){
              direcaoY = 1;
          } else {
              direcaoY = -1;
@@ -289,6 +288,8 @@ public class Batalha {
          yVariacao *= tempoPassadoDesdeUltimoMovimentoEmSegundos;
          xVariacao *= direcaoX;
          yVariacao *= direcaoY;
+         _projetil.mudarDirecao(_projetil.getPerseguido().getPosX()-_projetil.getPosX(),
+                                _projetil.getPerseguido().getPosY()-_projetil.getPosY());
          _projetil.deslocar(xVariacao, yVariacao);
      }
 

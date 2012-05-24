@@ -67,7 +67,11 @@ public class Projetil extends Desenho {
                 break;
         }
         perseguido = null;
-        velocidadeTilesSegundo = 5;
+        /*ATENÇÃO: precisa ser rápida o sufuciente para que o usuário não perceba
+         * que o movimento do projétil faz curvas! O projétil deve conseguir alcan-
+         * çar seu destino antes de fazer uma curva!
+         */
+        velocidadeTilesSegundo = 25;
     }
     public Projetil(Projetil _projetil){
         this(_projetil.tipo);
@@ -110,5 +114,34 @@ public class Projetil extends Desenho {
      public Inimigo getPerseguido(){
          return perseguido;
      }
+
+     /**
+      * Todo projétil, em sua textura, deve ter sua ponta na horizontal
+      * e no sentido da esquerda para a direita. Se isto for obedecido,
+      * esta função sempre manterá o projétil virada para a direção em
+      * que está indo.
+      * @param _deslocamentoX, _deslocamentoY Vetor direção em que o pro-
+      *         jétil deve olhar.
+      */
+      public void mudarDirecao(float _deslocamentoX, float _deslocamentoY){
+          double hipotenusa = Math.hypot((double) _deslocamentoX, (double) _deslocamentoY);
+          double seno=-20000;
+          float angulo;
+
+          if(0 < _deslocamentoX){
+              seno = _deslocamentoY/hipotenusa;
+
+              angulo = (float) Math.toDegrees(Math.asin(seno));
+          } else if(_deslocamentoX < 0){
+              seno = -_deslocamentoY/hipotenusa;
+              angulo = (float) Math.toDegrees(Math.asin(seno));
+              angulo += 180;
+          } else if(0 <= _deslocamentoY){
+              angulo = 90;
+          } else {
+              angulo = -90;
+          }
+          rotacionar(0, 0, angulo-getRotacaoZ());
+      }
      
 }

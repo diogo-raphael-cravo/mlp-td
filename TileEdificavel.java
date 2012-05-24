@@ -49,7 +49,6 @@ public class TileEdificavel extends Tile{
         torre = new Torre(_torre);
         torre.rotacionar(90, 0, 0);
         adicionarFilho(torre, 10, 10);
-        adicionarFilho(torre.getCopiaProjetil(), 10, 10);
     }
     
     /**
