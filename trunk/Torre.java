@@ -92,18 +92,15 @@ public class Torre extends Desenho {
     }
     
     /**
-     * @return Cópia do projétil desta torre.
-     */
-    public Projetil getCopiaProjetil(){
-        return new Projetil(modeloProjetil);
-    }
-
-    /**
      * Na prática, apenas marca a hora em que foi feito o último disparo.
      * Habilita o uso de estahProntaParaDisparar().
+     * @return Cópia do projétil desta torre.
      */
-    public void disparar(){
+    public Projetil disparar(){
+        Projetil projetilDisparado = new Projetil(modeloProjetil);
         horaUltimoDisparo = Temporizador.getHoraAtualMilissegundos();
+        projetilDisparado.mover(getPai().getPosX()+getPosX(), getPai().getPosY()+getPosY());
+        return projetilDisparado;
     }
 
     /**
