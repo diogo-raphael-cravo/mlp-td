@@ -146,11 +146,6 @@ public class Torre extends Desenho {
         float distanciaSudesteDoInimigoAoCentroDoAlcance = 
                 (float) Math.hypot(xSudesteInimigo-xCentroCirculo, ySudesteInimigo-yCentroCirculo);
 
-        System.out.println(distanciaNoroesteDoInimigoAoCentroDoAlcance+","
-                +distanciaNordesteDoInimigoAoCentroDoAlcance+","
-                +distanciaSudoesteDoInimigoAoCentroDoAlcance+","
-                +distanciaSudesteDoInimigoAoCentroDoAlcance+",");
-
         if(distanciaNoroesteDoInimigoAoCentroDoAlcance <= raioAlcance
                 || distanciaNordesteDoInimigoAoCentroDoAlcance <= raioAlcance
                 || distanciaSudoesteDoInimigoAoCentroDoAlcance <= raioAlcance

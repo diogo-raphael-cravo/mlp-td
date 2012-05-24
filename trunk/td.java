@@ -101,6 +101,7 @@ public class td {
       jogo = new Jogo(new Terreno(-Tela.WIDTH/2, -Tela.WIDTH/2, Tela.WIDTH, Tela.WIDTH, 10, 10), niveis);
       Camera.moverCameras(jogo.getTerreno().getPosX(), jogo.getTerreno().getPosY());
       controladorJogo = new ControladorJogo(jogo);
+      jogo.getTerreno().adicionarFilho(new Circulo(100), 0, 0);
       run();
     } catch(Exception ex) {
       LOGGER.log(Level.SEVERE,ex.toString(),ex);
