@@ -132,12 +132,27 @@ public class Batalha {
       * Na prática, o melhor é o menor caminho que o inimigo pode usar.
       */
      private void moverInimigos(){
-         Tile tileInimigo;
-         Tile tileVizinhaTileInimigo;
-         Vector<Inimigo> inimigosQueSairamDoTerreno = new Vector<Inimigo>();
+         //Tile tileInimigo;
+         //Tile tileVizinhaTileInimigo;
+         final Vector<Inimigo> inimigosQueSairamDoTerreno = new Vector<Inimigo>();
          Vector<Inimigo> inimigosNoTerreno = terreno.getInimigos();
-         Vector<TilePassadouro> caminhoDeTiles = terreno.getTilesCaminho();
+         //Vector<TilePassadouro> caminhoDeTiles = terreno.getTilesCaminho();
+         
+         Map.map(inimigosNoTerreno, new Method<Inimigo>() {
+        	 private Tile tileInimigo;
+        	 private Tile tileVizinhaTileInimigo;
+        	 
+        	 public void method(Inimigo op) {
+                 mover(op);
 
+                 tileInimigo = terreno.getTileComPosicao(op.getGlobalX(), op.getGlobalY());
+                 tileVizinhaTileInimigo = terreno.getTileVizinha(tileInimigo, terreno.getCaminho());
+                 if(tileVizinhaTileInimigo == null) {
+                     inimigosQueSairamDoTerreno.add(op);
+                 }
+        	 }
+         });
+/*
          for(Inimigo inimigoNoTerreno : inimigosNoTerreno){
             mover(inimigoNoTerreno);
 
@@ -147,6 +162,7 @@ public class Batalha {
                 inimigosQueSairamDoTerreno.add(inimigoNoTerreno);
             }
          }
+*/
 
          for(Inimigo inimigoQueSaiuDoTerreno : inimigosQueSairamDoTerreno){
              terreno.removerFilho(inimigoQueSaiuDoTerreno);
