@@ -14,7 +14,7 @@ package mlptd;
  * @author diogo
  */
 public class Arquivos {
-    public static final String LINK_BASE = "C:\\Documents and Settings\\NUTED\\Desktop\\Nova pasta\\texturas\\";
+    public static final String LINK_BASE = "D:/mlptd/texturas/";
     public static String LINK_BASE_TEXTURA_SLIMEKING = LINK_BASE+"slimeking/slimeking_";
     public static String ARQUIVO_TEXTURA_MURO = LINK_BASE+"muro2.png";
     public static String ARQUIVO_TEXTURA_CAVEIRA = LINK_BASE+"caveira4.png";

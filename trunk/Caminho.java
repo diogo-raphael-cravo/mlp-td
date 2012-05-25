@@ -125,17 +125,17 @@ public class Caminho {
         int posicaoAuxiliar;
         for(linha=0; linha<_linhaMaxima; linha++){
             for(coluna=0; coluna<_colunaMaxima; coluna++){
-                if((linha%2 == 0 && linha%4==0)){
+                if((linha%4==0)){
                     caminhoLinhasAlternadas.adicionarTile(posicao, coluna, linha);
                     posicao++;
-                } else if((linha%2 == 0 && linha%4==2)){
+                } else if((linha%4==2)){
                     posicaoAuxiliar = posicao + (_colunaMaxima - (2*coluna+1));
                     caminhoLinhasAlternadas.adicionarTile(posicaoAuxiliar, coluna, linha);
                     posicao++;
-                } else if(linha%2 == 1 && linha%4==1 && coluna == _colunaMaxima-1){
+                } else if(linha%4==1 && coluna == _colunaMaxima-1){
                     caminhoLinhasAlternadas.adicionarTile(posicao, coluna, linha);
                     posicao++;
-                } else if(linha%2 == 1 && linha%4==3 && coluna == 0){
+                } else if(linha%4==3 && coluna == 0){
                     caminhoLinhasAlternadas.adicionarTile(posicao, coluna, linha);
                     posicao++;
                 }

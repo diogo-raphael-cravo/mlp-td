@@ -103,7 +103,7 @@ public class Tela extends Desenho {
         super.desenhar();
         Camera.setCamera(cameraUsada);
         if(Temporizador.frameRate() == Integer.MAX_VALUE){
-            ctFramesPorSegundo.setTexto("Frames por segundo> MÃXIMO");
+            ctFramesPorSegundo.setTexto("Frames por segundo> MÃ?XIMO");
         } else {
             ctFramesPorSegundo.setTexto("Frames por segundo> "+Temporizador.frameRate());
         }
